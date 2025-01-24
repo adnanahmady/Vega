@@ -132,5 +132,8 @@
       }
     }
   },
-  "defaultProject": "Vega"
+  "defaultProject": "Vega",
+  "cli": {
+    "analytics": false
+  }
 }
