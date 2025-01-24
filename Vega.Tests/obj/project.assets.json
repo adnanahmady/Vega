@@ -65,6 +65,21 @@
           "buildTransitive/net7.0/Microsoft.AspNetCore.Mvc.Testing.targets": {}
         }
       },
+      "Microsoft.AspNetCore.SpaProxy/7.0.20": {
+        "type": "package",
+        "compile": {
+          "lib/net7.0/Microsoft.AspNetCore.SpaProxy.dll": {}
+        },
+        "runtime": {
+          "lib/net7.0/Microsoft.AspNetCore.SpaProxy.dll": {}
+        },
+        "frameworkReferences": [
+          "Microsoft.AspNetCore.App"
+        ],
+        "build": {
+          "build/_._": {}
+        }
+      },
       "Microsoft.AspNetCore.TestHost/7.0.0": {
         "type": "package",
         "dependencies": {
@@ -2491,6 +2506,22 @@
         "build": {
           "build/netcoreapp3.1/xunit.runner.visualstudio.props": {}
         }
+      },
+      "Vega/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v7.0",
+        "dependencies": {
+          "Microsoft.AspNetCore.SpaProxy": "7.0.20"
+        },
+        "compile": {
+          "bin/placeholder/Vega.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Vega.dll": {}
+        },
+        "frameworkReferences": [
+          "Microsoft.AspNetCore.App"
+        ]
       }
     }
   },
@@ -2666,6 +2697,21 @@
         "microsoft.aspnetcore.mvc.testing.7.0.0.nupkg.sha512",
         "microsoft.aspnetcore.mvc.testing.nuspec",
         "tasks/netstandard2.0/Microsoft.AspNetCore.Mvc.Testing.Tasks.dll"
+      ]
+    },
+    "Microsoft.AspNetCore.SpaProxy/7.0.20": {
+      "sha512": "ykqnzl3W8B0Yd/rfTjcfUzuwVo5hEnQjHxZf1skYf9czIyaJZ3345tRFBx8eAe58ZUmiBvrr10QDOJjJxFwnAQ==",
+      "type": "package",
+      "path": "microsoft.aspnetcore.spaproxy/7.0.20",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "Icon.png",
+        "THIRD-PARTY-NOTICES.TXT",
+        "build/Microsoft.AspNetCore.SpaProxy.targets",
+        "lib/net7.0/Microsoft.AspNetCore.SpaProxy.dll",
+        "microsoft.aspnetcore.spaproxy.7.0.20.nupkg.sha512",
+        "microsoft.aspnetcore.spaproxy.nuspec"
       ]
     },
     "Microsoft.AspNetCore.TestHost/7.0.0": {
@@ -7483,6 +7529,11 @@
         "xunit.runner.visualstudio.2.4.5.nupkg.sha512",
         "xunit.runner.visualstudio.nuspec"
       ]
+    },
+    "Vega/1.0.0": {
+      "type": "project",
+      "path": "../Vega/Vega.csproj",
+      "msbuildProject": "../Vega/Vega.csproj"
     }
   },
   "projectFileDependencyGroups": {
@@ -7490,6 +7541,7 @@
       "Microsoft.AspNetCore.Mvc.Testing >= 7.0.0",
       "Microsoft.NET.Test.Sdk >= 17.7.1",
       "Shouldly >= 4.3.0",
+      "Vega >= 1.0.0",
       "coverlet.collector >= 3.2.0",
       "xunit >= 2.4.2",
       "xunit.runner.visualstudio >= 2.4.5"
@@ -7519,7 +7571,11 @@
       "frameworks": {
         "net7.0": {
           "targetAlias": "net7.0",
-          "projectReferences": {}
+          "projectReferences": {
+            "/home/adnan/workstation/projects/dotnet3/vega/Vega/Vega.csproj": {
+              "projectPath": "/home/adnan/workstation/projects/dotnet3/vega/Vega/Vega.csproj"
+            }
+          }
         }
       },
       "warningProperties": {

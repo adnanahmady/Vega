@@ -24,4 +24,8 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Vega\Vega.csproj" />
+  </ItemGroup>
+
 </Project>

@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Vega.Tests")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+4eee83bd9dfd42196cdc773abdef9dd85a1e5f74")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+82e06ae80a8830d19529d930f25de5dd1afe8420")]
 [assembly: System.Reflection.AssemblyProductAttribute("Vega.Tests")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Vega.Tests")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
