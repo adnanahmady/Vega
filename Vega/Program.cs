@@ -1,8 +1,17 @@
+using System.Configuration;
+using Microsoft.EntityFrameworkCore;
+using Vega.Domain;
+using Vega.Profiles;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 builder.Services.AddControllersWithViews();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddDbContext<VegaDbContext>(options => options.UseSqlServer(
+    builder.Configuration.GetConnectionString("Default")));
+builder.Services.AddAutoMapper(typeof(Program));
 
 var app = builder.Build();
 
@@ -16,7 +25,6 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
-
 
 app.MapControllerRoute(
     name: "default",
