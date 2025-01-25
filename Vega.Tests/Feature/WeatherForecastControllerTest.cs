@@ -27,21 +27,21 @@ public class WeatherForecastControllerTest : IClassFixture<WebApplicationFactory
 
         var content = await response.Content.ReadAsStringAsync();
         var data = JsonConvert.DeserializeObject<List<WeatherForecast>>(content);
-        
+
         data.ShouldNotBeEmpty();
         data[0].Date.ShouldBeOfType<DateOnly>();
         data[0].Summary.ShouldNotBeNullOrEmpty();
         data[0].TemperatureC.ShouldBeOfType<int>();
         data[0].TemperatureF.ShouldBeOfType<int>();
     }
-    
+
     [Fact]
     public async Task Get_CallService_ShouldResponseOk()
     {
         var url = "/WeatherForecast";
 
         var response = await _client.GetAsync(url);
-        
+
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
     }
 }

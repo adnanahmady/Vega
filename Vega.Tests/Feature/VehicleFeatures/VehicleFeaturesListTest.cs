@@ -41,7 +41,7 @@ public class VehicleFeaturesListTest : IClassFixture<WebApplicationFactory<Progr
         var url = @"api/v1/features";
 
         var response = await _client.GetAsync(url);
-        
+
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
     }
 }

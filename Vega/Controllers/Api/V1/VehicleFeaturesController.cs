@@ -10,7 +10,7 @@ public class VehicleFeaturesController
 {
     private readonly VegaDbContext _context;
     private readonly IMapper _mapper;
-    
+
     public VehicleFeaturesController(
         VegaDbContext context,
         IMapper mapper)
@@ -18,7 +18,7 @@ public class VehicleFeaturesController
         _context = context;
         _mapper = mapper;
     }
-    
+
     [HttpGet(@"api/v1/features")]
     public ActionResult<IEnumerable<VehicleFeatureDto>> GetFeatures()
     {

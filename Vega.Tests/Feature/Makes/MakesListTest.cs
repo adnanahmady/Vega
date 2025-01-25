@@ -43,7 +43,7 @@ public class MakesListTest : IClassFixture<WebApplicationFactory<Program>>
         var url = @"/api/v1/makes";
 
         var response = await _client.GetAsync(url);
-        
+
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
     }
 }

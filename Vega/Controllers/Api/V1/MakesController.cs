@@ -1,8 +1,8 @@
-using Microsoft.AspNetCore.Mvc;
-using Vega.Dtos.V1;
 using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Vega.Domain;
+using Vega.Dtos.V1;
 
 namespace Vega.Controllers.Api.V1;
 
