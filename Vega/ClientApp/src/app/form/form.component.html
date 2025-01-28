@@ -1,0 +1,67 @@
+<h1 id="tableLabel">Create Form</h1>
+
+<p>This component demonstrates fetching data from the server.</p>
+
+<p *ngIf="!makes?.length"><em>Loading...</em></p>
+
+<form method="post" action="no-where">
+  <div class="form-group" *ngIf="makes.length">
+      <label>Vehicle makes</label>
+      <select name="make" class="form-control" (change)="makeSelected($event)">
+        <option value="0">Select</option>
+        <option [value]="[make.id]" *ngFor="let make of makes">
+          {{ make.name }}
+        </option>
+      </select>
+  </div>
+
+  <div class="form-group mt-3">
+    <p class="form-control" *ngIf="!selectedMake">
+      <span class="text-danger">*</span>
+      Please select a model
+    </p>
+  </div>
+  <div class="form-group" *ngIf="selectedMake">
+    <label>Selected vehicle models</label>
+    <select name="model" class="form-control">
+      <option value="0">Select</option>
+      <option [value]="[model.id]" *ngFor="let model of selectedMake.models">
+        {{ model.name }}
+      </option>
+    </select>
+  </div>
+
+  <div class="form-group mt-3">
+    <label>Is this vehicle registered?</label>
+    <input type="radio" name="is-registered">
+    <input type="radio" name="is-registered">
+  </div>
+
+  <div class="form-group mt-3" *ngIf="features.length">
+    <label>Vehicle features</label>
+    <select name="model" class="form-control" multiple size="5">
+      <option [value]="[feature.id]" *ngFor="let feature of features">
+        {{ feature.name }}
+      </option>
+    </select>
+  </div>
+
+  <div class="form-group mt-3">
+    <label for="contact-name">Contact Name</label>
+    <input type="text" class="form-control" name="contact-name" id="contact-name">
+  </div>
+
+  <div class="form-group mt-3">
+    <label for="contact-phone">Contact Phone</label>
+    <input type="text" class="form-control" name="contact-phone" id="contact-phone">
+  </div>
+
+  <div class="form-group mt-3">
+    <label for="contact-email">Contact Email</label>
+    <input type="text" class="form-control" name="contact-email" id="contact-email">
+  </div>
+
+  <div class="form-group mt-3">
+    <button class="btn btn-primary">Save</button>
+  </div>
+</form>
