@@ -1,7 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Vega.Configurations;
 using Vega.Models;
-using DbContext = Microsoft.EntityFrameworkCore.DbContext;
 
 namespace Vega.Domain;
 
