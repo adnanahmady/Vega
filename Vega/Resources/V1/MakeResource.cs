@@ -1,12 +1,12 @@
 using System.ComponentModel.DataAnnotations;
 using Vega.Models;
 
-namespace Vega.Dtos.V1;
+namespace Vega.Resources.V1;
 
-public class MakeDto
+public class MakeResource
 {
     public int Id { get; set; }
     public string Name { get; set; }
 
-    public List<ModelDto> Models { get; set; }
+    public List<ModelResource> Models { get; set; }
 }

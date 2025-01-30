@@ -2,7 +2,7 @@ using System.Net;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Newtonsoft.Json;
 using Shouldly;
-using Vega.Dtos.V1;
+using Vega.Resources.V1;
 using Xunit.Abstractions;
 
 namespace Vega.Tests.Feature.VehicleFeatures;
@@ -27,8 +27,8 @@ public class VehicleFeaturesListTest : IClassFixture<WebApplicationFactory<Progr
         var response = await _client.GetAsync(url);
 
         var content = await response.Content.ReadAsStringAsync();
-        _output.WriteLine("Content: >>>>>>>>>>>>>>>>>> : " + content);
-        var data = JsonConvert.DeserializeObject<List<VehicleFeatureDto>>(content);
+        this._output.WriteLine("Output => " + content);
+        var data = JsonConvert.DeserializeObject<List<VehicleFeatureResource>>(content);
         var item = data.First();
 
         item.Id.ShouldBeOfType<int>();

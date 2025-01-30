@@ -2,9 +2,10 @@ using AutoMapper;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Vega.Domain;
-using Vega.Dtos.V1;
 
 namespace Vega.Controllers.Api.V1;
+
+using Resources.V1;
 
 public class VehicleFeaturesController
 {
@@ -20,10 +21,10 @@ public class VehicleFeaturesController
     }
 
     [HttpGet(@"api/v1/features")]
-    public ActionResult<IEnumerable<VehicleFeatureDto>> GetFeatures()
+    public ActionResult<IEnumerable<VehicleFeatureResource>> GetFeatures()
     {
         var features = _context.VehicleFeatures.ToList();
-        var list = _mapper.Map<List<VehicleFeatureDto>>(features);
+        var list = _mapper.Map<List<VehicleFeatureResource>>(features);
 
         return list;
     }

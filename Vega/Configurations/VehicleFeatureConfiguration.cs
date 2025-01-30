@@ -8,7 +8,7 @@ public class VehicleFeatureConfiguration : IEntityTypeConfiguration<VehicleFeatu
 {
     public void Configure(EntityTypeBuilder<VehicleFeature> builder)
     {
-        builder.ToTable("VehicleFeature");
+        builder.ToTable("VehicleFeatures");
 
         builder.Property(f => f.Name).IsRequired();
     }

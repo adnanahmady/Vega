@@ -12,5 +12,10 @@ public class MakeConfiguration : IEntityTypeConfiguration<Make>
             .HasMany(m => m.Models)
             .WithOne(m => m.Make)
             .IsRequired();
+
+        builder
+            .Property(m => m.Name)
+            .HasMaxLength(255)
+            .IsRequired();
     }
 }

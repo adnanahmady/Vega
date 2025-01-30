@@ -1,13 +1,12 @@
+namespace Vega.Tests.Feature.Makes;
+
 using System.Net;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Newtonsoft.Json;
 using Shouldly;
-using Vega.Dtos.V1;
+using Resources.V1;
 using Xunit.Abstractions;
-using Xunit.Sdk;
-
-namespace Vega.Tests.Feature.Makes;
 
 public class MakesListTest : IClassFixture<WebApplicationFactory<Program>>
 {
@@ -28,8 +27,8 @@ public class MakesListTest : IClassFixture<WebApplicationFactory<Program>>
         var url = @"/api/v1/makes";
         var response = await _client.GetAsync(url);
 
-        string content = await response.Content.ReadAsStringAsync();
-        var data = JsonConvert.DeserializeObject<List<MakeDto>>(content);
+        var content = await response.Content.ReadAsStringAsync();
+        var data = JsonConvert.DeserializeObject<List<MakeResource>>(content);
         var dto = data.First();
 
         dto.Id.ShouldBeOfType<int>();

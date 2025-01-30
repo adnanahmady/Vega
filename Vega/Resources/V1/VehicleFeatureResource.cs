@@ -1,6 +1,6 @@
-namespace Vega.Dtos.V1;
+namespace Vega.Resources.V1;
 
-public class VehicleFeatureDto
+public class VehicleFeatureResource
 {
     public int Id { get; set; }
     public string Name { get; set; }

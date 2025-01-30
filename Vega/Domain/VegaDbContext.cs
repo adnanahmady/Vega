@@ -1,8 +1,8 @@
-using Microsoft.EntityFrameworkCore;
-using Vega.Configurations;
-using Vega.Models;
-
 namespace Vega.Domain;
+
+using Microsoft.EntityFrameworkCore;
+using Configurations;
+using Models;
 
 public class VegaDbContext : DbContext
 {
@@ -18,6 +18,7 @@ public class VegaDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfiguration(new MakeConfiguration());
+        modelBuilder.ApplyConfiguration(new ModelConfiguration());
         modelBuilder.ApplyConfiguration(new VehicleFeatureConfiguration());
 
         base.OnModelCreating(modelBuilder);

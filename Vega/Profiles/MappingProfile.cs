@@ -1,16 +1,17 @@
 using AutoMapper;
-using Vega.Dtos.V1;
 using Vega.Models;
 
 namespace Vega.Profiles;
+
+using Resources.V1;
 
 public class MappingProfile : Profile
 {
     public MappingProfile()
     {
-        AddMap<Make, MakeDto>();
-        AddMap<Model, ModelDto>();
-        AddMap<VehicleFeature, VehicleFeatureDto>();
+        AddMap<Make, MakeResource>();
+        AddMap<Model, ModelResource>();
+        AddMap<VehicleFeature, VehicleFeatureResource>();
     }
 
     private void AddMap<TModel, TDto>()

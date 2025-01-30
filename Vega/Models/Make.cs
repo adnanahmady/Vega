@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Vega.Models;
 
+using System.Collections.ObjectModel;
+
 public class Make
 {
     public int Id { get; set; }
@@ -10,5 +12,5 @@ public class Make
     [Required]
     public string Name { get; set; }
 
-    public List<Model> Models { get; set; }
+    public ICollection<Model> Models { get; set; } = new Collection<Model>();
 }
