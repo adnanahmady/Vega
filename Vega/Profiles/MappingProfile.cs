@@ -12,6 +12,7 @@ public class MappingProfile : Profile
         AddMap<Make, MakeResource>();
         AddMap<Model, ModelResource>();
         AddMap<VehicleFeature, VehicleFeatureResource>();
+        AddMap<Vehicle, VehicleResource>();
     }
 
     private void AddMap<TModel, TDto>()

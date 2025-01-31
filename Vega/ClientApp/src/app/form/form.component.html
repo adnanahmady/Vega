@@ -33,8 +33,9 @@
 
   <div class="form-group mt-3">
     <label>Is this vehicle registered?</label>
-    <input type="radio" name="is-registered">
-    <input type="radio" name="is-registered">
+    Its registered <input type="radio" name="is-registered" value="1">
+    <br>
+    Its not registered <input type="radio" name="is-registered" value="0">
   </div>
 
   <div class="form-group mt-3" *ngIf="features.length">

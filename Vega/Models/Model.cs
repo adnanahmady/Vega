@@ -11,4 +11,6 @@ public class Model
 
     public Make Make { get; set; }
     public int MakeId { get; set; }
+
+    public ICollection<Vehicle> Vehicles { get; set; }
 }
