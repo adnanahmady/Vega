@@ -23,6 +23,12 @@ public class TestableWebApplicationFactory : WebApplicationFactory<Program>
         });
     }
 
+    public T ResolveDbContext<T>() where T : notnull => this
+        .Services
+        .CreateScope()
+        .ServiceProvider
+        .GetRequiredService<T>();
+
     private void LoadTestSettingFile(IWebHostBuilder builder) =>
         builder.ConfigureAppConfiguration((c, config) =>
         {

@@ -3,8 +3,6 @@ namespace Vega.Tests.Feature.Vehicles;
 using System.Net;
 using Domain;
 using Factories;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using Resources.V1;
 using Shouldly;
@@ -18,11 +16,7 @@ public class VehiclesListTest : IClassFixture<TestableWebApplicationFactory>
     public VehiclesListTest(TestableWebApplicationFactory factory)
     {
         this._client = factory.CreateClient();
-        this._context = factory
-            .Services
-            .CreateScope()
-            .ServiceProvider
-            .GetRequiredService<VegaDbContext>();
+        this._context = factory.ResolveDbContext<VegaDbContext>();
     }
 
     [Fact]
