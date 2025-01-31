@@ -1,0 +1,51 @@
+x-restart-policy: &restart_policy
+  restart: always
+
+x-database-config: &database_config
+  image: mcr.microsoft.com/mssql/server:2022-latest
+  environment:
+    ACCEPT_EULA: 'Y'
+    MSSQL_SA_PASSWORD: 'Secret!123'
+  <<: *restart_policy
+  healthcheck:
+    test: 
+      - "CMD-SHELL"
+      - "/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P 'Secret!123' -C -Q 'SELECT 1' || exit 1"
+    start_period: 10s
+    interval: 5s
+    timeout: 5s
+    retries: 10
+
+services:
+  database:
+    <<: *database_config
+    volumes:
+      - sqlserver:/var/opt/mssql:rw
+    ports:
+      - 1433:1433
+
+  test_db:
+    <<: *database_config
+    tmpfs: 
+      - /var/opt/mssql/data
+    ports:
+      - 1434:1433
+  
+  adminer:
+    image: adminer:4.8.1
+    ports:
+      - 8080:8080
+    <<: *restart_policy
+
+  sqlpad:
+    image: sqlpad/sqlpad
+    <<: *restart_policy
+    ports:
+      - 3000:3000
+    environment:
+      SQLPAD_ADMIN: admin@sqlpad.com
+      SQLPAD_ADMIN_PASSWORD: secret
+
+volumes:
+  sqlserver:
+    driver: local

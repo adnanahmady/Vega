@@ -5,6 +5,7 @@ using Vega.Domain;
 
 namespace Vega.Controllers.Api.V1;
 
+using Models;
 using Resources.V1;
 
 [ApiController]

@@ -1,33 +1,28 @@
-using System.Net;
-using Microsoft.AspNetCore.Mvc.Testing;
-using Newtonsoft.Json;
-using Shouldly;
-using Vega.Resources.V1;
-using Xunit.Abstractions;
-
 namespace Vega.Tests.Feature.VehicleFeatures;
 
-public class VehicleFeaturesListTest : IClassFixture<WebApplicationFactory<Program>>
+using System.Net;
+using Newtonsoft.Json;
+using Shouldly;
+using Support;
+using Vega.Resources.V1;
+
+public class VehicleFeaturesListTest : IClassFixture<TestableWebApplicationFactory>
 {
     private readonly HttpClient _client;
-    private readonly ITestOutputHelper _output;
 
     public VehicleFeaturesListTest(
-        WebApplicationFactory<Program> factory,
-        ITestOutputHelper output)
+        TestableWebApplicationFactory factory)
     {
         _client = factory.CreateClient();
-        _output = output;
     }
 
     [Fact]
-    public async Task GetFeatures_CallService_ShouldBeAListOfVehicleFeatures()
+    public async Task GivenGetFeaturesWhenCallServiceThenShouldBeAListOfVehicleFeatures()
     {
         var url = @"api/v1/features";
         var response = await _client.GetAsync(url);
 
         var content = await response.Content.ReadAsStringAsync();
-        this._output.WriteLine("Output => " + content);
         var data = JsonConvert.DeserializeObject<List<VehicleFeatureResource>>(content);
         var item = data.First();
 
@@ -36,7 +31,7 @@ public class VehicleFeaturesListTest : IClassFixture<WebApplicationFactory<Progr
     }
 
     [Fact]
-    public async Task GetFeatures_CallService_ShouldResponseOk()
+    public async Task GivenGetFeaturesWhenCallServiceThenShouldResponseOk()
     {
         var url = @"api/v1/features";
 

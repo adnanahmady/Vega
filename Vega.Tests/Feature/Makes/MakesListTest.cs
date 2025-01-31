@@ -1,28 +1,22 @@
 namespace Vega.Tests.Feature.Makes;
 
 using System.Net;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Testing;
 using Newtonsoft.Json;
-using Shouldly;
 using Resources.V1;
-using Xunit.Abstractions;
+using Shouldly;
+using Support;
 
-public class MakesListTest : IClassFixture<WebApplicationFactory<Program>>
+public class MakesListTest : IClassFixture<TestableWebApplicationFactory>
 {
     private readonly HttpClient _client;
-    private readonly ITestOutputHelper _output;
 
-    public MakesListTest(
-        WebApplicationFactory<Program> factory,
-        ITestOutputHelper output)
+    public MakesListTest(TestableWebApplicationFactory factory)
     {
-        _client = factory.CreateClient();
-        _output = output;
+        this._client = factory.CreateClient();
     }
 
     [Fact]
-    public async Task GetMakes_CallService_ResponseShouldBeAsExpected()
+    public async Task GivenGetWhenMakesCallServiceThenResponseShouldBeAsExpected()
     {
         var url = @"/api/v1/makes";
         var response = await _client.GetAsync(url);
@@ -37,7 +31,7 @@ public class MakesListTest : IClassFixture<WebApplicationFactory<Program>>
     }
 
     [Fact]
-    public async Task GetMakes_CallService_ShouldResponseOk()
+    public async Task GivenGetWhenCallServiceThenShouldResponseOk()
     {
         var url = @"/api/v1/makes";
 

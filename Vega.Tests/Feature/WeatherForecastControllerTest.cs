@@ -1,26 +1,23 @@
 using System.Net;
-using Microsoft.AspNetCore.Mvc.Testing;
 using Newtonsoft.Json;
 using Shouldly;
-using Xunit.Abstractions;
 
 namespace Vega.Tests.Feature;
 
-public class WeatherForecastControllerTest : IClassFixture<WebApplicationFactory<Program>>
+using Support;
+
+public class WeatherForecastControllerTest : IClassFixture<TestableWebApplicationFactory>
 {
     private readonly HttpClient _client;
-    private readonly ITestOutputHelper _output;
 
     public WeatherForecastControllerTest(
-        WebApplicationFactory<Program> factory,
-        ITestOutputHelper output)
+        TestableWebApplicationFactory factory)
     {
         _client = factory.CreateClient();
-        _output = output;
     }
 
     [Fact]
-    public async Task Get_CallService_ShouldReturnItemsAsExpected()
+    public async Task GivenGetWhenCallServiceThenShouldReturnItemsAsExpected()
     {
         var url = "/WeatherForecast";
         var response = await _client.GetAsync(url);
@@ -36,7 +33,7 @@ public class WeatherForecastControllerTest : IClassFixture<WebApplicationFactory
     }
 
     [Fact]
-    public async Task Get_CallService_ShouldResponseOk()
+    public async Task GivenGetWhenCallServiceThenShouldResponseOk()
     {
         var url = "/WeatherForecast";
 

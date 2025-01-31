@@ -1,4 +1,4 @@
-namespace Vega.Tests.Unit.ExtensionMethods.String;
+namespace Vega.Tests.Unit.ExtensionMethods.Strings;
 
 using Shouldly;
 using Vega.ExtensionMethods;
@@ -6,7 +6,7 @@ using Vega.ExtensionMethods;
 public class TruncateExtensionTest
 {
     [Fact]
-    public void TextShould()
+    public void GivenTextWhenTruncatedThenShouldGetTruncatedAsExpected()
     {
         var count = 5;
 

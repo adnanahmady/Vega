@@ -1,7 +1,7 @@
 namespace Vega.Domain;
 
-using Microsoft.EntityFrameworkCore;
 using Configurations;
+using Microsoft.EntityFrameworkCore;
 using Models;
 
 public class VegaDbContext : DbContext
