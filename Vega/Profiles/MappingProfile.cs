@@ -3,6 +3,8 @@ using Vega.Models;
 
 namespace Vega.Profiles;
 
+using AutoMapper.Internal;
+using Forms;
 using Resources.V1;
 
 public class MappingProfile : Profile
@@ -13,11 +15,15 @@ public class MappingProfile : Profile
         AddMap<Model, ModelResource>();
         AddMap<VehicleFeature, VehicleFeatureResource>();
         AddMap<Vehicle, VehicleResource>();
+        CreateMap<CreateVehicleForm, Vehicle>();
     }
 
     private void AddMap<TModel, TDto>()
     {
         CreateMap<TModel, TDto>();
-        CreateMap<TDto, TModel>();
+        CreateMap<TDto, TModel>().ForMember(
+            "Id",
+            opt => opt.Ignore()
+        );
     }
 }

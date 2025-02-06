@@ -7,7 +7,8 @@ namespace Vega.Controllers.Api.V1;
 
 using Resources.V1;
 
-public class VehicleFeaturesController
+[Route("api/v1/features")]
+public class VehicleFeaturesController : Controller
 {
     private readonly VegaDbContext _context;
     private readonly IMapper _mapper;
@@ -20,7 +21,7 @@ public class VehicleFeaturesController
         _mapper = mapper;
     }
 
-    [HttpGet(@"api/v1/features")]
+    [HttpGet]
     public ActionResult<IEnumerable<VehicleFeatureResource>> GetFeatures()
     {
         var features = _context.VehicleFeatures.ToList();

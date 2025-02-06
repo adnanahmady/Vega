@@ -1,6 +1,7 @@
 namespace Vega.Tests.Feature.Vehicles;
 
 using System.Net;
+using System.Net.Http.Json;
 using Domain;
 using Factories;
 using Newtonsoft.Json;
@@ -26,8 +27,7 @@ public class VehiclesListTest : IClassFixture<TestableWebApplicationFactory>
         this._context.SaveChanges();
         var response = await this._client.GetAsync("/api/v1/vehicles");
 
-        var content = await response.Content.ReadAsStringAsync();
-        var data = JsonConvert.DeserializeObject<List<VehicleResource>>(content);
+        var data = await response.Content.ReadFromJsonAsync<List<VehicleResource>>();
 
         var item = data.First();
         item.Id.ShouldBeOfType<int>();

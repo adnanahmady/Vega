@@ -8,8 +8,9 @@ namespace Vega.Controllers.Api.V1;
 using Models;
 using Resources.V1;
 
+[Route("api/v1/makes")]
 [ApiController]
-public class MakesController
+public class MakesController : Controller
 {
     private readonly VegaDbContext _context;
     private readonly IMapper _mapper;
@@ -20,7 +21,7 @@ public class MakesController
         _mapper = mapper;
     }
 
-    [HttpGet("api/v1/makes")]
+    [HttpGet]
     public ActionResult<IEnumerable<MakeResource>> GetMakes()
     {
         var makes = _context.Makes

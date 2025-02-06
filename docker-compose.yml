@@ -6,6 +6,8 @@ x-database-config: &database_config
   environment:
     ACCEPT_EULA: 'Y'
     MSSQL_SA_PASSWORD: 'Secret!123'
+    MSSQL_DATA_DIR: /opt/mssql/data
+    MSSQL_DATA_LOG: /opt/mssql/log
   <<: *restart_policy
   healthcheck:
     test: 
@@ -27,7 +29,8 @@ services:
   test_db:
     <<: *database_config
     tmpfs: 
-      - /var/opt/mssql/data
+      - /opt/mssql/data
+      - /opt/mssql/log
     ports:
       - 1434:1433
   
