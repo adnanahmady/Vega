@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vega", "Vega\Vega.csproj", "{76E8B62C-FC4F-4A27-B9C9-FE3EE806C9FD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vega.Tests", "Vega.Tests\Vega.Tests.csproj", "{645D81F1-455C-4C02-8926-8BB1EF112424}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{76E8B62C-FC4F-4A27-B9C9-FE3EE806C9FD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{76E8B62C-FC4F-4A27-B9C9-FE3EE806C9FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{76E8B62C-FC4F-4A27-B9C9-FE3EE806C9FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{76E8B62C-FC4F-4A27-B9C9-FE3EE806C9FD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{645D81F1-455C-4C02-8926-8BB1EF112424}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{645D81F1-455C-4C02-8926-8BB1EF112424}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{645D81F1-455C-4C02-8926-8BB1EF112424}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{645D81F1-455C-4C02-8926-8BB1EF112424}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
