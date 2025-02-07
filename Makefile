@@ -17,3 +17,6 @@ status: ps
 
 logs:
 	@docker compose logs $(call default,${service},database) ${with}
+
+test:
+	@dotnet test
