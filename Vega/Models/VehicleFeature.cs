@@ -1,6 +1,3 @@
-using System.ComponentModel.DataAnnotations;
-using System.Data.Common;
-
 namespace Vega.Models;
 
 public class VehicleFeature

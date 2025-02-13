@@ -1,11 +1,12 @@
 using AutoMapper;
+
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+
 using Vega.Domain;
 
 namespace Vega.Controllers.Api.V1;
 
-using Models;
 using Resources.V1;
 
 [Route("api/v1/makes")]

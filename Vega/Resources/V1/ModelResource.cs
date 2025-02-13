@@ -1,5 +1,3 @@
-using Vega.Models;
-
 namespace Vega.Resources.V1;
 
 public class ModelResource

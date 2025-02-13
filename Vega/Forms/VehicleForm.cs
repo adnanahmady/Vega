@@ -1,6 +1,7 @@
 namespace Vega.Forms;
 
 using System.ComponentModel.DataAnnotations;
+
 using Validations;
 
 public class VehicleForm

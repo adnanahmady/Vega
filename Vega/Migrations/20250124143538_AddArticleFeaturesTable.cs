@@ -8,9 +8,7 @@ namespace Vega.Migrations
     public partial class AddArticleFeaturesTable : Migration
     {
         /// <inheritdoc />
-        protected override void Up(MigrationBuilder migrationBuilder)
-        {
-            migrationBuilder.CreateTable(
+        protected override void Up(MigrationBuilder migrationBuilder) => migrationBuilder.CreateTable(
                 name: "VehicleFeature",
                 columns: table => new
                 {
@@ -22,13 +20,9 @@ namespace Vega.Migrations
                 {
                     table.PrimaryKey("PK_VehicleFeature", x => x.Id);
                 });
-        }
 
         /// <inheritdoc />
-        protected override void Down(MigrationBuilder migrationBuilder)
-        {
-            migrationBuilder.DropTable(
+        protected override void Down(MigrationBuilder migrationBuilder) => migrationBuilder.DropTable(
                 name: "VehicleFeature");
-        }
     }
 }

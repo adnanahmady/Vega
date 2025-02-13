@@ -2,11 +2,15 @@ namespace Vega.Tests.Feature.Vehicles;
 
 using System.Net;
 using System.Net.Http.Json;
+
 using Domain;
+
 using Factories;
-using Newtonsoft.Json;
+
 using Resources.V1;
+
 using Shouldly;
+
 using Support;
 
 public class VehiclesListTest : IClassFixture<TestableWebApplicationFactory>

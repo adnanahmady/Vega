@@ -8,10 +8,7 @@ public class RegexCollectionAttribute : ValidationAttribute
 {
     private readonly string _pattern;
 
-    public RegexCollectionAttribute(string pattern)
-    {
-        this._pattern = pattern;
-    }
+    public RegexCollectionAttribute(string pattern) => _pattern = pattern;
 
     public override bool IsValid(object? value)
     {
@@ -19,7 +16,7 @@ public class RegexCollectionAttribute : ValidationAttribute
         {
             foreach (var item in collection)
             {
-                if (item is not int || !Regex.IsMatch(item.ToString(), this._pattern))
+                if (item is not int || !Regex.IsMatch(item.ToString() ?? string.Empty, this._pattern))
                 {
                     return false;
                 }

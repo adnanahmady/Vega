@@ -1,10 +1,11 @@
 using AutoMapper;
+
 using Vega.Models;
 
 namespace Vega.Profiles;
 
-using AutoMapper.Internal;
 using Forms;
+
 using Resources.V1;
 
 public class MappingProfile : Profile

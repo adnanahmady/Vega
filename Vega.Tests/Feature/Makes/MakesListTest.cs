@@ -1,19 +1,20 @@
 namespace Vega.Tests.Feature.Makes;
 
 using System.Net;
+
 using Newtonsoft.Json;
+
 using Resources.V1;
+
 using Shouldly;
+
 using Support;
 
 public class MakesListTest : IClassFixture<TestableWebApplicationFactory>
 {
     private readonly HttpClient _client;
 
-    public MakesListTest(TestableWebApplicationFactory factory)
-    {
-        this._client = factory.CreateClient();
-    }
+    public MakesListTest(TestableWebApplicationFactory factory) => this._client = factory.CreateClient();
 
     [Fact]
     public async Task GivenGetWhenMakesCallServiceThenResponseShouldBeAsExpected()

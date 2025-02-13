@@ -1,6 +1,7 @@
 namespace Vega.Tests.Unit.ExtensionMethods.Strings;
 
 using Shouldly;
+
 using Vega.ExtensionMethods;
 
 public class TruncateExtensionTest

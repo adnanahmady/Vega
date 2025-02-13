@@ -1,5 +1,7 @@
 using System.Net;
+
 using Newtonsoft.Json;
+
 using Shouldly;
 
 namespace Vega.Tests.Feature;
@@ -11,10 +13,7 @@ public class WeatherForecastControllerTest : IClassFixture<TestableWebApplicatio
     private readonly HttpClient _client;
 
     public WeatherForecastControllerTest(
-        TestableWebApplicationFactory factory)
-    {
-        _client = factory.CreateClient();
-    }
+        TestableWebApplicationFactory factory) => _client = factory.CreateClient();
 
     [Fact]
     public async Task GivenGetWhenCallServiceThenShouldReturnItemsAsExpected()

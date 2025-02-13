@@ -1,6 +1,3 @@
-using System.ComponentModel.DataAnnotations;
-using Vega.Models;
-
 namespace Vega.Resources.V1;
 
 public class MakeResource

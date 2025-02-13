@@ -1,6 +1,7 @@
 using AutoMapper;
-using Microsoft.AspNetCore.Http.HttpResults;
+
 using Microsoft.AspNetCore.Mvc;
+
 using Vega.Domain;
 
 namespace Vega.Controllers.Api.V1;

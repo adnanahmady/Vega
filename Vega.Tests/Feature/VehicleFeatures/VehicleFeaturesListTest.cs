@@ -1,9 +1,13 @@
 namespace Vega.Tests.Feature.VehicleFeatures;
 
 using System.Net;
+
 using Newtonsoft.Json;
+
 using Shouldly;
+
 using Support;
+
 using Vega.Resources.V1;
 
 public class VehicleFeaturesListTest : IClassFixture<TestableWebApplicationFactory>
@@ -11,10 +15,7 @@ public class VehicleFeaturesListTest : IClassFixture<TestableWebApplicationFacto
     private readonly HttpClient _client;
 
     public VehicleFeaturesListTest(
-        TestableWebApplicationFactory factory)
-    {
-        _client = factory.CreateClient();
-    }
+        TestableWebApplicationFactory factory) => _client = factory.CreateClient();
 
     [Fact]
     public async Task GivenGetFeaturesWhenCallServiceThenShouldBeAListOfVehicleFeatures()

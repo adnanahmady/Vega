@@ -1,8 +1,8 @@
 namespace Vega.Configurations;
 
-using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+
 using Models;
 
 public class VehicleConfiguration : IEntityTypeConfiguration<Vehicle>

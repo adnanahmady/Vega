@@ -1,6 +1,5 @@
 namespace Vega.Resources.V1;
 
-using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 public class VehicleResource

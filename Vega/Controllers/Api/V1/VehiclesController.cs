@@ -1,13 +1,16 @@
 namespace Vega.Controllers.Api.V1;
 
-using System.Text.Json;
 using AutoMapper;
+
 using Domain;
+
 using Forms;
-using Microsoft.AspNetCore.Http.HttpResults;
+
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+
 using Models;
+
 using Resources.V1;
 
 [Route("api/v1/vehicles")]

@@ -2,18 +2,21 @@ namespace Vega.Tests.Feature.Vehicles;
 
 using System.Net;
 using System.Net.Http.Json;
-using System.Security.Policy;
-using System.Text.Json;
-using Bogus.DataSets;
+
 using Domain;
+
 using Factories;
+
 using Microsoft.EntityFrameworkCore;
+
 using Models;
-using Newtonsoft.Json;
+
 using Resources.V1;
+
 using Shouldly;
+
 using Support;
-using JsonSerializer = System.Text.Json.JsonSerializer;
+
 using Vehicle = Models.Vehicle;
 
 public class UpdateVehicleTest : IClassFixture<TestableWebApplicationFactory>
@@ -23,8 +26,8 @@ public class UpdateVehicleTest : IClassFixture<TestableWebApplicationFactory>
 
     public UpdateVehicleTest(TestableWebApplicationFactory factory)
     {
-        this._client = factory.CreateClient();
-        this._context = factory.ResolveDbContext<VegaDbContext>();
+        _client = factory.CreateClient();
+        _context = factory.ResolveDbContext<VegaDbContext>();
     }
 
     public static IEnumerable<object[]> InvalidDataForValidationTest()
@@ -109,11 +112,11 @@ public class UpdateVehicleTest : IClassFixture<TestableWebApplicationFactory>
         var (url, vehicle) = await this.Prepare();
         var data = new
         {
-            IsRegistered = vehicle.IsRegistered,
-            ModelId = vehicle.ModelId,
+            vehicle.IsRegistered,
+            vehicle.ModelId,
             VehicleFeatureIds = vehicle.VehicleFeatures.Select(vf => vf.Id),
-            ContactName = vehicle.ContactName,
-            ContactEmail = vehicle.ContactEmail,
+            vehicle.ContactName,
+            vehicle.ContactEmail,
             ContactPhone = "09117773313",
         };
 
@@ -139,11 +142,11 @@ public class UpdateVehicleTest : IClassFixture<TestableWebApplicationFactory>
         var feature = await this.FactoryFeature();
         var data = new
         {
-            IsRegistered = vehicle.IsRegistered,
-            ModelId = vehicle.ModelId,
+            vehicle.IsRegistered,
+            vehicle.ModelId,
             VehicleFeatureIds = new[] { feature.Id },
-            ContactName = vehicle.ContactName,
-            ContactEmail = vehicle.ContactEmail,
+            vehicle.ContactName,
+            vehicle.ContactEmail,
             ContactPhone = "09117773313",
         };
 
@@ -166,11 +169,11 @@ public class UpdateVehicleTest : IClassFixture<TestableWebApplicationFactory>
         var feature = await this.FactoryFeature();
         var data = new
         {
-            IsRegistered = vehicle.IsRegistered,
-            ModelId = vehicle.ModelId,
+            vehicle.IsRegistered,
+            vehicle.ModelId,
             VehicleFeatureIds = new[] { feature.Id },
-            ContactName = vehicle.ContactName,
-            ContactEmail = vehicle.ContactEmail,
+            vehicle.ContactName,
+            vehicle.ContactEmail,
             ContactPhone = "09117773313",
         };
 
