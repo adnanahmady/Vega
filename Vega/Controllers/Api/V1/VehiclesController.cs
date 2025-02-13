@@ -1,6 +1,5 @@
 namespace Vega.Controllers.Api.V1;
 
-using System.Text.Json;
 using AutoMapper;
 using Domain;
 using Forms;
@@ -20,8 +19,26 @@ public class VehiclesController : Controller
         VegaDbContext context,
         IMapper mapper)
     {
-        _context = context;
-        _mapper = mapper;
+        this._context = context;
+        this._mapper = mapper;
+    }
+
+    [HttpGet(@"{id}")]
+    public async Task<IActionResult> ShowVehicle(int id)
+    {
+        var vehicle = await this._context.Vehicles
+            .Include(v => v.Model)
+            .Include(v => v.VehicleFeature)
+            .SingleOrDefaultAsync( v => v.Id == id);
+
+        if (vehicle == null)
+        {
+            return new NotFoundResult();
+        }
+
+        var resource = this._mapper.Map<VehicleResource>(vehicle);
+
+        return this.Ok(resource);
     }
 
     [HttpGet]
@@ -38,7 +55,7 @@ public class VehiclesController : Controller
     }
 
     [HttpPost]
-    public IActionResult Create([FromBody] CreateVehicleForm data)
+    public IActionResult Create([FromBody] VehicleForm data)
     {
         if (!this.ModelState.IsValid)
         {
@@ -66,5 +83,59 @@ public class VehiclesController : Controller
             nameof(this.GetVehicles),
             new { id = vehicle.Id },
             vehicle);
+    }
+
+    [HttpPut(@"{id}")]
+    public async Task<IActionResult> UpdateVehicle(
+        [FromBody] VehicleForm data, int id)
+    {
+        var vehicle = await this._context
+            .Vehicles
+            .Include(v => v.Model)
+            .Include(v => v.VehicleFeature)
+            .SingleOrDefaultAsync(v => v.Id == id);
+
+        if (vehicle == null)
+        {
+            return new NotFoundResult();
+        }
+
+        if (!this.ModelState.IsValid)
+        {
+            var errors = this.ModelState
+                .Where(x => x.Value.Errors.Any())
+                .Select(x => new
+                {
+                    Field = x.Key,
+                    Errors = x.Value.Errors.Select(
+                        e => e.ErrorMessage).ToList()
+                }).ToList();
+
+            return this.BadRequest(new
+            {
+                Message = "Invalid data provided",
+                Errors = errors
+            });
+        }
+
+        this._mapper.Map<VehicleForm, Vehicle>(data, vehicle);
+        await this._context.SaveChangesAsync();
+
+        return this.Ok(this._mapper.Map<VehicleResource>(vehicle));
+    }
+
+    [HttpDelete(@"{id}")]
+    public async Task<IActionResult> Delete(int id)
+    {
+        var result = await this._context.Vehicles
+            .Where(v => v.Id == id)
+            .ExecuteDeleteAsync();
+
+        if (result == 0)
+        {
+            return this.NotFound();
+        }
+
+        return this.NoContent();
     }
 }

@@ -1,13 +1,14 @@
 x-restart-policy: &restart_policy
   restart: always
 
+x-database-user: &database_user
+  ACCEPT_EULA: 'Y'
+  MSSQL_SA_PASSWORD: 'Secret!123'
+
 x-database-config: &database_config
   image: mcr.microsoft.com/mssql/server:2022-latest
   environment:
-    ACCEPT_EULA: 'Y'
-    MSSQL_SA_PASSWORD: 'Secret!123'
-    MSSQL_DATA_DIR: /opt/mssql/data
-    MSSQL_DATA_LOG: /opt/mssql/log
+    <<: *database_user
   <<: *restart_policy
   healthcheck:
     test: 
@@ -28,9 +29,13 @@ services:
 
   test_db:
     <<: *database_config
+    environment:
+      <<: *database_user
+      MSSQL_DATA_DIR: /home/mssql/data
+      MSSQL_DATA_LOG: /home/mssql/log
     tmpfs: 
-      - /opt/mssql/data
-      - /opt/mssql/log
+      - /home/mssql/data
+      - /home/mssql/log
     ports:
       - 1434:1433
   

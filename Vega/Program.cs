@@ -1,4 +1,5 @@
 using System.Configuration;
+using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
 using Vega.Domain;
 using Vega.Profiles;

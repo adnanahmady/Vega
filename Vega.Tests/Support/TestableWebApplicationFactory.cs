@@ -23,7 +23,7 @@ public class TestableWebApplicationFactory : WebApplicationFactory<Program>
         });
     }
 
-    public T ResolveDbContext<T>() where T : notnull => this
+    public T ResolveDbContext<T>() where T : class => this
         .Services
         .CreateScope()
         .ServiceProvider

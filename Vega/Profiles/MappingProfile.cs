@@ -15,7 +15,7 @@ public class MappingProfile : Profile
         AddMap<Model, ModelResource>();
         AddMap<VehicleFeature, VehicleFeatureResource>();
         AddMap<Vehicle, VehicleResource>();
-        CreateMap<CreateVehicleForm, Vehicle>();
+        CreateMap<VehicleForm, Vehicle>();
     }
 
     private void AddMap<TModel, TDto>()

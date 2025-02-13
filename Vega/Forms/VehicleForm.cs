@@ -2,7 +2,7 @@ namespace Vega.Forms;
 
 using System.ComponentModel.DataAnnotations;
 
-public class CreateVehicleForm
+public class VehicleForm
 {
     public bool IsRegistered { get; set; }
 
