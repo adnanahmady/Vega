@@ -24,7 +24,7 @@ public class VehiclesListTest : IClassFixture<TestableWebApplicationFactory>
     public async Task GivenGetThenServiceCalledThenShouldReturnListOfVehicles()
     {
         this._context.Vehicles.Add(VehicleFactory.Create());
-        this._context.SaveChanges();
+        await this._context.SaveChangesAsync();
         var response = await this._client.GetAsync("/api/v1/vehicles");
 
         var data = await response.Content.ReadFromJsonAsync<List<VehicleResource>>();
@@ -38,10 +38,10 @@ public class VehiclesListTest : IClassFixture<TestableWebApplicationFactory>
         var model = item.Model.ShouldBeOfType<ModelResource>();
         model.Id.ShouldBeOfType<int>();
         model.Name.ShouldBeOfType<string>();
-        var vehicleFeature = item.VehicleFeature
-            .ShouldBeOfType<VehicleFeatureResource>();
-        vehicleFeature.Id.ShouldBeOfType<int>();
-        vehicleFeature.Name.ShouldBeOfType<string>();
+        var vehicleFeature = item.VehicleFeatures
+            .ShouldBeOfType<List<VehicleFeatureResource>>();
+        vehicleFeature.First().Id.ShouldBeOfType<int>();
+        vehicleFeature.First().Name.ShouldBeOfType<string>();
     }
 
     [Fact]

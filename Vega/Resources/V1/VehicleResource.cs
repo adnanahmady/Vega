@@ -20,7 +20,7 @@ public class VehicleResource
 
     public ModelResource Model { get; set; }
 
-    public VehicleFeatureResource? VehicleFeature { get; set; }
+    public ICollection<VehicleFeatureResource> VehicleFeatures { get; set; }
 
     public DateTime CreatedAt = DateTime.Now;
 

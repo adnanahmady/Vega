@@ -15,8 +15,8 @@ public class Vehicle
     public Model Model { get; set; }
     public int ModelId { get; set; }
 
-    public VehicleFeature? VehicleFeature { get; set; }
-    public int? VehicleFeatureId { get; set; }
+    public ICollection<VehicleFeature> VehicleFeatures { get; set; }
+    public ICollection<long> VehicleFeatureIds { get; set; }
 
     public DateTime CreatedAt { get; set; } = DateTime.Now;
 

@@ -67,7 +67,7 @@ public class CreateVehicleTest : IClassFixture<TestableWebApplicationFactory>
         {
             new Func<Dictionary<string, object>, Dictionary<string, object>>(data =>
             {
-                data.Remove("VehicleFeatureId");
+                data.Remove("VehicleFeatureIds");
 
                 return data;
             })
@@ -89,7 +89,10 @@ public class CreateVehicleTest : IClassFixture<TestableWebApplicationFactory>
             { "ContactPhone", "09119933311" },
             { "ContactEmail", "user@dummy.com" },
             { "ModelId", this._context.Models.First().Id },
-            { "VehicleFeatureId", this._context.VehicleFeatures.First().Id },
+            { "VehicleFeatureIds", new []
+            {
+                this._context.VehicleFeatures.First().Id
+            }},
         };
         data = fn(data);
 
@@ -112,7 +115,10 @@ public class CreateVehicleTest : IClassFixture<TestableWebApplicationFactory>
             ContactPhone = "09119933311",
             ContactEmail = "user@dummy.com",
             ModelId = this._context.Models.First().Id,
-            VehicleFeatureId = this._context.VehicleFeatures.First().Id
+            VehicleFeatureIds = new[]
+            {
+                this._context.VehicleFeatures.First().Id
+            }
         };
 
         var response = await this._client.PostAsJsonAsync("/api/v1/vehicles", data);
@@ -139,7 +145,10 @@ public class CreateVehicleTest : IClassFixture<TestableWebApplicationFactory>
             ContactPhone = "09119933311",
             ContactEmail = "user@dummy.com",
             ModelId = this._context.Models.First().Id,
-            VehicleFeatureId = this._context.VehicleFeatures.First().Id
+            VehicleFeatureIds = new[]
+            {
+                this._context.VehicleFeatures.First().Id
+            }
         };
 
         var response = await this._client.PostAsJsonAsync("/api/v1/vehicles", data);
@@ -167,7 +176,10 @@ public class CreateVehicleTest : IClassFixture<TestableWebApplicationFactory>
             ContactPhone = "09119933134",
             ContactEmail = "admin@gmail.com",
             ModelId = this._context.Models.First().Id,
-            VehicleFeatureId = this._context.VehicleFeatures.First().Id
+            VehicleFeatureIds = new[]
+            {
+                this._context.VehicleFeatures.First().Id
+            }
         };
 
         var response = await this._client.PostAsJsonAsync("/api/v1/vehicles", data);

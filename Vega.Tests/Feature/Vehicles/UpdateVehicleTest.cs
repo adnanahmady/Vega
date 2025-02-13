@@ -8,10 +8,12 @@ using Bogus.DataSets;
 using Domain;
 using Factories;
 using Microsoft.EntityFrameworkCore;
+using Models;
 using Newtonsoft.Json;
 using Resources.V1;
 using Shouldly;
 using Support;
+using JsonSerializer = System.Text.Json.JsonSerializer;
 using Vehicle = Models.Vehicle;
 
 public class UpdateVehicleTest : IClassFixture<TestableWebApplicationFactory>
@@ -72,7 +74,7 @@ public class UpdateVehicleTest : IClassFixture<TestableWebApplicationFactory>
         {
             new Func<Dictionary<string, object>, Dictionary<string, object>>(data =>
             {
-                data.Remove("VehicleFeatureId");
+                data.Remove("VehicleFeatureIds");
 
                 return data;
             })
@@ -89,7 +91,7 @@ public class UpdateVehicleTest : IClassFixture<TestableWebApplicationFactory>
         {
             { "IsRegistered", vehicle.IsRegistered },
             { "ModelId", vehicle.ModelId },
-            { "VehicleFeatureId", vehicle.VehicleFeatureId },
+            { "VehicleFeatureIds", vehicle.VehicleFeatureIds },
             { "ContactName", vehicle.ContactName },
             { "ContactEmail", vehicle.ContactEmail },
             { "ContactPhone", "09117773313" },
@@ -109,7 +111,7 @@ public class UpdateVehicleTest : IClassFixture<TestableWebApplicationFactory>
         {
             IsRegistered = vehicle.IsRegistered,
             ModelId = vehicle.ModelId,
-            VehicleFeatureId = vehicle.VehicleFeatureId,
+            VehicleFeatureIds = vehicle.VehicleFeatures.Select(vf => vf.Id),
             ContactName = vehicle.ContactName,
             ContactEmail = vehicle.ContactEmail,
             ContactPhone = "09117773313",
@@ -121,7 +123,8 @@ public class UpdateVehicleTest : IClassFixture<TestableWebApplicationFactory>
             .Where(v => v.Id == vehicle.Id)
             .Where(v => v.IsRegistered == data.IsRegistered)
             .Where(v => v.ModelId == data.ModelId)
-            .Where(v => v.VehicleFeatureId == data.VehicleFeatureId)
+            .Where(v => v.VehicleFeatures.All(
+                vf => data.VehicleFeatureIds.Contains(vf.Id)))
             .Where(v => v.ContactEmail == data.ContactEmail)
             .Where(v => v.ContactName == data.ContactName)
             .Where(v => v.ContactPhone == data.ContactPhone)
@@ -133,11 +136,12 @@ public class UpdateVehicleTest : IClassFixture<TestableWebApplicationFactory>
     public async Task GivenVehicleDataWhenCalledThenResponseWithExpectedData()
     {
         var (url, vehicle) = await this.Prepare();
+        var feature = await this.FactoryFeature();
         var data = new
         {
             IsRegistered = vehicle.IsRegistered,
             ModelId = vehicle.ModelId,
-            VehicleFeatureId = vehicle.VehicleFeatureId,
+            VehicleFeatureIds = new[] { feature.Id },
             ContactName = vehicle.ContactName,
             ContactEmail = vehicle.ContactEmail,
             ContactPhone = "09117773313",
@@ -151,20 +155,20 @@ public class UpdateVehicleTest : IClassFixture<TestableWebApplicationFactory>
         resource.ContactEmail.ShouldBe(data.ContactEmail);
         resource.ContactName.ShouldBe(data.ContactName);
         resource.ContactPhone.ShouldBe(data.ContactPhone);
-        Assert.Equal(
-            resource.VehicleFeature?.Id,
-            data.VehicleFeatureId);
+        resource.VehicleFeatures.ShouldBeOfType<List<VehicleFeatureResource>>();
+        resource.VehicleFeatures.First().Id.ShouldBe(feature.Id);
     }
 
     [Fact]
     public async Task GivenVehicleIdWhenCalledThenResponseOk()
     {
         var (url, vehicle) = await this.Prepare();
+        var feature = await this.FactoryFeature();
         var data = new
         {
             IsRegistered = vehicle.IsRegistered,
             ModelId = vehicle.ModelId,
-            VehicleFeatureId = vehicle.VehicleFeatureId,
+            VehicleFeatureIds = new[] { feature.Id },
             ContactName = vehicle.ContactName,
             ContactEmail = vehicle.ContactEmail,
             ContactPhone = "09117773313",
@@ -175,11 +179,19 @@ public class UpdateVehicleTest : IClassFixture<TestableWebApplicationFactory>
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
     }
 
+    private async Task<VehicleFeature> FactoryFeature()
+    {
+        var feature = VehicleFeatureFactory.Create();
+        this._context.VehicleFeatures.Add(feature);
+        await this._context.SaveChangesAsync();
+        return feature;
+    }
+
     private async Task<(string url, Vehicle vehicle)> Prepare()
     {
         var vehicle = await this.FactoryVehicle();
         var url = $"/api/v1/vehicles/{vehicle.Id}";
-        return ( url, vehicle );
+        return (url, vehicle);
     }
 
     private async Task<Vehicle> FactoryVehicle()

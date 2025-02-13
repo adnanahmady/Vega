@@ -6,9 +6,11 @@ using Models;
 
 public class ModelConfiguration : IEntityTypeConfiguration<Model>
 {
-    public void Configure(EntityTypeBuilder<Model> builder) =>
+    public void Configure(EntityTypeBuilder<Model> builder)
+    {
         builder
             .Property(m => m.Name)
             .HasMaxLength(255)
             .IsRequired();
+    }
 }

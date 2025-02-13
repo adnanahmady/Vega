@@ -1,5 +1,6 @@
 namespace Vega.Configurations;
 
+using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Models;
@@ -30,10 +31,18 @@ public class VehicleConfiguration : IEntityTypeConfiguration<Vehicle>
             .HasForeignKey(v => v.ModelId)
             .OnDelete(DeleteBehavior.Restrict);
 
+        builder.Ignore(v => v.VehicleFeatureIds);
+
         builder
-            .HasOne(v => v.VehicleFeature)
+            .HasMany(v => v.VehicleFeatures)
             .WithMany(vf => vf.Vehicles)
-            .IsRequired(false)
-            .HasForeignKey(v => v.VehicleFeatureId);
+            .UsingEntity<Dictionary<string, object>>(
+                "FeaturesForVehicles",
+                j => j.HasOne<VehicleFeature>()
+                    .WithMany()
+                    .HasForeignKey("VehicleFeatureId"),
+                j => j.HasOne<Vehicle>()
+                    .WithMany()
+                    .HasForeignKey("VehicleId"));
     }
 }

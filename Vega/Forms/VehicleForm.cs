@@ -1,6 +1,7 @@
 namespace Vega.Forms;
 
 using System.ComponentModel.DataAnnotations;
+using Validations;
 
 public class VehicleForm
 {
@@ -20,6 +21,6 @@ public class VehicleForm
     public int ModelId { get; set; }
 
     [Required]
-    [RegularExpression(@"^[1-9]+\d*$", ErrorMessage = "Id must be a valid integer.")]
-    public int VehicleFeatureId { get; set; }
+    [RegexCollection(@"^[1-9]+\d*$", ErrorMessage = "Id must be a valid integer.")]
+    public int[] VehicleFeatureIds { get; set; }
 }

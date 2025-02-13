@@ -1,5 +1,6 @@
 namespace Vega.Controllers.Api.V1;
 
+using System.Text.Json;
 using AutoMapper;
 using Domain;
 using Forms;
@@ -28,8 +29,8 @@ public class VehiclesController : Controller
     {
         var vehicle = await this._context.Vehicles
             .Include(v => v.Model)
-            .Include(v => v.VehicleFeature)
-            .SingleOrDefaultAsync( v => v.Id == id);
+            .Include(v => v.VehicleFeatures)
+            .SingleOrDefaultAsync(v => v.Id == id);
 
         if (vehicle == null)
         {
@@ -47,7 +48,7 @@ public class VehiclesController : Controller
         var vehicles = this._context
             .Vehicles
             .Include(v => v.Model)
-            .Include(v => v.VehicleFeature)
+            .Include(v => v.VehicleFeatures)
             .ToList();
         var list = this._mapper.Map<List<VehicleResource>>(vehicles);
 
@@ -55,7 +56,7 @@ public class VehiclesController : Controller
     }
 
     [HttpPost]
-    public IActionResult Create([FromBody] VehicleForm data)
+    public async Task<IActionResult> Create([FromBody] VehicleForm data)
     {
         if (!this.ModelState.IsValid)
         {
@@ -76,13 +77,33 @@ public class VehiclesController : Controller
             });
         }
         var vehicle = this._mapper.Map<Vehicle>(data);
-        this._context.Vehicles.Add(vehicle);
-        this._context.SaveChanges();
+        vehicle.VehicleFeatures = new List<VehicleFeature>() { };
+        foreach (var i in data.VehicleFeatureIds)
+        {
+            var f = await this._context.VehicleFeatures
+                .SingleOrDefaultAsync(vf => vf.Id == i);
 
-        return CreatedAtAction(
+            if (f == null)
+            {
+                return this.BadRequest(new
+                {
+                    Message = "Invalid data provided",
+                    Errors = new
+                    {
+                        Field = "VehicleFeatureIds",
+                        Errors = new[] { "VehicleFeature With Id \"{i}\" not found." }
+                    }
+                });
+            }
+            vehicle.VehicleFeatures.Add(f);
+        }
+        this._context.Vehicles.Add(vehicle);
+        await this._context.SaveChangesAsync();
+
+        return this.CreatedAtAction(
             nameof(this.GetVehicles),
             new { id = vehicle.Id },
-            vehicle);
+            this._mapper.Map<VehicleResource>(vehicle));
     }
 
     [HttpPut(@"{id}")]
@@ -92,7 +113,7 @@ public class VehiclesController : Controller
         var vehicle = await this._context
             .Vehicles
             .Include(v => v.Model)
-            .Include(v => v.VehicleFeature)
+            .Include(v => v.VehicleFeatures)
             .SingleOrDefaultAsync(v => v.Id == id);
 
         if (vehicle == null)
@@ -119,6 +140,26 @@ public class VehiclesController : Controller
         }
 
         this._mapper.Map<VehicleForm, Vehicle>(data, vehicle);
+        vehicle.VehicleFeatures = new List<VehicleFeature>() { };
+        foreach (var i in data.VehicleFeatureIds)
+        {
+            var f = await this._context.VehicleFeatures
+                .SingleOrDefaultAsync(vf => vf.Id == i);
+
+            if (f == null)
+            {
+                return this.BadRequest(new
+                {
+                    Message = "Invalid data provided",
+                    Errors = new
+                    {
+                        Field = "VehicleFeatureIds",
+                        Errors = new[] { "VehicleFeature With Id \"{i}\" not found." }
+                    }
+                });
+            }
+            vehicle.VehicleFeatures.Add(f);
+        }
         await this._context.SaveChangesAsync();
 
         return this.Ok(this._mapper.Map<VehicleResource>(vehicle));
