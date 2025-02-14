@@ -27,3 +27,8 @@ logs:
 
 test:
 	@dotnet test $(call default,$(call prefix,${filter},--filter=),$(call prefix,${f},--filter=)) ${with}
+
+fix:
+	@dotnet format style
+	@dotnet format style --severity=info
+	@dotnet format whitespace

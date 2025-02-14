@@ -12,7 +12,7 @@ using Vega.Domain;
 namespace Vega.Migrations
 {
     [DbContext(typeof(VegaDbContext))]
-    [Migration("20250213150523_AddManyToManyRelationBetweenVehiclesAndFeatures")]
+    [Migration("20250214104226_AddManyToManyRelationBetweenVehiclesAndFeatures")]
     partial class AddManyToManyRelationBetweenVehiclesAndFeatures
     {
         /// <inheritdoc />

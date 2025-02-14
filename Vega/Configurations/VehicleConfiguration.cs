@@ -43,6 +43,11 @@ public class VehicleConfiguration : IEntityTypeConfiguration<Vehicle>
                     .HasForeignKey("VehicleFeatureId"),
                 j => j.HasOne<Vehicle>()
                     .WithMany()
-                    .HasForeignKey("VehicleId"));
+                    .HasForeignKey("VehicleId"),
+                j => j.HasKey(
+                        "VehicleFeatureId",
+                        "VehicleId"
+                    )
+                );
     }
 }
