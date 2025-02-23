@@ -16,7 +16,7 @@ public class RegexCollectionAttribute : ValidationAttribute
         {
             foreach (var item in collection)
             {
-                if (item is not int || !Regex.IsMatch(item.ToString() ?? string.Empty, this._pattern))
+                if (item is not int || !Regex.IsMatch(item.ToString() ?? string.Empty, _pattern))
                 {
                     return false;
                 }

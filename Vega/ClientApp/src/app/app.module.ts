@@ -9,7 +9,8 @@ import { NavMenuComponent } from './nav-menu/nav-menu.component';
 import { HomeComponent } from './home/home.component';
 import { CounterComponent } from './counter/counter.component';
 import { FetchDataComponent } from './fetch-data/fetch-data.component';
-import {FormComponent} from "./form/form.component";
+import { VehicleFormComponent } from "./vehicle-form/vehicle-form.component";
+import {VehicleService} from "./services/vehicle.service";
 
 @NgModule({
   declarations: [
@@ -18,7 +19,7 @@ import {FormComponent} from "./form/form.component";
     HomeComponent,
     CounterComponent,
     FetchDataComponent,
-    FormComponent
+    VehicleFormComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -28,10 +29,12 @@ import {FormComponent} from "./form/form.component";
       { path: '', component: HomeComponent, pathMatch: 'full' },
       { path: 'counter', component: CounterComponent },
       { path: 'fetch-data', component: FetchDataComponent },
-      { path: 'create-form', component: FormComponent },
+      { path: 'vehicles/new', component: VehicleFormComponent },
     ])
   ],
-  providers: [],
+  providers: [
+    VehicleService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

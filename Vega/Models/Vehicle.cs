@@ -1,3 +1,5 @@
+using System.Text.Json;
+
 namespace Vega.Models;
 
 public class Vehicle
@@ -21,4 +23,6 @@ public class Vehicle
     public DateTime CreatedAt { get; set; } = DateTime.Now;
 
     public DateTime LastUpdate { get; set; } = DateTime.Now;
+
+    public override string ToString() => JsonSerializer.Serialize(this);
 }

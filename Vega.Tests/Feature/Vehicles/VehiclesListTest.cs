@@ -20,25 +20,25 @@ public class VehiclesListTest : IClassFixture<TestableWebApplicationFactory>
 
     public VehiclesListTest(TestableWebApplicationFactory factory)
     {
-        this._client = factory.CreateClient();
-        this._context = factory.ResolveDbContext<VegaDbContext>();
+        _client = factory.CreateClient();
+        _context = factory.ResolveDbContext<VegaDbContext>();
     }
 
     [Fact]
     public async Task GivenGetThenServiceCalledThenShouldReturnListOfVehicles()
     {
-        this._context.Vehicles.Add(VehicleFactory.Create());
-        await this._context.SaveChangesAsync();
-        var response = await this._client.GetAsync("/api/v1/vehicles");
+        _context.Vehicles.Add(VehicleFactory.Create());
+        await _context.SaveChangesAsync();
+        var response = await _client.GetAsync("/api/v1/vehicles");
 
         var data = await response.Content.ReadFromJsonAsync<List<VehicleResource>>();
 
         var item = data.First();
         item.Id.ShouldBeOfType<int>();
         item.IsRegistered.ShouldBeOfType<bool>();
-        item.ContactName.ShouldBeOfType<string>().ShouldNotBeNullOrWhiteSpace();
-        item.ContactPhone.ShouldBeOfType<string>().ShouldNotBeNullOrWhiteSpace();
-        item.ContactEmail.ShouldBeOfType<string>().ShouldNotBeNullOrWhiteSpace();
+        item.Contact.Name.ShouldBeOfType<string>().ShouldNotBeNullOrWhiteSpace();
+        item.Contact.Phone.ShouldBeOfType<string>().ShouldNotBeNullOrWhiteSpace();
+        item.Contact.Email.ShouldBeOfType<string>().ShouldNotBeNullOrWhiteSpace();
         var model = item.Model.ShouldBeOfType<ModelResource>();
         model.Id.ShouldBeOfType<int>();
         model.Name.ShouldBeOfType<string>();
@@ -51,10 +51,10 @@ public class VehiclesListTest : IClassFixture<TestableWebApplicationFactory>
     [Fact]
     public async Task GivenGetWhenServiceCalledThenShouldReturnOkStatusCode()
     {
-        this._context.Vehicles.Add(VehicleFactory.Create());
-        this._context.SaveChanges();
+        _context.Vehicles.Add(VehicleFactory.Create());
+        _context.SaveChanges();
 
-        var response = await this._client.GetAsync("/api/v1/vehicles");
+        var response = await _client.GetAsync("/api/v1/vehicles");
 
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
     }

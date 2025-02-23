@@ -1,3 +1,5 @@
+using System.Text.Json;
+
 namespace Vega.Forms;
 
 using System.ComponentModel.DataAnnotations;
@@ -8,14 +10,7 @@ public class VehicleForm
 {
     public bool IsRegistered { get; set; }
 
-    [Required]
-    public string ContactName { get; set; }
-
-    [MaxLength(11)]
-    public string? ContactPhone { get; set; }
-
-    [Required]
-    public string ContactEmail { get; set; }
+    public ContactForm Contact { get; set; }
 
     [Required]
     [RegularExpression(@"^[1-9]+\d*$", ErrorMessage = "Id must be a valid integer.")]
@@ -23,5 +18,7 @@ public class VehicleForm
 
     [Required]
     [RegexCollection(@"^[1-9]+\d*$", ErrorMessage = "Id must be a valid integer.")]
-    public int[] VehicleFeatureIds { get; set; }
+    public int[] FeatureIds { get; set; }
+
+    public override string ToString() => JsonSerializer.Serialize(this);
 }

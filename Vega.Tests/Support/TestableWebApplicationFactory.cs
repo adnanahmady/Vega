@@ -12,15 +12,15 @@ public class TestableWebApplicationFactory : WebApplicationFactory<Program>
 {
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
-        this.LoadTestSettingFile(builder);
+        LoadTestSettingFile(builder);
 
         builder.ConfigureServices((c, services) =>
         {
-            this.RemoveExistingDbContext(services);
+            RemoveExistingDbContext(services);
 
-            this.AddDbContextWithTestConnectionString(c, services);
+            AddDbContextWithTestConnectionString(c, services);
 
-            this.ApplyMigrationsBeforeTesting(services);
+            ApplyMigrationsBeforeTesting(services);
         });
     }
 

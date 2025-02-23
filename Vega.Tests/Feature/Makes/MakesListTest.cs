@@ -14,7 +14,7 @@ public class MakesListTest : IClassFixture<TestableWebApplicationFactory>
 {
     private readonly HttpClient _client;
 
-    public MakesListTest(TestableWebApplicationFactory factory) => this._client = factory.CreateClient();
+    public MakesListTest(TestableWebApplicationFactory factory) => _client = factory.CreateClient();
 
     [Fact]
     public async Task GivenGetWhenMakesCallServiceThenResponseShouldBeAsExpected()

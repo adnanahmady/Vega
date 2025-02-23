@@ -23,14 +23,27 @@ public class VehiclesController : Controller
         VegaDbContext context,
         IMapper mapper)
     {
-        this._context = context;
-        this._mapper = mapper;
+        _context = context;
+        _mapper = mapper;
+    }
+
+    [HttpGet]
+    public ActionResult<IEnumerable<VehicleResource>> Index()
+    {
+        var vehicles = _context
+            .Vehicles
+            .Include(v => v.Model)
+            .Include(v => v.VehicleFeatures)
+            .ToList();
+        var list = _mapper.Map<List<VehicleResource>>(vehicles);
+
+        return list;
     }
 
     [HttpGet(@"{id}")]
-    public async Task<IActionResult> ShowVehicle(int id)
+    public async Task<IActionResult> Show(int id)
     {
-        var vehicle = await this._context.Vehicles
+        var vehicle = await _context.Vehicles
             .Include(v => v.Model)
             .Include(v => v.VehicleFeatures)
             .SingleOrDefaultAsync(v => v.Id == id);
@@ -40,30 +53,17 @@ public class VehiclesController : Controller
             return new NotFoundResult();
         }
 
-        var resource = this._mapper.Map<VehicleResource>(vehicle);
+        var resource = _mapper.Map<VehicleResource>(vehicle);
 
-        return this.Ok(resource);
-    }
-
-    [HttpGet]
-    public ActionResult<IEnumerable<VehicleResource>> GetVehicles()
-    {
-        var vehicles = this._context
-            .Vehicles
-            .Include(v => v.Model)
-            .Include(v => v.VehicleFeatures)
-            .ToList();
-        var list = this._mapper.Map<List<VehicleResource>>(vehicles);
-
-        return list;
+        return Ok(resource);
     }
 
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] VehicleForm data)
     {
-        if (!this.ModelState.IsValid)
+        if (!ModelState.IsValid)
         {
-            var errors = this.ModelState
+            var errors = ModelState
                 .Where(x => x.Value.Errors.Any())
                 .Select(x => new
                 {
@@ -73,22 +73,24 @@ public class VehiclesController : Controller
                 })
                 .ToList();
 
-            return this.BadRequest(new
+            return BadRequest(new
             {
                 Message = "Invalid data provided",
                 Errors = errors
             });
         }
-        var vehicle = this._mapper.Map<Vehicle>(data);
-        vehicle.VehicleFeatures = new List<VehicleFeature>() { };
-        foreach (var i in data.VehicleFeatureIds)
+
+        var vehicle = _mapper.Map<Vehicle>(data);
+        vehicle.VehicleFeatures = new List<VehicleFeature>();
+
+        foreach (var i in data.FeatureIds)
         {
-            var f = await this._context.VehicleFeatures
+            var f = await _context.VehicleFeatures
                 .SingleOrDefaultAsync(vf => vf.Id == i);
 
             if (f == null)
             {
-                return this.BadRequest(new
+                return BadRequest(new
                 {
                     Message = "Invalid data provided",
                     Errors = new
@@ -100,20 +102,21 @@ public class VehiclesController : Controller
             }
             vehicle.VehicleFeatures.Add(f);
         }
-        this._context.Vehicles.Add(vehicle);
-        await this._context.SaveChangesAsync();
 
-        return this.CreatedAtAction(
-            nameof(this.GetVehicles),
-            new { id = vehicle.Id },
-            this._mapper.Map<VehicleResource>(vehicle));
+        _context.Vehicles.Add(vehicle);
+        await _context.SaveChangesAsync();
+
+        return CreatedAtAction(
+            nameof(Index),
+            null,
+            _mapper.Map<VehicleResource>(vehicle));
     }
 
     [HttpPut(@"{id}")]
-    public async Task<IActionResult> UpdateVehicle(
-        [FromBody] VehicleForm data, int id)
+    public async Task<IActionResult> Update(
+        [FromBody] VehicleForm vehicleForm, int id)
     {
-        var vehicle = await this._context
+        var vehicle = await _context
             .Vehicles
             .Include(v => v.Model)
             .Include(v => v.VehicleFeatures)
@@ -124,9 +127,9 @@ public class VehiclesController : Controller
             return new NotFoundResult();
         }
 
-        if (!this.ModelState.IsValid)
+        if (!ModelState.IsValid)
         {
-            var errors = this.ModelState
+            var errors = ModelState
                 .Where(x => x.Value.Errors.Any())
                 .Select(x => new
                 {
@@ -135,23 +138,23 @@ public class VehiclesController : Controller
                         e => e.ErrorMessage).ToList()
                 }).ToList();
 
-            return this.BadRequest(new
+            return BadRequest(new
             {
                 Message = "Invalid data provided",
                 Errors = errors
             });
         }
 
-        this._mapper.Map<VehicleForm, Vehicle>(data, vehicle);
-        vehicle.VehicleFeatures = new List<VehicleFeature>() { };
-        foreach (var i in data.VehicleFeatureIds)
+        _mapper.Map(vehicleForm, vehicle);
+        vehicle.VehicleFeatures = new List<VehicleFeature>();
+        foreach (var i in vehicleForm.FeatureIds)
         {
-            var f = await this._context.VehicleFeatures
+            var f = await _context.VehicleFeatures
                 .SingleOrDefaultAsync(vf => vf.Id == i);
 
             if (f == null)
             {
-                return this.BadRequest(new
+                return BadRequest(new
                 {
                     Message = "Invalid data provided",
                     Errors = new
@@ -161,25 +164,27 @@ public class VehiclesController : Controller
                     }
                 });
             }
+
             vehicle.VehicleFeatures.Add(f);
         }
-        await this._context.SaveChangesAsync();
 
-        return this.Ok(this._mapper.Map<VehicleResource>(vehicle));
+        await _context.SaveChangesAsync();
+
+        return Ok(_mapper.Map<VehicleResource>(vehicle));
     }
 
     [HttpDelete(@"{id}")]
     public async Task<IActionResult> Delete(int id)
     {
-        var result = await this._context.Vehicles
+        var result = await _context.Vehicles
             .Where(v => v.Id == id)
             .ExecuteDeleteAsync();
 
         if (result == 0)
         {
-            return this.NotFound();
+            return NotFound();
         }
 
-        return this.NoContent();
+        return NoContent();
     }
 }

@@ -17,11 +17,11 @@ public class VehicleConfiguration : IEntityTypeConfiguration<Vehicle>
         builder
             .Property(v => v.ContactEmail)
             .HasMaxLength(255)
-            .IsRequired();
+            .IsRequired(false);
 
         builder
             .Property(v => v.ContactPhone)
-            .IsRequired(false)
+            .IsRequired()
             .HasMaxLength(255);
 
         builder

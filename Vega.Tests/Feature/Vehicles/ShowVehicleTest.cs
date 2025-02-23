@@ -22,33 +22,33 @@ public class ShowVehicleTest : IClassFixture<TestableWebApplicationFactory>
 
     public ShowVehicleTest(TestableWebApplicationFactory factory)
     {
-        this._client = factory.CreateClient();
-        this._context = factory.ResolveDbContext<VegaDbContext>();
+        _client = factory.CreateClient();
+        _context = factory.ResolveDbContext<VegaDbContext>();
     }
 
     [Fact]
     public async Task GivenVehicleIdWhenCalledThenReturnExpectingData()
     {
-        var vehicle = await this.FactoryVehicle();
+        var vehicle = await FactoryVehicle();
         var url = $"/api/v1/vehicles/{vehicle.Id}";
 
-        var data = await this._client.GetFromJsonAsync<VehicleResource>(url);
+        var data = await _client.GetFromJsonAsync<VehicleResource>(url);
 
         data.Id.ShouldBe(vehicle.Id);
         data.Model.Id.ShouldBe(vehicle.ModelId);
         data.VehicleFeatures.ShouldBeOfType<List<VehicleFeatureResource>>();
-        data.ContactEmail.ShouldBe(vehicle.ContactEmail);
-        data.ContactName.ShouldBe(vehicle.ContactName);
-        data.ContactPhone.ShouldBe(vehicle.ContactPhone);
+        data.Contact.Email.ShouldBe(vehicle.ContactEmail);
+        data.Contact.Name.ShouldBe(vehicle.ContactName);
+        data.Contact.Phone.ShouldBe(vehicle.ContactPhone);
     }
 
     [Fact]
     public async Task GivenVehicleIdWhenCalledThenShouldReturnOk()
     {
-        var vehicle = await this.FactoryVehicle();
+        var vehicle = await FactoryVehicle();
         var url = $"/api/v1/vehicles/{vehicle.Id}";
 
-        var response = await this._client.GetAsync(url);
+        var response = await _client.GetAsync(url);
 
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
     }
@@ -56,8 +56,8 @@ public class ShowVehicleTest : IClassFixture<TestableWebApplicationFactory>
     private async Task<Vehicle> FactoryVehicle()
     {
         var vehicle = VehicleFactory.Create();
-        this._context.Vehicles.Add(vehicle);
-        await this._context.SaveChangesAsync();
+        _context.Vehicles.Add(vehicle);
+        await _context.SaveChangesAsync();
 
         return vehicle;
     }

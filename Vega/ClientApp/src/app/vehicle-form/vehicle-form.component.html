@@ -7,7 +7,10 @@
 <form method="post" action="no-where">
   <div class="form-group" *ngIf="makes.length">
       <label>Vehicle makes</label>
-      <select name="make" class="form-control" (change)="makeSelected($event)">
+      <select name="make" class="form-control"
+              (change)="handleMakeChange($event)"
+              [(ngModel)]="vehicle.make"
+      >
         <option value="0">Select</option>
         <option [value]="[make.id]" *ngFor="let make of makes">
           {{ make.name }}
@@ -16,16 +19,16 @@
   </div>
 
   <div class="form-group mt-3">
-    <p class="form-control" *ngIf="!selectedMake">
+    <p class="form-control" *ngIf="!models.length">
       <span class="text-danger">*</span>
       Please select a model
     </p>
   </div>
-  <div class="form-group" *ngIf="selectedMake">
+  <div class="form-group" *ngIf="models.length">
     <label>Selected vehicle models</label>
     <select name="model" class="form-control">
       <option value="0">Select</option>
-      <option [value]="[model.id]" *ngFor="let model of selectedMake.models">
+      <option [value]="[model.id]" *ngFor="let model of models">
         {{ model.name }}
       </option>
     </select>
@@ -33,9 +36,10 @@
 
   <div class="form-group mt-3">
     <label>Is this vehicle registered?</label>
-    Its registered <input type="radio" name="is-registered" value="1">
-    <br>
-    Its not registered <input type="radio" name="is-registered" value="0">
+    <div class="form-group">
+      Yes <input type="radio" name="is_registered" value="1">
+      No <input type="radio" name="is_registered" value="0">
+    </div>
   </div>
 
   <div class="form-group mt-3" *ngIf="features.length">
@@ -48,21 +52,21 @@
   </div>
 
   <div class="form-group mt-3">
-    <label for="contact-name">Contact Name</label>
+    <label for="contact-name">Name</label>
     <input type="text" class="form-control" name="contact-name" id="contact-name">
   </div>
 
   <div class="form-group mt-3">
-    <label for="contact-phone">Contact Phone</label>
+    <label for="contact-phone">Phone</label>
     <input type="text" class="form-control" name="contact-phone" id="contact-phone">
   </div>
 
   <div class="form-group mt-3">
-    <label for="contact-email">Contact Email</label>
+    <label for="contact-email">Email</label>
     <input type="text" class="form-control" name="contact-email" id="contact-email">
   </div>
 
   <div class="form-group mt-3">
-    <button class="btn btn-primary">Save</button>
+    <button class="btn btn-primary" (click)="handleSubmit()">Save</button>
   </div>
 </form>

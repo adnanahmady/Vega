@@ -21,8 +21,8 @@ public class DeleteVehicleTest : IClassFixture<TestableWebApplicationFactory>
 
     public DeleteVehicleTest(TestableWebApplicationFactory factory)
     {
-        this._client = factory.CreateClient();
-        this._context = factory.ResolveDbContext<VegaDbContext>();
+        _client = factory.CreateClient();
+        _context = factory.ResolveDbContext<VegaDbContext>();
     }
 
     [Fact]
@@ -30,7 +30,7 @@ public class DeleteVehicleTest : IClassFixture<TestableWebApplicationFactory>
     {
         var url = $"/api/v1/vehicles/10";
 
-        var data = await this._client.DeleteAsync(url);
+        var data = await _client.DeleteAsync(url);
 
         data.StatusCode.ShouldBe(HttpStatusCode.NotFound);
     }
@@ -38,12 +38,12 @@ public class DeleteVehicleTest : IClassFixture<TestableWebApplicationFactory>
     [Fact]
     public async Task GivenVehicleIdWhenCalledThenDeleteVehicle()
     {
-        var vehicle = await this.FactoryVehicle();
+        var vehicle = await FactoryVehicle();
         var url = $"/api/v1/vehicles/{vehicle.Id}";
 
-        await this._client.DeleteAsync(url);
+        await _client.DeleteAsync(url);
 
-        var count = await this._context.Vehicles
+        var count = await _context.Vehicles
             .Where(v => v.Id == vehicle.Id).CountAsync();
         count.ShouldBe(0);
     }
@@ -51,10 +51,10 @@ public class DeleteVehicleTest : IClassFixture<TestableWebApplicationFactory>
     [Fact]
     public async Task GivenVehicleIdWhenCalledThenShouldReturnNoContent()
     {
-        var vehicle = await this.FactoryVehicle();
+        var vehicle = await FactoryVehicle();
         var url = $"/api/v1/vehicles/{vehicle.Id}";
 
-        var response = await this._client.DeleteAsync(url);
+        var response = await _client.DeleteAsync(url);
 
         response.StatusCode.ShouldBe(HttpStatusCode.NoContent);
     }
@@ -62,8 +62,8 @@ public class DeleteVehicleTest : IClassFixture<TestableWebApplicationFactory>
     private async Task<Vehicle> FactoryVehicle()
     {
         var vehicle = VehicleFactory.Create();
-        this._context.Vehicles.Add(vehicle);
-        await this._context.SaveChangesAsync();
+        _context.Vehicles.Add(vehicle);
+        await _context.SaveChangesAsync();
 
         return vehicle;
     }
