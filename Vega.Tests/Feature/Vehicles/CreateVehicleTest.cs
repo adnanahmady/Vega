@@ -72,6 +72,19 @@ public class CreateVehicleTest : IClassFixture<TestableWebApplicationFactory>
             1
         };
 
+        // ModelId should exist in the system
+        yield return new object[]
+        {
+            new Func<Dictionary<string, object>, Dictionary<string, object>>(data =>
+            {
+                data["ModelId"] = 9999;
+
+                return data;
+            }),
+            "ModelId",
+            1
+        };
+
         yield return new object[]
         {
             new Func<Dictionary<string, object>, Dictionary<string, object>>(data =>

@@ -59,7 +59,7 @@ public class VehiclesController : Controller
     }
 
     [HttpPost]
-    public async Task<IActionResult> Create([FromBody] VehicleForm data)
+    public async Task<IActionResult> Create([FromBody] VehicleForm formData)
     {
         if (!ModelState.IsValid)
         {
@@ -80,10 +80,27 @@ public class VehiclesController : Controller
             });
         }
 
-        var vehicle = _mapper.Map<Vehicle>(data);
+        var model = await _context.Models.FindAsync(formData.ModelId);
+        if (model == null)
+        {
+            ModelState.AddModelError("ModelId", "Invalid model id.");
+
+            return BadRequest(new
+            {
+                Message = "Invalid data provided",
+                Errors = new[] { new
+                {
+                    Field = ModelState.First().Key,
+                    Errors = ModelState.First().Value?.Errors.Select(
+                        e => e.ErrorMessage).ToList()
+                } }
+            });
+        }
+
+        var vehicle = _mapper.Map<Vehicle>(formData);
         vehicle.VehicleFeatures = new List<VehicleFeature>();
 
-        foreach (var i in data.FeatureIds)
+        foreach (var i in formData.FeatureIds)
         {
             var f = await _context.VehicleFeatures
                 .SingleOrDefaultAsync(vf => vf.Id == i);
@@ -149,10 +166,10 @@ public class VehiclesController : Controller
         vehicle.VehicleFeatures = new List<VehicleFeature>();
         foreach (var i in vehicleForm.FeatureIds)
         {
-            var f = await _context.VehicleFeatures
+            var feature = await _context.VehicleFeatures
                 .SingleOrDefaultAsync(vf => vf.Id == i);
 
-            if (f == null)
+            if (feature == null)
             {
                 return BadRequest(new
                 {
@@ -165,7 +182,7 @@ public class VehiclesController : Controller
                 });
             }
 
-            vehicle.VehicleFeatures.Add(f);
+            vehicle.VehicleFeatures.Add(feature);
         }
 
         await _context.SaveChangesAsync();
@@ -180,11 +197,6 @@ public class VehiclesController : Controller
             .Where(v => v.Id == id)
             .ExecuteDeleteAsync();
 
-        if (result == 0)
-        {
-            return NotFound();
-        }
-
-        return NoContent();
+        return result == 0 ? NotFound() : NoContent();
     }
 }

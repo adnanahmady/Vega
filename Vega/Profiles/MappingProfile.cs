@@ -32,6 +32,7 @@ public class MappingProfile : Profile
 
     private void MapFromRequestFormToDomainModel() =>
         CreateMap<VehicleForm, Vehicle>()
+            .ForMember(v => v.Id, opt => opt.Ignore())
             .ForMember(
                 v => v.ContactEmail,
                 opt => opt.MapFrom(f => f.Contact.Email))
