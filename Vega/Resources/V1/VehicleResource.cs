@@ -9,6 +9,8 @@ public class VehicleResource
 
     public required ModelResource Model { get; set; }
 
+    public required MakeResource Make { get; set; }
+
     public ICollection<VehicleFeatureResource> VehicleFeatures { get; set; } =
         new List<VehicleFeatureResource>();
 

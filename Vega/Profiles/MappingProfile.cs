@@ -21,6 +21,11 @@ public class MappingProfile : Profile
                 Name = v.ContactName,
                 Email = v.ContactEmail,
                 Phone = v.ContactPhone
+            }))
+            .ForMember(vr => vr.Make, opt => opt.MapFrom(v => new MakeResource()
+            {
+                Id = v.Model.Make.Id,
+                Name = v.Model.Make.Name
             }));
     }
 

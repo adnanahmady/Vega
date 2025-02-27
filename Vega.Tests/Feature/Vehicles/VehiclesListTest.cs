@@ -34,14 +34,12 @@ public class VehiclesListTest : IClassFixture<TestableWebApplicationFactory>
         var data = await response.Content.ReadFromJsonAsync<List<VehicleResource>>();
 
         var item = data!.First();
-        Console.WriteLine("************************************************************");
-        Console.WriteLine(await response.Content.ReadAsStringAsync());
-        Console.WriteLine("************************************************************");
         item.Id.ShouldBeOfType<int>();
         item.IsRegistered.ShouldBeOfType<bool>();
         item.Contact.Name.ShouldBeOfType<string>().ShouldNotBeNullOrWhiteSpace();
         item.Contact.Phone.ShouldBeOfType<string>().ShouldNotBeNullOrWhiteSpace();
         item.Contact.Email.ShouldBeOfType<string>().ShouldNotBeNullOrWhiteSpace();
+        item.Make.ShouldBeOfType<MakeResource>();
         var model = item.Model.ShouldBeOfType<ModelResource>();
         model.Id.ShouldBeOfType<int>();
         model.Name.ShouldBeOfType<string>();
