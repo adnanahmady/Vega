@@ -187,7 +187,7 @@ public class UpdateVehicleTest : IClassFixture<TestableWebApplicationFactory>
         resource.Contact.Email.ShouldBe(data.Contact.Email);
         resource.Contact.Name.ShouldBe(data.Contact.Name);
         resource.Contact.Phone.ShouldBe(data.Contact.Phone);
-        resource.VehicleFeatures.ShouldBeOfType<List<VehicleFeatureResource>>();
+        resource.VehicleFeatures.ShouldBeOfType<List<KeyValuePairResource>>();
         resource.VehicleFeatures.First().Id.ShouldBe(feature.Id);
     }
 

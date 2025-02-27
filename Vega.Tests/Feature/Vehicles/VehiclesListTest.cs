@@ -39,12 +39,13 @@ public class VehiclesListTest : IClassFixture<TestableWebApplicationFactory>
         item.Contact.Name.ShouldBeOfType<string>().ShouldNotBeNullOrWhiteSpace();
         item.Contact.Phone.ShouldBeOfType<string>().ShouldNotBeNullOrWhiteSpace();
         item.Contact.Email.ShouldBeOfType<string>().ShouldNotBeNullOrWhiteSpace();
-        item.Make.ShouldBeOfType<MakeResource>();
-        var model = item.Model.ShouldBeOfType<ModelResource>();
+        var make = item.Make.ShouldBeOfType<KeyValuePairResource>();
+        make.Id.ShouldBeOfType<int>();
+        var model = item.Model.ShouldBeOfType<KeyValuePairResource>();
         model.Id.ShouldBeOfType<int>();
         model.Name.ShouldBeOfType<string>();
         var vehicleFeature = item.VehicleFeatures
-            .ShouldBeOfType<List<VehicleFeatureResource>>();
+            .ShouldBeOfType<List<KeyValuePairResource>>();
         vehicleFeature.First().Id.ShouldBeOfType<int>();
         vehicleFeature.First().Name.ShouldBeOfType<string>();
     }

@@ -24,7 +24,7 @@ public class VehicleFeaturesListTest : IClassFixture<TestableWebApplicationFacto
         var response = await _client.GetAsync(url);
 
         var content = await response.Content.ReadAsStringAsync();
-        var data = JsonConvert.DeserializeObject<List<VehicleFeatureResource>>(content);
+        var data = JsonConvert.DeserializeObject<List<KeyValuePairResource>>(content);
         var item = data!.First();
 
         item.Id.ShouldBeOfType<int>();

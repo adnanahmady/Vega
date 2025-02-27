@@ -16,14 +16,14 @@ public class VehicleRepository : Repository<Vehicle>, IVehicleRepository
     public Vehicle? FindWithModelAndFeatures(int id) =>
         VegaDbContext.Vehicles
             .Include(v => v.Model)
-            .Include(v => v.Model.Make)
+            .ThenInclude(m => m.Make)
             .Include(v => v.VehicleFeatures)
             .SingleOrDefault(v => v.Id == id);
 
     public IEnumerable<Vehicle> GetAllWithModelAndFeatures() =>
         VegaDbContext.Vehicles
             .Include(v => v.Model)
-            .Include(v => v.Model.Make)
+            .ThenInclude(m => m.Make)
             .Include(v => v.VehicleFeatures)
             .ToList();
 
@@ -31,14 +31,14 @@ public class VehicleRepository : Repository<Vehicle>, IVehicleRepository
     public async Task<Vehicle?> FindWithModelAndFeaturesAsync(int id) =>
         await VegaDbContext.Vehicles
             .Include(v => v.Model)
-            .Include(v => v.Model.Make)
+            .ThenInclude(m => m.Make)
             .Include(v => v.VehicleFeatures)
             .SingleOrDefaultAsync(v => v.Id == id);
 
     public IEnumerable<Vehicle> GetPaginatedWithModelAndFeatures(int pageIndex, int pageSize) =>
         VegaDbContext.Vehicles
             .Include(v => v.Model)
-            .Include(v => v.Model.Make)
+            .ThenInclude(m => m.Make)
             .Include(v => v.VehicleFeatures)
             .Skip((pageIndex - 1) * pageSize)
             .Take(pageSize)
@@ -47,7 +47,7 @@ public class VehicleRepository : Repository<Vehicle>, IVehicleRepository
     public async Task<IEnumerable<Vehicle>> GetPaginatedWithModelAndFeaturesAsync(int pageIndex, int pageSize) =>
         await VegaDbContext.Vehicles
             .Include(v => v.Model)
-            .Include(v => v.Model.Make)
+            .ThenInclude(m => m.Make)
             .Include(v => v.VehicleFeatures)
             .Skip((pageIndex - 1) * pageSize)
             .Take(pageSize)

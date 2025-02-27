@@ -1,9 +1,6 @@
 namespace Vega.Resources.V1;
 
-public class MakeResource
+public class MakeResource : KeyValuePairResource
 {
-    public int Id { get; set; }
-    public string Name { get; set; } = "";
-
-    public List<ModelResource> Models { get; set; } = new List<ModelResource>();
+    public List<KeyValuePairResource> Models { get; set; } = new List<KeyValuePairResource>();
 }

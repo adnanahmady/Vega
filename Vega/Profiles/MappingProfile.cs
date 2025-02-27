@@ -22,7 +22,7 @@ public class MappingProfile : Profile
                 Email = v.ContactEmail,
                 Phone = v.ContactPhone
             }))
-            .ForMember(vr => vr.Make, opt => opt.MapFrom(v => new MakeResource()
+            .ForMember(vr => vr.Make, opt => opt.MapFrom(v => new KeyValuePairResource()
             {
                 Id = v.Model.Make.Id,
                 Name = v.Model.Make.Name
@@ -32,8 +32,8 @@ public class MappingProfile : Profile
     private void MapBiDirectionalModelResource()
     {
         AddMap<Make, MakeResource>();
-        AddMap<Model, ModelResource>();
-        AddMap<VehicleFeature, VehicleFeatureResource>();
+        AddMap<Model, KeyValuePairResource>();
+        AddMap<VehicleFeature, KeyValuePairResource>();
     }
 
     private void MapFromRequestFormToDomainModel() =>

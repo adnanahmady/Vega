@@ -7,12 +7,12 @@ public class VehicleResource
 
     public required ContactResource Contact { get; set; }
 
-    public required ModelResource Model { get; set; }
+    public required KeyValuePairResource Model { get; set; }
 
-    public required MakeResource Make { get; set; }
+    public required KeyValuePairResource Make { get; set; }
 
-    public ICollection<VehicleFeatureResource> VehicleFeatures { get; set; } =
-        new List<VehicleFeatureResource>();
+    public ICollection<KeyValuePairResource> VehicleFeatures { get; set; } =
+        new List<KeyValuePairResource>();
 
     public DateTime CreatedAt = DateTime.Now;
 

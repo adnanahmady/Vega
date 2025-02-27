@@ -36,7 +36,7 @@ public class ShowVehicleTest : IClassFixture<TestableWebApplicationFactory>
 
         data!.Id.ShouldBe(vehicle.Id);
         data.Model.Id.ShouldBe(vehicle.ModelId);
-        data.VehicleFeatures.ShouldBeOfType<List<VehicleFeatureResource>>();
+        data.VehicleFeatures.ShouldBeOfType<List<KeyValuePairResource>>();
         data.Contact.Email.ShouldBe(vehicle.ContactEmail);
         data.Contact.Name.ShouldBe(vehicle.ContactName);
         data.Contact.Phone.ShouldBe(vehicle.ContactPhone);

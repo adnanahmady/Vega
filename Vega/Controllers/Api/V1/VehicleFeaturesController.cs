@@ -23,10 +23,10 @@ public class VehicleFeaturesController : Controller
     }
 
     [HttpGet]
-    public ActionResult<IEnumerable<VehicleFeatureResource>> GetFeatures()
+    public ActionResult<IEnumerable<KeyValuePairResource>> GetFeatures()
     {
         var features = _unitOfWork.VehicleFeatures.GetAll();
-        var list = _mapper.Map<List<VehicleFeatureResource>>(features);
+        var list = _mapper.Map<List<KeyValuePairResource>>(features);
 
         return list;
     }
