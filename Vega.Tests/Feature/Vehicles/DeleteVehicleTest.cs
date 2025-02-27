@@ -1,18 +1,18 @@
+using Vega.Core.Domain;
+
 namespace Vega.Tests.Feature.Vehicles;
 
 using System.Net;
-
-using Domain;
 
 using Factories;
 
 using Microsoft.EntityFrameworkCore;
 
+using Persistence;
+
 using Shouldly;
 
 using Support;
-
-using Vehicle = Models.Vehicle;
 
 public class DeleteVehicleTest : IClassFixture<TestableWebApplicationFactory>
 {

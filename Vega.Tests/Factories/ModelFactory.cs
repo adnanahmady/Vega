@@ -1,8 +1,8 @@
+using Vega.Core.Domain;
+
 namespace Vega.Tests.Factories;
 
 using Bogus;
-
-using Models;
 
 public class ModelFactory
 {

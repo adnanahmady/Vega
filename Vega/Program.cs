@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 
-using Vega.Domain;
+using Vega.Core;
+using Vega.Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,6 +21,7 @@ builder.Services.AddCors(options =>
             .AllowAnyMethod();
     });
 });
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 var app = builder.Build();
 
@@ -30,8 +32,11 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
-app.UseCors("AllowAll");
-app.UseHttpsRedirection();
+if (!app.Environment.IsEnvironment("Testing"))
+{
+    app.UseCors("AllowAll");
+    app.UseHttpsRedirection();
+}
 app.UseStaticFiles();
 app.UseRouting();
 

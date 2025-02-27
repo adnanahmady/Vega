@@ -1,40 +1,37 @@
+using Vega.Core;
+
 namespace Vega.Controllers.Api.V1;
 
 using AutoMapper;
 
-using Domain;
+using Core.Domain;
 
 using Forms;
 
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-
-using Models;
 
 using Resources.V1;
 
 [Route("api/v1/vehicles")]
 public class VehiclesController : Controller
 {
-    private readonly VegaDbContext _context;
+    private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
 
     public VehiclesController(
-        VegaDbContext context,
+        IUnitOfWork unitOfWork,
         IMapper mapper)
     {
-        _context = context;
+        _unitOfWork = unitOfWork;
         _mapper = mapper;
     }
 
     [HttpGet]
     public ActionResult<IEnumerable<VehicleResource>> Index()
     {
-        var vehicles = _context
+        var vehicles = _unitOfWork
             .Vehicles
-            .Include(v => v.Model)
-            .Include(v => v.VehicleFeatures)
-            .ToList();
+            .GetAllWithModelAndFeatures();
         var list = _mapper.Map<List<VehicleResource>>(vehicles);
 
         return list;
@@ -43,10 +40,8 @@ public class VehiclesController : Controller
     [HttpGet(@"{id}")]
     public async Task<IActionResult> Show(int id)
     {
-        var vehicle = await _context.Vehicles
-            .Include(v => v.Model)
-            .Include(v => v.VehicleFeatures)
-            .SingleOrDefaultAsync(v => v.Id == id);
+        var vehicle = await _unitOfWork.Vehicles
+            .FindWithModelAndFeaturesAsync(id);
 
         if (vehicle == null)
         {
@@ -80,7 +75,7 @@ public class VehiclesController : Controller
             });
         }
 
-        var model = await _context.Models.FindAsync(formData.ModelId);
+        var model = await _unitOfWork.Models.GetAsync(formData.ModelId);
         if (model == null)
         {
             ModelState.AddModelError("ModelId", "Invalid model id.");
@@ -102,8 +97,7 @@ public class VehiclesController : Controller
 
         foreach (var i in formData.FeatureIds)
         {
-            var f = await _context.VehicleFeatures
-                .SingleOrDefaultAsync(vf => vf.Id == i);
+            var f = await _unitOfWork.VehicleFeatures.GetAsync(i);
 
             if (f == null)
             {
@@ -120,8 +114,8 @@ public class VehiclesController : Controller
             vehicle.VehicleFeatures.Add(f);
         }
 
-        _context.Vehicles.Add(vehicle);
-        await _context.SaveChangesAsync();
+        _unitOfWork.Vehicles.Add(vehicle);
+        await _unitOfWork.CompleteAsync();
 
         return CreatedAtAction(
             nameof(Index),
@@ -133,11 +127,9 @@ public class VehiclesController : Controller
     public async Task<IActionResult> Update(
         [FromBody] VehicleForm vehicleForm, int id)
     {
-        var vehicle = await _context
+        var vehicle = await _unitOfWork
             .Vehicles
-            .Include(v => v.Model)
-            .Include(v => v.VehicleFeatures)
-            .SingleOrDefaultAsync(v => v.Id == id);
+            .FindWithModelAndFeaturesAsync(id);
 
         if (vehicle == null)
         {
@@ -166,8 +158,8 @@ public class VehiclesController : Controller
         vehicle.VehicleFeatures = new List<VehicleFeature>();
         foreach (var i in vehicleForm.FeatureIds)
         {
-            var feature = await _context.VehicleFeatures
-                .SingleOrDefaultAsync(vf => vf.Id == i);
+            var feature = await _unitOfWork.VehicleFeatures
+                .GetAsync(i);
 
             if (feature == null)
             {
@@ -185,7 +177,7 @@ public class VehiclesController : Controller
             vehicle.VehicleFeatures.Add(feature);
         }
 
-        await _context.SaveChangesAsync();
+        await _unitOfWork.CompleteAsync();
 
         return Ok(_mapper.Map<VehicleResource>(vehicle));
     }
@@ -193,9 +185,8 @@ public class VehiclesController : Controller
     [HttpDelete(@"{id}")]
     public async Task<IActionResult> Delete(int id)
     {
-        var result = await _context.Vehicles
-            .Where(v => v.Id == id)
-            .ExecuteDeleteAsync();
+        var result = await _unitOfWork.Vehicles
+            .ExecuteDeleteAsync(id);
 
         return result == 0 ? NotFound() : NoContent();
     }

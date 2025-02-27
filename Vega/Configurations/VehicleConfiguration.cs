@@ -1,9 +1,9 @@
+using Vega.Core.Domain;
+
 namespace Vega.Configurations;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-
-using Models;
 
 public class VehicleConfiguration : IEntityTypeConfiguration<Vehicle>
 {

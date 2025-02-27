@@ -1,9 +1,8 @@
 using AutoMapper;
 
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
-using Vega.Domain;
+using Vega.Core;
 
 namespace Vega.Controllers.Api.V1;
 
@@ -13,21 +12,21 @@ using Resources.V1;
 [ApiController]
 public class MakesController : Controller
 {
-    private readonly VegaDbContext _context;
+    private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
 
-    public MakesController(VegaDbContext context, IMapper mapper)
+    public MakesController(
+        IUnitOfWork unitOfWork,
+        IMapper mapper)
     {
-        _context = context;
+        _unitOfWork = unitOfWork;
         _mapper = mapper;
     }
 
     [HttpGet]
     public ActionResult<IEnumerable<MakeResource>> GetMakes()
     {
-        var makes = _context.Makes
-            .Include(m => m.Models)
-            .ToList();
+        var makes = _unitOfWork.Makes.GetWithModels();
         var list = _mapper.Map<List<MakeResource>>(makes);
 
         return list;

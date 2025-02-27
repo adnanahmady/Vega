@@ -1,11 +1,11 @@
 using System.Text.Json;
 
+using Vega.Persistence;
+
 namespace Vega.Tests.Feature.Vehicles;
 
 using System.Net;
 using System.Net.Http.Json;
-
-using Domain;
 
 using Factories;
 
@@ -179,7 +179,7 @@ public class CreateVehicleTest : IClassFixture<TestableWebApplicationFactory>
 
         var vehicle = await response.Content.ReadFromJsonAsync<VehicleResource>();
         var exists = await _context.Vehicles.AnyAsync(
-            v => v.Id == vehicle.Id
+            v => v.Id == vehicle!.Id
                  && v.ContactEmail == data.Contact.Email
                  && v.ContactPhone == data.Contact.Phone);
         exists.ShouldBeTrue();
@@ -211,7 +211,7 @@ public class CreateVehicleTest : IClassFixture<TestableWebApplicationFactory>
         var response = await _client.PostAsJsonAsync("/api/v1/vehicles", data);
 
         var vehicle = await response.Content.ReadFromJsonAsync<VehicleResource>();
-        vehicle.Id.ShouldBeGreaterThan(0);
+        vehicle!.Id.ShouldBeGreaterThan(0);
         vehicle.Id.ShouldBeLessThan(1000);
         vehicle.IsRegistered.ShouldBe(data.IsRegistered);
         vehicle.Contact.Name.ShouldBe(data.Contact.Name);

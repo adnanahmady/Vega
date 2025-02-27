@@ -1,17 +1,18 @@
 namespace Vega.Tests.Support;
 
-using Domain;
-
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
+using Persistence;
+
 public class TestableWebApplicationFactory : WebApplicationFactory<Program>
 {
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
+        builder.UseEnvironment("Testing");
         LoadTestSettingFile(builder);
 
         builder.ConfigureServices((c, services) =>

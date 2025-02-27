@@ -3,9 +3,9 @@ namespace Vega.Tests.Feature.Vehicles;
 using System.Net;
 using System.Net.Http.Json;
 
-using Domain;
-
 using Factories;
+
+using Persistence;
 
 using Resources.V1;
 
@@ -13,7 +13,7 @@ using Shouldly;
 
 using Support;
 
-using Vehicle = Models.Vehicle;
+using Vehicle = Core.Domain.Vehicle;
 
 public class ShowVehicleTest : IClassFixture<TestableWebApplicationFactory>
 {
@@ -34,7 +34,7 @@ public class ShowVehicleTest : IClassFixture<TestableWebApplicationFactory>
 
         var data = await _client.GetFromJsonAsync<VehicleResource>(url);
 
-        data.Id.ShouldBe(vehicle.Id);
+        data!.Id.ShouldBe(vehicle.Id);
         data.Model.Id.ShouldBe(vehicle.ModelId);
         data.VehicleFeatures.ShouldBeOfType<List<VehicleFeatureResource>>();
         data.Contact.Email.ShouldBe(vehicle.ContactEmail);

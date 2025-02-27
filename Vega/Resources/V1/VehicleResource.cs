@@ -5,11 +5,12 @@ public class VehicleResource
 
     public bool IsRegistered { get; set; }
 
-    public ContactResource Contact { get; set; }
+    public required ContactResource Contact { get; set; }
 
-    public ModelResource Model { get; set; }
+    public required ModelResource Model { get; set; }
 
-    public ICollection<VehicleFeatureResource> VehicleFeatures { get; set; }
+    public ICollection<VehicleFeatureResource> VehicleFeatures { get; set; } =
+        new List<VehicleFeatureResource>();
 
     public DateTime CreatedAt = DateTime.Now;
 

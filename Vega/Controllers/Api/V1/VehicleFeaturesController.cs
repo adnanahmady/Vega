@@ -2,7 +2,7 @@ using AutoMapper;
 
 using Microsoft.AspNetCore.Mvc;
 
-using Vega.Domain;
+using Vega.Core;
 
 namespace Vega.Controllers.Api.V1;
 
@@ -11,21 +11,21 @@ using Resources.V1;
 [Route("api/v1/features")]
 public class VehicleFeaturesController : Controller
 {
-    private readonly VegaDbContext _context;
+    private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
 
     public VehicleFeaturesController(
-        VegaDbContext context,
+        IUnitOfWork unitOfWork,
         IMapper mapper)
     {
-        _context = context;
+        _unitOfWork = unitOfWork;
         _mapper = mapper;
     }
 
     [HttpGet]
     public ActionResult<IEnumerable<VehicleFeatureResource>> GetFeatures()
     {
-        var features = _context.VehicleFeatures.ToList();
+        var features = _unitOfWork.VehicleFeatures.GetAll();
         var list = _mapper.Map<List<VehicleFeatureResource>>(features);
 
         return list;

@@ -1,10 +1,9 @@
-namespace Vega.Domain;
-
-using Configurations;
-
 using Microsoft.EntityFrameworkCore;
 
-using Models;
+using Vega.Configurations;
+using Vega.Core.Domain;
+
+namespace Vega.Persistence;
 
 public class VegaDbContext : DbContext
 {

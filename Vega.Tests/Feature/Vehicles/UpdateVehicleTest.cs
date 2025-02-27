@@ -1,25 +1,22 @@
 using System.Text.Json;
 
+using Microsoft.EntityFrameworkCore;
+
+using Vega.Core.Domain;
+using Vega.Persistence;
+
 namespace Vega.Tests.Feature.Vehicles;
 
 using System.Net;
 using System.Net.Http.Json;
 
-using Domain;
-
 using Factories;
-
-using Microsoft.EntityFrameworkCore;
-
-using Models;
 
 using Resources.V1;
 
 using Shouldly;
 
 using Support;
-
-using Vehicle = Models.Vehicle;
 
 public class UpdateVehicleTest : IClassFixture<TestableWebApplicationFactory>
 {
@@ -185,7 +182,7 @@ public class UpdateVehicleTest : IClassFixture<TestableWebApplicationFactory>
         var response = await _client.PutAsJsonAsync(url, data);
         var resource = await response.Content.ReadFromJsonAsync<VehicleResource>();
 
-        resource.IsRegistered.ShouldBe(data.IsRegistered);
+        resource!.IsRegistered.ShouldBe(data.IsRegistered);
         resource.Model.Id.ShouldBe(data.ModelId);
         resource.Contact.Email.ShouldBe(data.Contact.Email);
         resource.Contact.Name.ShouldBe(data.Contact.Name);

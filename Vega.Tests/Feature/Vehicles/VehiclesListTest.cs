@@ -3,9 +3,9 @@ namespace Vega.Tests.Feature.Vehicles;
 using System.Net;
 using System.Net.Http.Json;
 
-using Domain;
-
 using Factories;
+
+using Persistence;
 
 using Resources.V1;
 
@@ -33,7 +33,10 @@ public class VehiclesListTest : IClassFixture<TestableWebApplicationFactory>
 
         var data = await response.Content.ReadFromJsonAsync<List<VehicleResource>>();
 
-        var item = data.First();
+        var item = data!.First();
+        Console.WriteLine("************************************************************");
+        Console.WriteLine(await response.Content.ReadAsStringAsync());
+        Console.WriteLine("************************************************************");
         item.Id.ShouldBeOfType<int>();
         item.IsRegistered.ShouldBeOfType<bool>();
         item.Contact.Name.ShouldBeOfType<string>().ShouldNotBeNullOrWhiteSpace();

@@ -3,7 +3,7 @@ namespace Vega.Configurations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-using Models;
+using Vega.Core.Domain;
 
 public class ModelConfiguration : IEntityTypeConfiguration<Model>
 {
