@@ -1,5 +1,5 @@
 x-restart-policy: &restart_policy
-  restart: always
+  restart: on-failure
 
 x-database-user: &database_user
   ACCEPT_EULA: 'Y'
@@ -34,8 +34,7 @@ services:
       MSSQL_DATA_DIR: /home/mssql/data
       MSSQL_DATA_LOG: /home/mssql/log
     tmpfs: 
-      - /home/mssql/data
-      - /home/mssql/log
+      - /home/mssql:rw
     ports:
       - 1434:1433
   
