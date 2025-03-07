@@ -5,7 +5,7 @@ import {Observable} from "rxjs";
 
 @Injectable()
 export class VehicleService {
-  private baseUrl: string = 'https://localhost:7177/';
+  private baseUrl: string = 'https://localhost:5001/';
 
   constructor(private http: HttpClient) {
   }
