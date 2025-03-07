@@ -37,8 +37,8 @@ public class VehiclesController : Controller
         return list;
     }
 
-    [HttpGet(@"{id}")]
-    public async Task<IActionResult> Show(int id)
+    [HttpGet(@"{id:int}")]
+    public async Task<IActionResult> Show([FromRoute] int id)
     {
         var vehicle = await _unitOfWork.Vehicles
             .FindWithModelAndFeaturesAsync(id);
@@ -58,38 +58,14 @@ public class VehiclesController : Controller
     {
         if (!ModelState.IsValid)
         {
-            var errors = ModelState
-                .Where(x => x.Value.Errors.Any())
-                .Select(x => new
-                {
-                    Field = x.Key,
-                    Errors = x.Value.Errors.Select(
-                        e => e.ErrorMessage).ToList()
-                })
-                .ToList();
-
-            return BadRequest(new
-            {
-                Message = "Invalid data provided",
-                Errors = errors
-            });
+            return ValidationResponse();
         }
 
         var model = await _unitOfWork.Models.GetAsync(formData.ModelId);
         if (model == null)
         {
             ModelState.AddModelError("ModelId", "Invalid model id.");
-
-            return BadRequest(new
-            {
-                Message = "Invalid data provided",
-                Errors = new[] { new
-                {
-                    Field = ModelState.First().Key,
-                    Errors = ModelState.First().Value?.Errors.Select(
-                        e => e.ErrorMessage).ToList()
-                } }
-            });
+            return ValidationResponse();
         }
 
         var vehicle = _mapper.Map<Vehicle>(formData);
@@ -123,9 +99,10 @@ public class VehiclesController : Controller
             _mapper.Map<VehicleResource>(vehicle));
     }
 
-    [HttpPut(@"{id}")]
+    [HttpPut(@"{id:int}")]
     public async Task<IActionResult> Update(
-        [FromBody] VehicleForm vehicleForm, int id)
+        [FromBody] VehicleForm vehicleForm,
+        [FromRoute] int id)
     {
         var vehicle = await _unitOfWork
             .Vehicles
@@ -138,20 +115,7 @@ public class VehiclesController : Controller
 
         if (!ModelState.IsValid)
         {
-            var errors = ModelState
-                .Where(x => x.Value.Errors.Any())
-                .Select(x => new
-                {
-                    Field = x.Key,
-                    Errors = x.Value.Errors.Select(
-                        e => e.ErrorMessage).ToList()
-                }).ToList();
-
-            return BadRequest(new
-            {
-                Message = "Invalid data provided",
-                Errors = errors
-            });
+            return ValidationResponse();
         }
 
         _mapper.Map(vehicleForm, vehicle);
@@ -182,8 +146,26 @@ public class VehiclesController : Controller
         return Ok(_mapper.Map<VehicleResource>(vehicle));
     }
 
-    [HttpDelete(@"{id}")]
-    public async Task<IActionResult> Delete(int id)
+    private IActionResult ValidationResponse()
+    {
+        var errors = ModelState
+            .Where(x => x.Value.Errors.Any())
+            .Select(x => new
+            {
+                Field = x.Key,
+                Errors = x.Value.Errors.Select(
+                    e => e.ErrorMessage).ToList()
+            }).ToList();
+
+        return BadRequest(new
+        {
+            Message = "Invalid data provided",
+            Errors = errors
+        });
+    }
+
+    [HttpDelete(@"{id:int}")]
+    public async Task<IActionResult> Delete([FromRoute] int id)
     {
         var result = await _unitOfWork.Vehicles
             .ExecuteDeleteAsync(id);
