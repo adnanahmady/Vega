@@ -25,6 +25,10 @@ status: ps
 logs:
 	@docker compose logs $(call default,${service},database) ${with}
 
+run: start
+start:
+	@dotnet run --project Vega
+
 test:
 	@dotnet test $(call default,$(call prefix,${filter},--filter=),$(call prefix,${f},--filter=)) ${with}
 
