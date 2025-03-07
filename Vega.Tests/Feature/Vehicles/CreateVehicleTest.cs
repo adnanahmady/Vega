@@ -132,10 +132,10 @@ public class CreateVehicleTest : IClassFixture<TestableWebApplicationFactory>
                     { "Email", "user@dummy.com" },
                 }
             },
-            { "ModelId", _context.Models.First().Id },
+            { "ModelId", _context.Models.OrderBy(i => i.Id).First().Id },
             { "FeatureIds", new[]
                 {
-                    _context.VehicleFeatures.First().Id
+                    _context.VehicleFeatures.OrderBy(i => i.Id).First().Id
                 }},
         };
         data = fn(data);
@@ -168,10 +168,10 @@ public class CreateVehicleTest : IClassFixture<TestableWebApplicationFactory>
                 Phone = "09119933311",
                 Email = "user@dummy.com",
             },
-            ModelId = _context.Models.First().Id,
+            ModelId = _context.Models.OrderBy(i => i.Id).First().Id,
             FeatureIds = new[]
             {
-                _context.VehicleFeatures.First().Id
+                _context.VehicleFeatures.OrderBy(i => i.Id).First().Id
             }
         };
 
@@ -201,10 +201,10 @@ public class CreateVehicleTest : IClassFixture<TestableWebApplicationFactory>
                 Phone = "09119933311",
                 Email = "user@dummy.com",
             },
-            ModelId = _context.Models.First().Id,
+            ModelId = _context.Models.OrderBy(i => i.Id).First().Id,
             FeatureIds = new[]
             {
-                _context.VehicleFeatures.First().Id
+                _context.VehicleFeatures.OrderBy(i => i.Id).First().Id
             }
         };
 
@@ -235,10 +235,10 @@ public class CreateVehicleTest : IClassFixture<TestableWebApplicationFactory>
                 Phone = "09119933311",
                 Email = "user@dummy.com",
             },
-            ModelId = _context.Models.First().Id,
+            ModelId = _context.Models.OrderBy(i => i.Id).First().Id,
             FeatureIds = new[]
             {
-                _context.VehicleFeatures.First().Id
+                _context.VehicleFeatures.OrderBy(i => i.Id).First().Id
             }
         };
 

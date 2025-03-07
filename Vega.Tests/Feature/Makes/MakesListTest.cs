@@ -24,7 +24,7 @@ public class MakesListTest : IClassFixture<TestableWebApplicationFactory>
 
         var content = await response.Content.ReadAsStringAsync();
         var data = JsonConvert.DeserializeObject<List<MakeResource>>(content);
-        var dto = data!.First();
+        var dto = data!.OrderBy(i => i.Id).First();
 
         dto.Id.ShouldBeOfType<int>();
         dto.Name.ShouldBeOfType<string>();

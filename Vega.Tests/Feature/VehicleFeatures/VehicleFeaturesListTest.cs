@@ -25,7 +25,7 @@ public class VehicleFeaturesListTest : IClassFixture<TestableWebApplicationFacto
 
         var content = await response.Content.ReadAsStringAsync();
         var data = JsonConvert.DeserializeObject<List<KeyValuePairResource>>(content);
-        var item = data!.First();
+        var item = data!.OrderBy(i => i.Id).First();
 
         item.Id.ShouldBeOfType<int>();
         item.Name.ShouldBeOfType<string>();

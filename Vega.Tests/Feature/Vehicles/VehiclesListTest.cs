@@ -33,7 +33,7 @@ public class VehiclesListTest : IClassFixture<TestableWebApplicationFactory>
 
         var data = await response.Content.ReadFromJsonAsync<List<VehicleResource>>();
 
-        var item = data!.First();
+        var item = data!.OrderBy(i => i.Id).First();
         item.Id.ShouldBeOfType<int>();
         item.IsRegistered.ShouldBeOfType<bool>();
         item.Contact.Name.ShouldBeOfType<string>().ShouldNotBeNullOrWhiteSpace();
@@ -46,8 +46,8 @@ public class VehiclesListTest : IClassFixture<TestableWebApplicationFactory>
         model.Name.ShouldBeOfType<string>();
         var vehicleFeature = item.VehicleFeatures
             .ShouldBeOfType<List<KeyValuePairResource>>();
-        vehicleFeature.First().Id.ShouldBeOfType<int>();
-        vehicleFeature.First().Name.ShouldBeOfType<string>();
+        vehicleFeature.OrderBy(i => i.Id).First().Id.ShouldBeOfType<int>();
+        vehicleFeature.OrderBy(i => i.Id).First().Name.ShouldBeOfType<string>();
     }
 
     [Fact]
