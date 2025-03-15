@@ -4,18 +4,23 @@
 
 <p *ngIf="!makes?.length"><em>Loading...</em></p>
 
-<form method="post" action="no-where">
+<p>{{ vehicle | json }}</p>
+
+<form method="post" (ngSubmit)="handleSubmit()" #f="ngForm">
   <div class="form-group" *ngIf="makes.length">
       <label>Vehicle makes</label>
       <select name="make" class="form-control"
               (change)="handleMakeChange($event)"
-              [(ngModel)]="vehicle.make"
+              [(ngModel)]="vehicle.makeId"
+              [ngClass]="{'is-invalid': makeControl.touched && makeControl.value == 0}"
+              #makeControl="ngModel"
       >
-        <option value="0">Select</option>
-        <option [value]="[make.id]" *ngFor="let make of makes">
+        <option [ngValue]="0">Select</option>
+        <option [value]="make.id" *ngFor="let make of makes">
           {{ make.name }}
         </option>
       </select>
+    <div class="alert alert-danger" *ngIf="makeControl.touched && makeControl.value == 0">Please specify the make.</div>
   </div>
 
   <div class="form-group mt-3">
@@ -26,7 +31,7 @@
   </div>
   <div class="form-group" *ngIf="models.length">
     <label>Selected vehicle models</label>
-    <select name="model" class="form-control">
+    <select name="model" class="form-control" [(ngModel)]="vehicle.modelId">
       <option value="0">Select</option>
       <option [value]="[model.id]" *ngFor="let model of models">
         {{ model.name }}
@@ -37,36 +42,51 @@
   <div class="form-group mt-3">
     <label>Is this vehicle registered?</label>
     <div class="form-group">
-      Yes <input type="radio" name="is_registered" value="1">
-      No <input type="radio" name="is_registered" value="0">
+      Yes <input type="radio" name="is_registered" value="1" [(ngModel)]="vehicle.isRegistered">
+      No <input type="radio" name="is_registered" value="0" [(ngModel)]="!vehicle.isRegistered">
     </div>
   </div>
 
   <div class="form-group mt-3" *ngIf="features.length">
     <label>Vehicle features</label>
-    <select name="model" class="form-control" multiple size="5">
-      <option [value]="[feature.id]" *ngFor="let feature of features">
-        {{ feature.name }}
-      </option>
-    </select>
+    <div *ngFor="let f of features" class="checkbox" (change)="handleFeatureToggle(f.id, $event)">
+      <label for="feature{{ f.id }}">
+        <input type="checkbox" id="feature{{ f.id }}"> {{ f.name }}
+      </label>
+    </div>
   </div>
 
   <div class="form-group mt-3">
     <label for="contact-name">Name</label>
-    <input type="text" class="form-control" name="contact-name" id="contact-name">
+    <input
+      type="text"
+      class="form-control"
+      name="contact-name"
+      id="contact-name"
+      [(ngModel)]="vehicle.contact.name">
   </div>
 
   <div class="form-group mt-3">
     <label for="contact-phone">Phone</label>
-    <input type="text" class="form-control" name="contact-phone" id="contact-phone">
+    <input
+      type="text"
+      class="form-control"
+      name="contact-phone"
+      id="contact-phone"
+      [(ngModel)]="vehicle.contact.phone">
   </div>
 
   <div class="form-group mt-3">
     <label for="contact-email">Email</label>
-    <input type="text" class="form-control" name="contact-email" id="contact-email">
+    <input
+      type="text"
+      class="form-control"
+      name="contact-email"
+      id="contact-email"
+      [(ngModel)]="vehicle.contact.email">
   </div>
 
   <div class="form-group mt-3">
-    <button class="btn btn-primary" (click)="handleSubmit()">Save</button>
+    <button class="btn btn-primary" type="submit" [disabled]="!f.valid">Save</button>
   </div>
 </form>

@@ -4,6 +4,18 @@ import {VehicleService} from "../services/vehicle.service";
 import {Make, Model, Feature} from "../Interfaces/MakeInterfaces";
 import {concatWith} from "rxjs";
 
+interface Vehicle {
+  makeId?: number;
+  modelId?: number;
+  isRegistered: boolean;
+  contact: {
+    name: string;
+    phone: string;
+    email: string;
+  };
+  featureIds: number[];
+}
+
 @Component({
   selector: 'app-form',
   templateUrl: './vehicle-form.component.html'
@@ -13,7 +25,15 @@ export class VehicleFormComponent {
   public models: Model[] = [];
   public features: Feature[] = [];
   public selectedMake: null|Make = null;
-  public vehicle: any = {};
+  public vehicle: Vehicle = {
+    isRegistered: false,
+    featureIds: [],
+    contact: {
+      name: "",
+      phone: "",
+      email: ""
+    }
+  };
 
   constructor(
     private vehicleService: VehicleService
@@ -23,7 +43,7 @@ export class VehicleFormComponent {
   }
 
   getMakes(): void {
-    this.vehicle.make = 0;
+    this.vehicle.makeId = 0;
     this.vehicleService.getMakes()
       .subscribe(makes => this.makes = makes);
   }
@@ -38,15 +58,28 @@ export class VehicleFormComponent {
     const make = this.makes
       .filter(m => m.id == selected)[0] || null;
     if (make === null) {
-      this.vehicle.make = 0;
+      this.vehicle.makeId = 0;
+      delete this.vehicle.modelId;
       this.models = [];
       return;
     }
-    this.vehicle.make = make.id;
+    this.vehicle.makeId = make.id;
+    delete this.vehicle.modelId;
     this.models = make?.models;
   }
 
+  handleFeatureToggle(featureId: number, $event: any) {
+    if ($event.target.checked) { this.vehicle.featureIds.push(featureId); return; }
+
+    const features = this.vehicle.featureIds.filter((id: any) => id !== featureId);
+    this.vehicle.featureIds = features
+  }
+
   handleSubmit() {
-    console.log("Form submitted")
+    this.vehicleService.create(this.vehicle)
+      .subscribe(
+        x => console.log("Success", x),
+        err => console.log("Error", err),
+      );
   }
 }

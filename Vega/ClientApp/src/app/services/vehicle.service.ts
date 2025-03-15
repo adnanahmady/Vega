@@ -17,4 +17,9 @@ export class VehicleService {
   getFeatures(): Observable<Feature[]> {
     return this.http.get<Feature[]>(this.baseUrl + 'api/v1/features');
   }
+
+  create(vehicle: any) {
+    vehicle.isRegistered = vehicle.isRegistered ? true : false;
+    return this.http.post(this.baseUrl + 'api/v1/vehicles', vehicle);
+  }
 }

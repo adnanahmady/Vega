@@ -54,24 +54,24 @@ public class VehiclesController : Controller
     }
 
     [HttpPost]
-    public async Task<IActionResult> Create([FromBody] VehicleForm formData)
+    public async Task<IActionResult> Create([FromBody] VehicleForm data)
     {
         if (!ModelState.IsValid)
         {
             return ValidationResponse();
         }
 
-        var model = await _unitOfWork.Models.GetAsync(formData.ModelId);
+        var model = await _unitOfWork.Models.GetAsync(data.ModelId);
         if (model == null)
         {
             ModelState.AddModelError("ModelId", "Invalid model id.");
             return ValidationResponse();
         }
 
-        var vehicle = _mapper.Map<Vehicle>(formData);
+        var vehicle = _mapper.Map<Vehicle>(data);
         vehicle.VehicleFeatures = new List<VehicleFeature>();
 
-        foreach (var i in formData.FeatureIds)
+        foreach (var i in data.FeatureIds)
         {
             var f = await _unitOfWork.VehicleFeatures.GetAsync(i);
 

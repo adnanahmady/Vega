@@ -9,8 +9,15 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllersWithViews();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddDbContext<VegaDbContext>(options => options.UseSqlServer(
-    builder.Configuration.GetConnectionString("Default")));
+var defaultConnection = builder.Configuration.GetConnectionString("Default");
+Console.WriteLine("************************************************************");
+Console.WriteLine(defaultConnection);
+Console.WriteLine("************************************************************");
+builder.Services.AddDbContext<VegaDbContext>(options => options
+    .UseSqlServer(builder.Configuration.GetConnectionString("Default"),
+        opt => opt.EnableRetryOnFailure()
+        )
+);
 builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddCors(options =>
 {
