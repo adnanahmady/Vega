@@ -1,8 +1,7 @@
 import { Component, Inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import {VehicleService} from "../services/vehicle.service";
 import {Make, Model, Feature} from "../Interfaces/MakeInterfaces";
-import {concatWith} from "rxjs";
+import {ToastyService} from "ng2-toasty";
 
 interface Vehicle {
   makeId?: number;
@@ -36,7 +35,8 @@ export class VehicleFormComponent {
   };
 
   constructor(
-    private vehicleService: VehicleService
+    private vehicleService: VehicleService,
+    private toastyService: ToastyService
     ) {
     this.getMakes();
     this.getVehicleFeatures();
@@ -79,7 +79,9 @@ export class VehicleFormComponent {
     this.vehicleService.create(this.vehicle)
       .subscribe(
         x => console.log("Success", x),
-        err => console.log("Error", err),
+        err => {
+          alert("Vehicle creation failed");
+        }
       );
   }
 }
