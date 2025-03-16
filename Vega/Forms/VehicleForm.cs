@@ -10,7 +10,8 @@ public class VehicleForm
 {
     public bool IsRegistered { get; set; }
 
-    public ContactForm Contact { get; set; }
+    [Required]
+    public required ContactForm Contact { get; set; }
 
     [Required]
     [RegularExpression(@"^[1-9]+\d*$", ErrorMessage = "Id must be a valid integer.")]

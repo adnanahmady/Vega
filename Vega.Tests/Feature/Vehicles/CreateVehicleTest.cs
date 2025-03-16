@@ -191,6 +191,9 @@ public class CreateVehicleTest : IClassFixture<TestableWebApplicationFactory>
         _context.Models.Add(ModelFactory.Create());
         _context.VehicleFeatures.Add(VehicleFeatureFactory.Create());
         await _context.SaveChangesAsync();
+        var model = _context.Models
+            .Include(m => m.Make)
+            .OrderBy(i => i.Id).First();
         var data = new
         {
             Id = 1000,
@@ -201,7 +204,7 @@ public class CreateVehicleTest : IClassFixture<TestableWebApplicationFactory>
                 Phone = "09119933311",
                 Email = "user@dummy.com",
             },
-            ModelId = _context.Models.OrderBy(i => i.Id).First().Id,
+            ModelId = model.Id,
             FeatureIds = new[]
             {
                 _context.VehicleFeatures.OrderBy(i => i.Id).First().Id
@@ -210,13 +213,20 @@ public class CreateVehicleTest : IClassFixture<TestableWebApplicationFactory>
 
         var response = await _client.PostAsJsonAsync("/api/v1/vehicles", data);
 
-        var vehicle = await response.Content.ReadFromJsonAsync<VehicleResource>();
-        vehicle!.Id.ShouldBeGreaterThan(0);
-        vehicle.Id.ShouldBeLessThan(1000);
-        vehicle.IsRegistered.ShouldBe(data.IsRegistered);
-        vehicle.Contact.Name.ShouldBe(data.Contact.Name);
-        vehicle.Contact.Phone.ShouldBe(data.Contact.Phone);
-        vehicle.Contact.Email.ShouldBe(data.Contact.Email);
+        var content = await response.Content.ReadFromJsonAsync<JsonElement>();
+        content.GetProperty("id").GetInt32().ShouldBeGreaterThan(0);
+        content.GetProperty("id").GetInt32().ShouldBeLessThan(1000);
+        content.GetProperty("isRegistered").GetBoolean().ShouldBeEquivalentTo(data.IsRegistered);
+        content.GetProperty("contact").GetProperty("name").GetString()
+            .ShouldBeEquivalentTo(data.Contact.Name);
+        content.GetProperty("contact").GetProperty("phone").GetString()
+            .ShouldBeEquivalentTo(data.Contact.Phone);
+        content.GetProperty("contact").GetProperty("email").ToString()
+            .ShouldBeEquivalentTo(data.Contact.Email);
+        content.GetProperty("make").GetProperty("id").GetInt32().ShouldBe(model.MakeId);
+        content.GetProperty("make").GetProperty("name").GetString().ShouldBe(model.Make.Name);
+        content.GetProperty("model").GetProperty("id").GetInt32().ShouldBe(model.Id);
+        content.GetProperty("model").GetProperty("name").GetString().ShouldBe(model.Name);
     }
 
     [Fact]
