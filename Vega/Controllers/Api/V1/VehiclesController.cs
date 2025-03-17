@@ -1,4 +1,5 @@
 using Vega.Core;
+using Vega.Resources.Support;
 
 namespace Vega.Controllers.Api.V1;
 
@@ -27,14 +28,25 @@ public class VehiclesController : Controller
     }
 
     [HttpGet]
-    public ActionResult<IEnumerable<VehicleResource>> Index()
+    public PageResult<VehicleResource> Index(
+        [FromQuery] int pageNumber, [FromQuery] int pageSize)
     {
-        var vehicles = _unitOfWork
-            .Vehicles
-            .GetAllWithModelAndFeatures();
+        var pageIndex = pageNumber > 0 ? pageNumber - 1 : 0;
+        pageSize = pageSize < 1 ? 15 : pageSize;
+
+        var count = _unitOfWork.Vehicles.CountAll();
+        var vehicles = _unitOfWork.Vehicles
+            .GetAll(skip: pageIndex, take: pageSize);
+
         var list = _mapper.Map<List<VehicleResource>>(vehicles);
 
-        return list;
+        return new PageResult<VehicleResource>()
+        {
+            Items = list,
+            CurrentPage = pageNumber,
+            PageSize = pageSize,
+            TotalRecords = count,
+        };
     }
 
     [HttpGet(@"{id:int}")]
@@ -149,11 +161,11 @@ public class VehiclesController : Controller
     private IActionResult ValidationResponse()
     {
         var errors = ModelState
-            .Where(x => x.Value.Errors.Any())
+            .Where(x => x.Value!.Errors.Any())
             .Select(x => new
             {
                 Field = x.Key,
-                Errors = x.Value.Errors.Select(
+                Errors = x.Value!.Errors.Select(
                     e => e.ErrorMessage).ToList()
             }).ToList();
 

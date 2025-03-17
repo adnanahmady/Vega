@@ -19,7 +19,7 @@ public class VehicleForm
 
     [Required]
     [RegexCollection(@"^[1-9]+\d*$", ErrorMessage = "Id must be a valid integer.")]
-    public int[] FeatureIds { get; set; }
+    public required int[] FeatureIds { get; set; }
 
     public override string ToString() => JsonSerializer.Serialize(this);
 }

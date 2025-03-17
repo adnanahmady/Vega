@@ -18,7 +18,12 @@ public class Repository<TEntity> : IRepository<TEntity> where TEntity : class
     public virtual TEntity? Get(int id) => Context.Set<TEntity>().Find(id);
     public virtual async Task<TEntity?> GetAsync(int id) => await Context.Set<TEntity>().FindAsync(id);
 
+    public virtual int CountAll() => Context.Set<TEntity>().Count();
     public virtual IEnumerable<TEntity> GetAll() => Context.Set<TEntity>().ToList();
+
+    public virtual IEnumerable<TEntity> GetAll(int skip, int take) =>
+        Context.Set<TEntity>().Skip(skip).Take(take).ToList();
+
     public virtual async Task<IEnumerable<TEntity>> GetAllAsync() =>
         await Context.Set<TEntity>().ToListAsync();
 

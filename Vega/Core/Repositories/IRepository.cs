@@ -6,7 +6,9 @@ public interface IRepository<TEntity> where TEntity : class
 {
     TEntity? Get(int id);
     Task<TEntity?> GetAsync(int id);
+    int CountAll();
     IEnumerable<TEntity> GetAll();
+    IEnumerable<TEntity> GetAll(int skip, int take);
     Task<IEnumerable<TEntity>> GetAllAsync();
     IEnumerable<TEntity> Find(Expression<Func<TEntity, bool>> predicate);
     Task<IEnumerable<TEntity>> FindAsync(Expression<Func<TEntity, bool>> predicate);

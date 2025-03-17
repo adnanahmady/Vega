@@ -20,13 +20,22 @@ public class VehicleRepository : Repository<Vehicle>, IVehicleRepository
             .Include(v => v.VehicleFeatures)
             .SingleOrDefault(v => v.Id == id);
 
-    public IEnumerable<Vehicle> GetAllWithModelAndFeatures() =>
+    public override IEnumerable<Vehicle> GetAll() =>
         VegaDbContext.Vehicles
             .Include(v => v.Model)
             .ThenInclude(m => m.Make)
             .Include(v => v.VehicleFeatures)
             .ToList();
 
+    public override IEnumerable<Vehicle> GetAll(int skip, int take) =>
+        VegaDbContext.Vehicles
+            .OrderBy(v => v.Id)
+            .Skip(skip)
+            .Take(take)
+            .Include(v => v.Model)
+            .ThenInclude(m => m.Make)
+            .Include(v => v.VehicleFeatures)
+            .ToList();
 
     public async Task<Vehicle?> FindWithModelAndFeaturesAsync(int id) =>
         await VegaDbContext.Vehicles
