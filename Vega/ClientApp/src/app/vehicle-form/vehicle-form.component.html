@@ -42,8 +42,10 @@
   <div class="form-group mt-3">
     <label>Is this vehicle registered?</label>
     <div class="form-group">
-      Yes <input type="radio" name="is_registered" value="1" [(ngModel)]="vehicle.isRegistered">
-      No <input type="radio" name="is_registered" value="0" [(ngModel)]="!vehicle.isRegistered">
+      <input type="radio" id="its" name="is_registered" [value]="true" [(ngModel)]="vehicle.isRegistered">
+      <label for="its" class="mx-2">Yes</label>
+      <input type="radio" id="its-not" name="is_registered" [value]="false" [(ngModel)]="vehicle.isRegistered">
+      <label for="its-not" class="mx-2">No</label>
     </div>
   </div>
 
@@ -51,7 +53,9 @@
     <label>Vehicle features</label>
     <div *ngFor="let f of features" class="checkbox" (change)="handleFeatureToggle(f.id, $event)">
       <label for="feature{{ f.id }}">
-        <input type="checkbox" id="feature{{ f.id }}"> {{ f.name }}
+        <input type="checkbox" id="feature{{ f.id }}"
+               [checked]="vehicle.featureIds.includes(f.id)"
+        > {{ f.name }}
       </label>
     </div>
   </div>
@@ -87,6 +91,10 @@
   </div>
 
   <div class="form-group mt-3">
-    <button class="btn btn-primary" type="submit" [disabled]="!f.valid">Save</button>
+    <button class="mx-2 btn btn-primary" type="submit" [disabled]="!f.valid">Save</button>
+    <button class="mx-2 btn btn-outline-danger"
+            type="button"
+            (click)="handleDelete()"
+            [disabled]="!vehicle.id">Delete</button>
   </div>
 </form>

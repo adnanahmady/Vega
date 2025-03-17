@@ -1,9 +1,12 @@
-import { Component, Inject } from '@angular/core';
+import {Component, Inject} from '@angular/core';
 import {VehicleService} from "../services/vehicle.service";
 import {Make, Model, Feature} from "../Interfaces/MakeInterfaces";
 import {ToastyService} from "ng2-toasty";
+import {ActivatedRoute, Router} from "@angular/router";
+import {Observable} from "rxjs";
 
 interface Vehicle {
+  id?: number,
   makeId?: number;
   modelId?: number;
   isRegistered: boolean;
@@ -23,7 +26,7 @@ export class VehicleFormComponent {
   public makes: Make[] = [];
   public models: Model[] = [];
   public features: Feature[] = [];
-  public selectedMake: null|Make = null;
+  public selectedMake: null | Make = null;
   public vehicle: Vehicle = {
     isRegistered: false,
     featureIds: [],
@@ -35,17 +38,49 @@ export class VehicleFormComponent {
   };
 
   constructor(
+    private route: ActivatedRoute,
+    private router: Router,
     private vehicleService: VehicleService,
-    private toastyService: ToastyService
-    ) {
+  ) {
+    route.params.subscribe(p => {
+      this.vehicle.id = +p['id'];
+    })
+    this.getVehicle();
     this.getMakes();
     this.getVehicleFeatures();
   }
 
+  getVehicle() {
+    if (!this.vehicle.id) {
+      return;
+    }
+    this.vehicleService.getVehicle(this.vehicle.id)
+      .subscribe(v => {
+        this.vehicle.makeId = v.make.id;
+        this.getMakes();
+        this.vehicle.modelId = v.model.id;
+        this.vehicle.isRegistered = v.isRegistered;
+        this.vehicle.contact = v.contact;
+        this.vehicle.featureIds = v.vehicleFeatures
+          .map(f => f.id);
+      }, e => {
+        if (e.status == 404) {
+          this.router.navigate(['/']);
+        }
+      })
+  }
+
   getMakes(): void {
-    this.vehicle.makeId = 0;
+    if (!this.vehicle.id) {
+      this.vehicle.makeId = 0;
+    }
     this.vehicleService.getMakes()
       .subscribe(makes => this.makes = makes);
+
+    if (this.vehicle.makeId) {
+      const make = this.makes.filter(m => m.id === this.vehicle.makeId);
+      this.models = make[0].models;
+    }
   }
 
   getVehicleFeatures(): void {
@@ -69,13 +104,26 @@ export class VehicleFormComponent {
   }
 
   handleFeatureToggle(featureId: number, $event: any) {
-    if ($event.target.checked) { this.vehicle.featureIds.push(featureId); return; }
+    if ($event.target.checked) {
+      this.vehicle.featureIds.push(featureId);
+      return;
+    }
 
     const features = this.vehicle.featureIds.filter((id: any) => id !== featureId);
     this.vehicle.featureIds = features
   }
 
   handleSubmit() {
+    if (this.vehicle.id) {
+      this.vehicleService.update(this.vehicle)
+        .subscribe(
+          x => console.log("Success", x),
+          err => {
+            alert("Vehicle creation failed");
+          }
+        );
+      return;
+    }
     this.vehicleService.create(this.vehicle)
       .subscribe(
         x => console.log("Success", x),
@@ -83,5 +131,19 @@ export class VehicleFormComponent {
           alert("Vehicle creation failed");
         }
       );
+  }
+
+  handleDelete() {
+    if (!this.vehicle.id) {
+      return;
+    }
+    if (!confirm("Are you sure to delete this item?")) {
+      return;
+    }
+
+    this.vehicleService.delete(this.vehicle.id)
+      .subscribe(x => {
+        this.router.navigate(['/home']);
+      });
   }
 }
