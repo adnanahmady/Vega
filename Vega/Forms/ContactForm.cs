@@ -5,11 +5,13 @@ namespace Vega.Forms;
 public class ContactForm
 {
     [Required]
-    public required string Name { get; set; }
+    [MinLength(2)]
+    public string? Name { get; set; }
 
     [MaxLength(11)]
     public string? Phone { get; set; }
 
     [Required]
-    public required string Email { get; set; }
+    [MinLength(2)]
+    public string? Email { get; set; }
 }

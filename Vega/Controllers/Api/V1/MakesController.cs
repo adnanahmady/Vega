@@ -10,24 +10,20 @@ using Resources.V1;
 
 [Route("api/v1/makes")]
 [ApiController]
-public class MakesController : Controller
+public class MakesController : BaseController
 {
-    private readonly IUnitOfWork _unitOfWork;
-    private readonly IMapper _mapper;
-
     public MakesController(
         IUnitOfWork unitOfWork,
-        IMapper mapper)
+        IMapper mapper
+    ) : base(unitOfWork, mapper)
     {
-        _unitOfWork = unitOfWork;
-        _mapper = mapper;
     }
 
     [HttpGet]
     public ActionResult<IEnumerable<MakeResource>> GetMakes()
     {
-        var makes = _unitOfWork.Makes.GetWithModels();
-        var list = _mapper.Map<List<MakeResource>>(makes);
+        var makes = UnitOfWork.Makes.GetWithModels();
+        var list = Mapper.Map<List<MakeResource>>(makes);
 
         return list;
     }
