@@ -47,4 +47,10 @@ export class VehicleService {
       this.baseUrl + 'api/v1/vehicles/' + id
     );
   }
+
+  getVehicles(): Observable<{ data: VehicleResource[], meta: object}> {
+    return this.http.get<{ data: VehicleResource[], meta: object}>(
+      this.baseUrl + 'api/v1/vehicles'
+    );
+  }
 }

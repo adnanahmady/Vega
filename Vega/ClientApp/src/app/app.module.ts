@@ -13,6 +13,7 @@ import { VehicleFormComponent } from "./vehicle-form/vehicle-form.component";
 import {VehicleService} from "./services/vehicle.service";
 import {ToastyModule, ToastyService} from "ng2-toasty";
 import {AppErrorHandler} from "./handlers/app.error-handler";
+import {VehiclesListComponent} from "./vehicles-list/vehicles-list.component";
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import {AppErrorHandler} from "./handlers/app.error-handler";
     HomeComponent,
     CounterComponent,
     FetchDataComponent,
-    VehicleFormComponent
+    VehicleFormComponent,
+    VehiclesListComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -32,6 +34,7 @@ import {AppErrorHandler} from "./handlers/app.error-handler";
       { path: '', component: HomeComponent, pathMatch: 'full' },
       { path: 'counter', component: CounterComponent },
       { path: 'fetch-data', component: FetchDataComponent },
+      { path: 'vehicles', component: VehiclesListComponent },
       { path: 'vehicles/new', component: VehicleFormComponent },
       { path: 'vehicles/:id', component: VehicleFormComponent },
     ])

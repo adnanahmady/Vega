@@ -4,8 +4,6 @@
 
 <p *ngIf="!makes?.length"><em>Loading...</em></p>
 
-<p>{{ vehicle | json }}</p>
-
 <form method="post" (ngSubmit)="handleSubmit()" #f="ngForm">
   <div class="form-group" *ngIf="makes.length">
       <label>Vehicle makes</label>
