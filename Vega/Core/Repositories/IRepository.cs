@@ -1,9 +1,13 @@
 using System.Linq.Expressions;
 
+using Vega.Core.QueryFilters;
+
 namespace Vega.Core.Repositories;
 
 public interface IRepository<TEntity> where TEntity : class
 {
+    public IRepository<TEntity> QueryFilter(IQueryFilter<TEntity> filter);
+
     TEntity? Get(int id);
     Task<TEntity?> GetAsync(int id);
     int CountAll();

@@ -4,10 +4,17 @@ namespace Vega.Tests.Factories;
 
 using Bogus;
 
-public class ModelFactory
+public static class ModelFactory
 {
-    public static Model Create() => new Faker<Model>()
-            .RuleFor(m => m.Name, f => f.Name.FindName())
-            .RuleFor(m => m.Make, f => MakeFactory.Create())
+    public static Model Create() => Create(
+        (f, v) => f.Name.FullName(),
+        (f, v) => MakeFactory.Create()
+    );
+
+    public static Model Create(
+        Func<Faker, Model, object> name,
+        Func<Faker, Model, object> make) => new Faker<Model>()
+            .RuleFor(m => m.Name, name)
+            .RuleFor(m => m.Make, make)
             .Generate();
 }

@@ -1,6 +1,9 @@
 using System.Text.Json;
 
+using Bogus.DataSets;
+
 using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.EntityFrameworkCore;
 
 namespace Vega.Tests.Feature.Vehicles;
 
@@ -27,8 +30,43 @@ public class VehiclesListTest : IClassFixture<TestableWebApplicationFactory>
     }
 
     [Fact]
+    public async Task GivenSortWhenCalledThenShouldReturnWithExpectedSort()
+    {
+        var items = new[]
+        {
+            new[] { "A User", "C Model", "B Make" },
+            new[] { "C User", "B Model", "A Make" },
+            new[] { "B User", "A Model", "C Make" },
+        };
+        foreach (var item in items)
+        {
+            _context.Vehicles.Add(VehicleFactory.Create(
+                contactName: (_, _) => item[0],
+                model: (_, _) => ModelFactory.Create(
+                    name: (_, _) => item[1],
+                    (_, _) => MakeFactory.Create(name: (_, _) => item[2])
+                )));
+        }
+        await _context.SaveChangesAsync();
+        var queryString = new Dictionary<string, string?>()
+        {
+            { "sortBy", "make" },
+            { "sortDirection", "desc" }
+        };
+        var url = QueryHelpers.AddQueryString(uri: "/api/v1/vehicles",
+            queryString: queryString);
+
+        var response = await _client.GetAsync(url);
+
+        var content = await response.Content.ReadFromJsonAsync<JsonElement>();
+        var data = content.GetProperty("data").EnumerateArray().First();
+        data.GetProperty("make").GetProperty("name").GetString().ShouldBe("C Make");
+    }
+
+    [Fact]
     public async Task GivenListWhenResponseReturnedThenShouldBePaginated()
     {
+        await _context.Vehicles.ExecuteDeleteAsync();
         _context.Vehicles.Add(VehicleFactory.Create());
         await _context.SaveChangesAsync();
         var queryString = new Dictionary<string, string?>()
@@ -92,5 +130,4 @@ public class VehiclesListTest : IClassFixture<TestableWebApplicationFactory>
 
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
     }
-
 }

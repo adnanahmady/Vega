@@ -4,9 +4,12 @@ namespace Vega.Tests.Factories;
 
 using Bogus;
 
-public class MakeFactory
+public static class MakeFactory
 {
-    public static Make Create() => new Faker<Make>()
-            .RuleFor(m => m.Name, f => f.Name.FindName())
+    public static Make Create() => Create((f, v) => f.Name.FullName());
+
+    public static Make Create(
+        Func<Faker, Make, object> name) => new Faker<Make>()
+            .RuleFor(m => m.Name, name)
             .Generate();
 }

@@ -3,6 +3,7 @@ using System.Linq.Expressions;
 
 using Microsoft.EntityFrameworkCore;
 
+using Vega.Core.QueryFilters;
 using Vega.Core.Repositories;
 
 using DbContext = Microsoft.EntityFrameworkCore.DbContext;
@@ -12,6 +13,14 @@ namespace Vega.Persistence.Repositories;
 public class Repository<TEntity> : IRepository<TEntity> where TEntity : class
 {
     protected readonly DbContext Context;
+    protected IQueryFilter<TEntity>? Filter;
+
+    public IRepository<TEntity> QueryFilter(IQueryFilter<TEntity> filter)
+    {
+        Filter = filter;
+
+        return this;
+    }
 
     public Repository(DbContext context) => Context = context;
 

@@ -1,12 +1,15 @@
 using Microsoft.EntityFrameworkCore;
 
 using Vega.Core;
+using Vega.Core.QueryFilters;
 using Vega.Persistence;
+using Vega.Persistence.QueryFilters;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
+builder.Services.AddHttpContextAccessor();
 builder.Services.AddControllersWithViews();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddDbContext<VegaDbContext>(options => options.UseSqlServer(
@@ -24,6 +27,7 @@ builder.Services.AddCors(options =>
     });
 });
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddScoped<IVehiclesListFilter, VehiclesListFilter>();
 
 var app = builder.Build();
 
