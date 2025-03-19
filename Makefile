@@ -20,7 +20,16 @@ shell:
 
 ps:
 	@docker compose ps
-status: ps
+
+volumes:
+	@docker compose ps
+	@echo "\nVolumes and their containers:"
+	@for container in $$(docker compose ps -q); do \
+		echo "\nContainer: $$(docker container inspect --format '{{.Name}}' $$container)"; \
+		docker container inspect -f '{{range .Mounts}}{{printf "Volume: %s\nTarget: %s\nSource: %s\nType: %s\n" .Name .Destination .Source .Type}}{{end}}' $$container; \
+	done
+
+status: ps volumes
 
 logs:
 	@docker compose logs $(call default,${service},database) ${with}
