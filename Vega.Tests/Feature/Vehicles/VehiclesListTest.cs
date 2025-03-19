@@ -3,6 +3,8 @@ using System.Text.Json;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.EntityFrameworkCore;
 
+using Vega.Core.Domain;
+
 namespace Vega.Tests.Feature.Vehicles;
 
 using System.Net;
@@ -27,24 +29,137 @@ public class VehiclesListTest : IClassFixture<TestableWebApplicationFactory>
         _context = factory.ResolveDbContext<VegaDbContext>();
     }
 
-    [Fact]
-    public async Task GivenFilterWhenCalledThenShouldReturnExpectedData()
+    public static IEnumerable<object[]> MemberDataForFilterTest()
     {
+        yield return new object[]
+        {
+            new Func<Make, Make, Make, Model, Model, Dictionary<string, string?>>(
+            (make1, make2, make3, model1, model2) => new Dictionary<string, string?>
+            {
+                { "makeId", $"{make1.Id}" }
+            }),
+            new Action<JsonElement>(content => content.GetProperty("data").GetArrayLength().ShouldBe(1)),
+            "given 1st make when called then should return 1 vehicle"
+        };
+
+        yield return new object[]
+        {
+            new Func<Make, Make, Make, Model, Model, Dictionary<string, string?>>(
+            (make1, make2, make3, model1, model2) => new Dictionary<string, string?>
+            {
+                { "makeId", $"{make2.Id}" }
+            }),
+            new Action<JsonElement>(content => content.GetProperty("data").GetArrayLength().ShouldBe(2)),
+            "given 2nd make when called then should return 2 vehicles"
+        };
+
+        yield return new object[]
+        {
+            new Func<Make, Make, Make, Model, Model, Dictionary<string, string?>>(
+            (make1, make2, make3, model1, model2) => new Dictionary<string, string?>
+            {
+                { "makeId", $"{make3.Id}" }
+            }),
+            new Action<JsonElement>(content => content.GetProperty("data").GetArrayLength().ShouldBe(0)),
+            "given 3rd make when called then should return empty list"
+        };
+
+        yield return new object[]
+        {
+            new Func<Make, Make, Make, Model, Model, Dictionary<string, string?>>(
+            (make1, make2, make3, model1, model2) => new Dictionary<string, string?>
+            {
+                { "makeId", "1000" }
+            }),
+            new Action<JsonElement>(content => content.GetProperty("data").GetArrayLength().ShouldBe(0)),
+            "given not existing make when called then should return empty list"
+        };
+
+        yield return new object[]
+        {
+            new Func<Make, Make, Make, Model, Model, Dictionary<string, string?>>(
+            (make1, make2, make3, model1, model2) => new Dictionary<string, string?>
+            {
+                { "makeId", null }
+            }),
+            new Action<JsonElement>(content => content.GetProperty("data").GetArrayLength().ShouldBe(3)),
+            "given make filter when value is null then should return all 3 vehicles"
+        };
+
+        yield return new object[]
+        {
+            new Func<Make, Make, Make, Model, Model, Dictionary<string, string?>>(
+            (make1, make2, make3, model1, model2) => new Dictionary<string, string?>
+            {
+                { "modelId", $"{model1.Id}" }
+            }),
+            new Action<JsonElement>(content => content.GetProperty("data").GetArrayLength().ShouldBe(1)),
+            "given 1st model when called then should return 1 vehicle"
+        };
+
+        yield return new object[]
+        {
+            new Func<Make, Make, Make, Model, Model, Dictionary<string, string?>>(
+            (make1, make2, make3, model1, model2) => new Dictionary<string, string?>
+            {
+                { "modelId", $"{model2.Id}" }
+            }),
+            new Action<JsonElement>(content => content.GetProperty("data").GetArrayLength().ShouldBe(2)),
+            "given 2nd model when called then should return 2 vehicles"
+        };
+
+        yield return new object[]
+        {
+            new Func<Make, Make, Make, Model, Model, Dictionary<string, string?>>(
+            (make1, make2, make3, model1, model2) => new Dictionary<string, string?>
+            {
+                { "modelId", "3000" }
+            }),
+            new Action<JsonElement>(content => content.GetProperty("data").GetArrayLength().ShouldBe(0)),
+            "given not existing model when called then should return empty list"
+        };
+
+        yield return new object[]
+        {
+            new Func<Make, Make, Make, Model, Model, Dictionary<string, string?>>(
+            (make1, make2, make3, model1, model2) => new Dictionary<string, string?>
+            {
+                { "modelId", null }
+            }),
+            new Action<JsonElement>(content => content.GetProperty("data").GetArrayLength().ShouldBe(3)),
+            "given model filter when value is null then should return all 3 vehicles"
+        };
+    }
+
+    [Theory]
+    [MemberData(nameof(MemberDataForFilterTest))]
+    public async Task GivenFilterWhenCalledThenShouldReturnExpectedData(
+        Func<Make, Make, Make, Model, Model, Dictionary<string, string?>> queryString,
+        Action<JsonElement> assertion,
+        string scenario)
+    {
+        await _context.Vehicles.ExecuteDeleteAsync();
+        await _context.Models.ExecuteDeleteAsync();
+        await _context.Makes.ExecuteDeleteAsync();
         var make1 = MakeFactory.Create(name: (_, _) => "A Make");
         var model1 = ModelFactory.Create((_, _) => "A Model", (_, _) => make1);
         _context.Vehicles.Add(VehicleFactory.Create(model: (_, _) => model1));
         var make2 = MakeFactory.Create(name: (_, _) => "B Make");
         var model2 = ModelFactory.Create((_, _) => "B Model", (_, _) => make2);
+        var make3 = MakeFactory.Create(name: (_, _) => "C Make");
+        _context.Makes.Add(make3);
         _context.Vehicles.Add(VehicleFactory.Create(model: (_, _) => model2));
         _context.Vehicles.Add(VehicleFactory.Create(model: (_, _) => model2));
         await _context.SaveChangesAsync();
-        var queryString = new Dictionary<string, string?> { { "makeId", $"{make1.Id}" } };
-        var url = QueryHelpers.AddQueryString("/api/v1/vehicles", queryString);
+        var url = QueryHelpers.AddQueryString(
+            "/api/v1/vehicles",
+            queryString(make1, make2, make3, model1, model2)
+        );
 
         var response = await _client.GetAsync(url);
 
         var content = await response.Content.ReadFromJsonAsync<JsonElement>();
-        content.GetProperty("data").GetArrayLength().ShouldBe(1);
+        assertion(content);
     }
 
     public static IEnumerable<object[]> MemberDataForSortingTest()

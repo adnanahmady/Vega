@@ -16,6 +16,14 @@ public class VehiclesListFilter : QueryFilter<Vehicle>, IVehiclesListFilter
         Queryable = Queryable.Where(v => v.Model.MakeId == id);
     }
 
+
+    public void ModelId(object value)
+    {
+        var id = Convert.ToUInt32(value);
+
+        Queryable = Queryable.Where(v => v.ModelId == id);
+    }
+
     // the method handles the given sortBy query string
     public void SortBy(object column)
     {
