@@ -30,7 +30,7 @@ public class VehiclesListFilter : QueryFilter<Vehicle>, IVehiclesListFilter
         {
             "make" => v => v.Model.Make.Name,
             "model" => v => v.Model.Name,
-            "contactName" => v => v.ContactName,
+            "contact-name" => v => v.ContactName,
             _ => v => v.Id,
         };
 }

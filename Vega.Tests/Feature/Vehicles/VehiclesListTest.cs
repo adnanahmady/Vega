@@ -29,8 +29,95 @@ public class VehiclesListTest : IClassFixture<TestableWebApplicationFactory>
         _context = factory.ResolveDbContext<VegaDbContext>();
     }
 
-    [Fact]
-    public async Task GivenSortWhenCalledThenShouldReturnWithExpectedSort()
+    public static IEnumerable<object[]> MemberDataForSortingTest()
+    {
+        yield return new object[]
+        {
+            new Dictionary<string, string?>()
+                    {
+                        { "sortBy", "make" },
+                        { "sortDirection", "desc" }
+                    },
+            new Action<JsonElement>(data =>
+                data.GetProperty("make").GetProperty("name").GetString().ShouldBe("C Make")
+            ),
+            "given make when its desc then `c make` should be the first one"
+        };
+
+        yield return new object[]
+        {
+            new Dictionary<string, string?>()
+                    {
+                        { "sortBy", "make" },
+                        { "sortDirection", "asc" }
+                    },
+            new Action<JsonElement>(data =>
+                data.GetProperty("make").GetProperty("name").GetString().ShouldBe("A Make")
+            ),
+            "given make when its asc then `a make` should be the first one"
+        };
+
+        yield return new object[]
+        {
+            new Dictionary<string, string?>()
+                    {
+                        { "sortBy", "model" },
+                        { "sortDirection", "desc" }
+                    },
+            new Action<JsonElement>(data =>
+                data.GetProperty("model").GetProperty("name").GetString().ShouldBe("C Model")
+            ),
+            "given model when its desc then `c model` should be the first one"
+        };
+
+        yield return new object[]
+        {
+            new Dictionary<string, string?>()
+                    {
+                        { "sortBy", "model" },
+                        { "sortDirection", "asc" }
+                    },
+            new Action<JsonElement>(data =>
+                data.GetProperty("model").GetProperty("name").GetString().ShouldBe("A Model")
+            ),
+            "given model when its desc then `a model` should be the first one"
+        };
+
+        yield return new object[]
+        {
+            new Dictionary<string, string?>()
+                    {
+                        { "sortBy", "contact-name" },
+                        { "sortDirection", "desc" }
+                    },
+            new Action<JsonElement>(data =>
+                data.GetProperty("contact").GetProperty("name").GetString().ShouldBe("C User")
+            ),
+            "given contact name when its desc then `c user` should be the first one"
+        };
+
+        yield return new object[]
+        {
+            new Dictionary<string, string?>()
+                    {
+                        { "sortBy", "contact-name" },
+                        { "sortDirection", "asc" }
+                    },
+            new Action<JsonElement>(data =>
+                data.GetProperty("contact").GetProperty("name").GetString().ShouldBe("A User")
+            ),
+            "given contact name when its desc then `a user` should be the first one"
+        };
+    }
+
+    [Theory]
+    [MemberData(nameof(MemberDataForSortingTest))]
+    public async Task GivenSortWhenCalledThenShouldReturnWithExpectedSort(
+        Dictionary<string, string?> queryString,
+        Action<JsonElement> assertion,
+        // the scenario parameter is useful to determine the failing iteration when test fails
+        string scenario
+    )
     {
         var items = new[]
         {
@@ -48,11 +135,6 @@ public class VehiclesListTest : IClassFixture<TestableWebApplicationFactory>
                 )));
         }
         await _context.SaveChangesAsync();
-        var queryString = new Dictionary<string, string?>()
-        {
-            { "sortBy", "make" },
-            { "sortDirection", "desc" }
-        };
         var url = QueryHelpers.AddQueryString(uri: "/api/v1/vehicles",
             queryString: queryString);
 
@@ -60,7 +142,7 @@ public class VehiclesListTest : IClassFixture<TestableWebApplicationFactory>
 
         var content = await response.Content.ReadFromJsonAsync<JsonElement>();
         var data = content.GetProperty("data").EnumerateArray().First();
-        data.GetProperty("make").GetProperty("name").GetString().ShouldBe("C Make");
+        assertion(data);
     }
 
     [Fact]
