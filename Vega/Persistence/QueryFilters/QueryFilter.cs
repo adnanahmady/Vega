@@ -1,5 +1,3 @@
-using System.Text.Json;
-
 using Humanizer;
 
 using Vega.Core.QueryFilters;
@@ -11,10 +9,7 @@ public abstract class QueryFilter<T> : IQueryFilter<T>
     protected IHttpContextAccessor ContextAccessor;
     protected IQueryable<T> Queryable;
 
-    public QueryFilter(IHttpContextAccessor contextAccessor)
-    {
-        ContextAccessor = contextAccessor;
-    }
+    public QueryFilter(IHttpContextAccessor contextAccessor) => ContextAccessor = contextAccessor;
 
     public IQueryable<T> Apply(IQueryable<T> queryable)
     {
@@ -30,7 +25,7 @@ public abstract class QueryFilter<T> : IQueryFilter<T>
 
             if (type == null) continue;
 
-            var method = GetType().GetMethod(methodName, new Type[] {typeof(string)});
+            var method = GetType().GetMethod(methodName, new Type[] { typeof(string) });
             method!.Invoke(this, new object[] { v.ToString() });
         }
 

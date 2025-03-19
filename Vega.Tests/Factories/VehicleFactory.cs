@@ -11,10 +11,16 @@ public static class VehicleFactory
         (f, v) => f.Internet.Email(),
         (f, v) => f.Phone.PhoneNumber(),
         (f, v) => ModelFactory.Create(),
-        (f, v) => new[]
-        {
-            VehicleFeatureFactory.Create()
-        },
+        (f, v) => new[] { VehicleFeatureFactory.Create() },
+        (f, v) => f.Random.Bool()
+    );
+
+    public static Vehicle Create(Func<Faker, Vehicle, object> model) => Create(
+        (f, v) => f.Name.FullName(),
+        (f, v) => f.Internet.Email(),
+        (f, v) => f.Phone.PhoneNumber(),
+        model,
+        (f, v) => new[] { VehicleFeatureFactory.Create() },
         (f, v) => f.Random.Bool()
     );
 
@@ -26,10 +32,7 @@ public static class VehicleFactory
         (f, v) => f.Internet.Email(),
         (f, v) => f.Phone.PhoneNumber(),
         model,
-        (f, v) => new[]
-        {
-            VehicleFeatureFactory.Create()
-        },
+        (f, v) => new[] { VehicleFeatureFactory.Create() },
         (f, v) => f.Random.Bool()
     );
 

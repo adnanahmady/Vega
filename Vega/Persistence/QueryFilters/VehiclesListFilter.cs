@@ -1,5 +1,3 @@
-using System.Text.Json;
-
 using Vega.Core.Domain;
 using Vega.Core.QueryFilters;
 
@@ -9,6 +7,13 @@ public class VehiclesListFilter : QueryFilter<Vehicle>, IVehiclesListFilter
 {
     public VehiclesListFilter(IHttpContextAccessor contextAccessor) : base(contextAccessor)
     {
+    }
+
+    public void MakeId(object value)
+    {
+        var id = Convert.ToUInt32(value);
+
+        Queryable = Queryable.Where(v => v.Model.MakeId == id);
     }
 
     // the method handles the given sortBy query string
@@ -27,10 +32,10 @@ public class VehiclesListFilter : QueryFilter<Vehicle>, IVehiclesListFilter
     }
 
     private Func<Vehicle, object> GetColumnMap(string column) => column.ToLower() switch
-        {
-            "make" => v => v.Model.Make.Name,
-            "model" => v => v.Model.Name,
-            "contact-name" => v => v.ContactName,
-            _ => v => v.Id,
-        };
+    {
+        "make" => v => v.Model.Make.Name,
+        "model" => v => v.Model.Name,
+        "contact-name" => v => v.ContactName,
+        _ => v => v.Id,
+    };
 }

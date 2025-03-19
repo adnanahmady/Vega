@@ -1,12 +1,8 @@
-using System.Linq.Expressions;
-
 using Microsoft.EntityFrameworkCore;
 
 using Vega.Core.Domain;
-using Vega.Core.QueryFilters;
 using Vega.Core.Repositories;
 using Vega.ExtensionMethods;
-using Vega.Persistence.QueryFilters;
 
 namespace Vega.Persistence.Repositories;
 

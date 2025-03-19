@@ -1,7 +1,5 @@
 using System.Text.Json;
 
-using Bogus.DataSets;
-
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.EntityFrameworkCore;
 
@@ -27,6 +25,26 @@ public class VehiclesListTest : IClassFixture<TestableWebApplicationFactory>
     {
         _client = factory.CreateClient();
         _context = factory.ResolveDbContext<VegaDbContext>();
+    }
+
+    [Fact]
+    public async Task GivenFilterWhenCalledThenShouldReturnExpectedData()
+    {
+        var make1 = MakeFactory.Create(name: (_, _) => "A Make");
+        var model1 = ModelFactory.Create((_, _) => "A Model", (_, _) => make1);
+        _context.Vehicles.Add(VehicleFactory.Create(model: (_, _) => model1));
+        var make2 = MakeFactory.Create(name: (_, _) => "B Make");
+        var model2 = ModelFactory.Create((_, _) => "B Model", (_, _) => make2);
+        _context.Vehicles.Add(VehicleFactory.Create(model: (_, _) => model2));
+        _context.Vehicles.Add(VehicleFactory.Create(model: (_, _) => model2));
+        await _context.SaveChangesAsync();
+        var queryString = new Dictionary<string, string?> { { "makeId", $"{make1.Id}" } };
+        var url = QueryHelpers.AddQueryString("/api/v1/vehicles", queryString);
+
+        var response = await _client.GetAsync(url);
+
+        var content = await response.Content.ReadFromJsonAsync<JsonElement>();
+        content.GetProperty("data").GetArrayLength().ShouldBe(1);
     }
 
     public static IEnumerable<object[]> MemberDataForSortingTest()

@@ -14,16 +14,13 @@ using Resources.V1;
 [Route("api/v1/vehicles")]
 public class VehiclesListController : BaseController
 {
-    private IQueryFilter<Vehicle> _filter;
+    private readonly IQueryFilter<Vehicle> _filter;
 
     public VehiclesListController(
         IUnitOfWork unitOfWork,
         IMapper mapper,
         IVehiclesListFilter filter
-    ) : base(unitOfWork, mapper)
-    {
-        _filter = filter;
-    }
+    ) : base(unitOfWork, mapper) => _filter = filter;
 
     [HttpGet]
     public PageResult<VehicleResource> Index(
