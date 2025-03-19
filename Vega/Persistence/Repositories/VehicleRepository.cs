@@ -27,11 +27,15 @@ public class VehicleRepository : Repository<Vehicle>, IVehicleRepository
         var queryable = VegaDbContext.Vehicles
             .Include(v => v.Model)
             .ThenInclude(m => m.Make)
-            .Include(v => v.VehicleFeatures);
+            .Include(v => v.VehicleFeatures)
+            .AsQueryable();
 
-        var ordered = queryable.OrderByDescending(v => v.Model.Make.Name);
+        if (null != Filter)
+        {
+            queryable = queryable.Filter(Filter).AsQueryable();
+        }
 
-        return ordered.ToList();
+        return queryable.ToList();
     }
 
     public override IEnumerable<Vehicle> GetAll(int skip, int take)
@@ -42,12 +46,15 @@ public class VehicleRepository : Repository<Vehicle>, IVehicleRepository
             .Take(take)
             .Include(v => v.Model)
             .ThenInclude(m => m.Make)
-            .Include(v => v.VehicleFeatures);
+            .Include(v => v.VehicleFeatures)
+            .AsQueryable();
 
-        var ordered = queryable.Filter(Filter);
-        // var ordered = queryable.OrderByDescending(v => v.Model.Make.Name);
+        if (null != Filter)
+        {
+            queryable = queryable.Filter(Filter).AsQueryable();
+        }
 
-        return ordered.ToList();
+        return queryable.ToList();
     }
 
     public async Task<Vehicle?> FindWithModelAndFeaturesAsync(int id) =>

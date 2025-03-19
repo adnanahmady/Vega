@@ -38,7 +38,7 @@ public class VehiclesListTest : IClassFixture<TestableWebApplicationFactory>
             {
                 { "makeId", $"{make1.Id}" }
             }),
-            new Action<JsonElement>(content => content.GetProperty("data").GetArrayLength().ShouldBe(1)),
+            1,
             "given 1st make when called then should return 1 vehicle"
         };
 
@@ -49,7 +49,7 @@ public class VehiclesListTest : IClassFixture<TestableWebApplicationFactory>
             {
                 { "makeId", $"{make2.Id}" }
             }),
-            new Action<JsonElement>(content => content.GetProperty("data").GetArrayLength().ShouldBe(2)),
+            2,
             "given 2nd make when called then should return 2 vehicles"
         };
 
@@ -60,7 +60,7 @@ public class VehiclesListTest : IClassFixture<TestableWebApplicationFactory>
             {
                 { "makeId", $"{make3.Id}" }
             }),
-            new Action<JsonElement>(content => content.GetProperty("data").GetArrayLength().ShouldBe(0)),
+            0,
             "given 3rd make when called then should return empty list"
         };
 
@@ -71,7 +71,7 @@ public class VehiclesListTest : IClassFixture<TestableWebApplicationFactory>
             {
                 { "makeId", "1000" }
             }),
-            new Action<JsonElement>(content => content.GetProperty("data").GetArrayLength().ShouldBe(0)),
+            0,
             "given not existing make when called then should return empty list"
         };
 
@@ -82,7 +82,7 @@ public class VehiclesListTest : IClassFixture<TestableWebApplicationFactory>
             {
                 { "makeId", null }
             }),
-            new Action<JsonElement>(content => content.GetProperty("data").GetArrayLength().ShouldBe(3)),
+            3,
             "given make filter when value is null then should return all 3 vehicles"
         };
 
@@ -93,7 +93,7 @@ public class VehiclesListTest : IClassFixture<TestableWebApplicationFactory>
             {
                 { "modelId", $"{model1.Id}" }
             }),
-            new Action<JsonElement>(content => content.GetProperty("data").GetArrayLength().ShouldBe(1)),
+            1,
             "given 1st model when called then should return 1 vehicle"
         };
 
@@ -104,7 +104,7 @@ public class VehiclesListTest : IClassFixture<TestableWebApplicationFactory>
             {
                 { "modelId", $"{model2.Id}" }
             }),
-            new Action<JsonElement>(content => content.GetProperty("data").GetArrayLength().ShouldBe(2)),
+            2,
             "given 2nd model when called then should return 2 vehicles"
         };
 
@@ -115,7 +115,7 @@ public class VehiclesListTest : IClassFixture<TestableWebApplicationFactory>
             {
                 { "modelId", "3000" }
             }),
-            new Action<JsonElement>(content => content.GetProperty("data").GetArrayLength().ShouldBe(0)),
+            0,
             "given not existing model when called then should return empty list"
         };
 
@@ -126,7 +126,7 @@ public class VehiclesListTest : IClassFixture<TestableWebApplicationFactory>
             {
                 { "modelId", null }
             }),
-            new Action<JsonElement>(content => content.GetProperty("data").GetArrayLength().ShouldBe(3)),
+            3,
             "given model filter when value is null then should return all 3 vehicles"
         };
     }
@@ -135,7 +135,7 @@ public class VehiclesListTest : IClassFixture<TestableWebApplicationFactory>
     [MemberData(nameof(MemberDataForFilterTest))]
     public async Task GivenFilterWhenCalledThenShouldReturnExpectedData(
         Func<Make, Make, Make, Model, Model, Dictionary<string, string?>> queryString,
-        Action<JsonElement> assertion,
+        int expectedCount,
         string scenario)
     {
         await _context.Vehicles.ExecuteDeleteAsync();
@@ -159,7 +159,7 @@ public class VehiclesListTest : IClassFixture<TestableWebApplicationFactory>
         var response = await _client.GetAsync(url);
 
         var content = await response.Content.ReadFromJsonAsync<JsonElement>();
-        assertion(content);
+        content.GetProperty("data").GetArrayLength().ShouldBe(expectedCount);
     }
 
     public static IEnumerable<object[]> MemberDataForSortingTest()
