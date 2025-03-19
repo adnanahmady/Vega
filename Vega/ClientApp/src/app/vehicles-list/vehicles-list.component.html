@@ -2,7 +2,21 @@
 
 <p>This component demonstrates fetching data from the server.</p>
 
-<p *ngIf="!vehicles?.length"><em>Loading...</em></p>
+<p *ngIf="!allVehicles?.length"><em>Loading...</em></p>
+
+<a href="/vehicles/new" class="btn btn-primary mb-3">New Vehicle</a>
+
+<div class="well mb-3">
+  <div class="form-group mb-3">
+    <label for="make" class="mb-1">Make</label>
+    <select id="make" class="form-control" [(ngModel)]="filter.makeId" (change)="handleFilterChange()">
+      <option value=""></option>
+      <option value="{{ m.id }}" *ngFor="let m of makes">{{ m.name }}</option>
+    </select>
+  </div>
+
+  <button class="btn btn-outline-dark" (click)="resetFilter()">Reset</button>
+</div>
 
 <table class="table table-stripped">
   <thead>

@@ -31,7 +31,7 @@ import {VehiclesListComponent} from "./vehicles-list/vehicles-list.component";
     FormsModule,
     ToastyModule.forRoot(),
     RouterModule.forRoot([
-      { path: '', component: HomeComponent, pathMatch: 'full' },
+      { path: '', redirectTo: '/vehicles', pathMatch: 'full' },
       { path: 'counter', component: CounterComponent },
       { path: 'fetch-data', component: FetchDataComponent },
       { path: 'vehicles', component: VehiclesListComponent },
