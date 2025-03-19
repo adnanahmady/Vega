@@ -1,29 +1,20 @@
 import { Injectable } from "@angular/core";
 import {HttpClient} from "@angular/common/http";
-import {Feature, Make} from "../Interfaces/MakeInterfaces";
 import {Observable} from "rxjs";
 import {VehicleResource} from "../types/resources/vehicle-resources";
 
 @Injectable()
 export class VehicleService {
-  private baseUrl: string = 'https://localhost:5001/';
+  private baseUrl: string = 'https://localhost:5001/api/v1/vehicles';
 
   constructor(private http: HttpClient) {
-  }
-
-  getMakes(): Observable<Make[]> {
-    return this.http.get<Make[]>(this.baseUrl + 'api/v1/makes');
-  }
-
-  getFeatures(): Observable<Feature[]> {
-    return this.http.get<Feature[]>(this.baseUrl + 'api/v1/features');
   }
 
   create(vehicle: any): Observable<VehicleResource> {
     vehicle.isRegistered = !!vehicle.isRegistered;
 
     return this.http.post<VehicleResource>(
-      this.baseUrl + 'api/v1/vehicles',
+      this.baseUrl,
       vehicle
     );
   }
@@ -32,25 +23,31 @@ export class VehicleService {
     vehicle.isRegistered = !!vehicle.isRegistered;
 
     return this.http.put<VehicleResource>(
-      this.baseUrl + 'api/v1/vehicles/' + vehicle.id,
+      this.baseUrl + '/' + vehicle.id,
       vehicle
     );
   }
 
   delete(id: number): Observable<Object>
   {
-    return this.http.delete('api/v1/vehicles/' + id);
+    return this.http.delete(this.baseUrl + '/' + id);
   }
 
   getVehicle(id: number): Observable<VehicleResource> {
     return this.http.get<VehicleResource>(
-      this.baseUrl + 'api/v1/vehicles/' + id
+      this.baseUrl + '/' + id
     );
   }
 
-  getVehicles(): Observable<{ data: VehicleResource[], meta: object}> {
+  getVehicles(filter: VehicleFilters): Observable<{ data: VehicleResource[], meta: object}> {
     return this.http.get<{ data: VehicleResource[], meta: object}>(
-      this.baseUrl + 'api/v1/vehicles'
+      this.baseUrl,
+      {params: {...filter}}
     );
   }
+}
+
+export interface VehicleFilters {
+  makeId?: number,
+  modelId?: number,
 }

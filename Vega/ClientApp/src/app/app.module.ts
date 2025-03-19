@@ -14,6 +14,8 @@ import {VehicleService} from "./services/vehicle.service";
 import {ToastyModule, ToastyService} from "ng2-toasty";
 import {AppErrorHandler} from "./handlers/app.error-handler";
 import {VehiclesListComponent} from "./vehicles-list/vehicles-list.component";
+import {FeatureService} from "./services/feature.service";
+import {MakeService} from "./services/make.service";
 
 @NgModule({
   declarations: [
@@ -42,6 +44,8 @@ import {VehiclesListComponent} from "./vehicles-list/vehicles-list.component";
   providers: [
     { provide: ErrorHandler, useClass: AppErrorHandler },
     VehicleService,
+    MakeService,
+    FeatureService,
     ToastyService,
   ],
   bootstrap: [AppComponent]

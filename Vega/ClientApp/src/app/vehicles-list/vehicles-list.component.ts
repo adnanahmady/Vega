@@ -1,11 +1,12 @@
 import {Component, Inject, NgModule} from '@angular/core';
-import {VehicleService} from "../services/vehicle.service";
+import {VehicleFilters, VehicleService} from "../services/vehicle.service";
 import {Make, Model, Feature} from "../Interfaces/MakeInterfaces";
 import {ToastyService} from "ng2-toasty";
 import {ActivatedRoute, Router} from "@angular/router";
 import {Observable} from "rxjs";
 import {IdNameType, VehicleResource} from "../types/resources/vehicle-resources";
 import {CommonModule} from "@angular/common";
+import {MakeService} from "../services/make.service";
 
 @Component({
   selector: 'app-vehicles-list',
@@ -16,22 +17,23 @@ export class VehiclesListComponent {
   protected allVehicles: VehicleResource[] = [];
   protected meta = {};
   protected makes: IdNameType[] = [];
-  protected filter: any = [];
+  protected filter: VehicleFilters = {};
 
   constructor(
     private vehicleService: VehicleService,
+    private makeService: MakeService
   ) {
     this.getVehicles();
     this.getMakes();
   }
 
   getMakes(): void {
-    this.vehicleService.getMakes()
+    this.makeService.getMakes()
       .subscribe((m: Make[]) => this.makes = m);
   }
 
   getVehicles() {
-    this.vehicleService.getVehicles()
+    this.vehicleService.getVehicles(this.filter)
       .subscribe(l => {
         this.vehicles = l.data;
         this.allVehicles = l.data;
@@ -43,15 +45,7 @@ export class VehiclesListComponent {
   }
 
   handleFilterChange(): void {
-    let vehicles: VehicleResource[] = this.allVehicles;
-
-    if (this.filter.makeId)
-      vehicles = vehicles.filter(v => +v.make.id === +this.filter.makeId);
-
-    if (this.filter.modelId)
-      vehicles = vehicles.filter(v => +v.model.id === +this.filter.modelId);
-
-    this.vehicles = vehicles;
+    this.getVehicles();
   }
 
   resetFilter() {

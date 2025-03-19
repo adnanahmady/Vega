@@ -1,5 +1,7 @@
 using Humanizer;
 
+using Microsoft.IdentityModel.Tokens;
+
 using Vega.Core.QueryFilters;
 
 namespace Vega.Persistence.QueryFilters;
@@ -18,7 +20,7 @@ public abstract class QueryFilter<T> : IQueryFilter<T>
 
         foreach (var (k, v) in queries)
         {
-            if (!v.Any()) continue;
+            if (!v.Any() || string.IsNullOrWhiteSpace(v)) continue;
 
             var methodName = k.Pascalize();
             var type = GetType().GetMethod(methodName);

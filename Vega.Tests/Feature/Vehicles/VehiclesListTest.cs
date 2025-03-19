@@ -91,6 +91,17 @@ public class VehiclesListTest : IClassFixture<TestableWebApplicationFactory>
             new Func<Make, Make, Make, Model, Model, Dictionary<string, string?>>(
             (make1, make2, make3, model1, model2) => new Dictionary<string, string?>
             {
+                { "makeId", "" }
+            }),
+            3,
+            "given empty make filter when value is null then should return all 3 vehicles"
+        };
+
+        yield return new object[]
+        {
+            new Func<Make, Make, Make, Model, Model, Dictionary<string, string?>>(
+            (make1, make2, make3, model1, model2) => new Dictionary<string, string?>
+            {
                 { "modelId", $"{model1.Id}" }
             }),
             1,

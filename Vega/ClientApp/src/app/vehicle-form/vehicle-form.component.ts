@@ -4,6 +4,8 @@ import {Make, Model, Feature} from "../Interfaces/MakeInterfaces";
 import {ToastyService} from "ng2-toasty";
 import {ActivatedRoute, Router} from "@angular/router";
 import {Observable} from "rxjs";
+import {FeatureService} from "../services/feature.service";
+import {MakeService} from "../services/make.service";
 
 interface Vehicle {
   id?: number,
@@ -41,6 +43,8 @@ export class VehicleFormComponent {
     private route: ActivatedRoute,
     private router: Router,
     private vehicleService: VehicleService,
+    private makeService: MakeService,
+    private featureService: FeatureService
   ) {
     route.params.subscribe(p => {
       this.vehicle.id = +p['id'];
@@ -74,7 +78,7 @@ export class VehicleFormComponent {
     if (!this.vehicle.id) {
       this.vehicle.makeId = 0;
     }
-    this.vehicleService.getMakes()
+    this.makeService.getMakes()
       .subscribe(makes => this.makes = makes);
 
     if (this.vehicle.makeId) {
@@ -84,7 +88,7 @@ export class VehicleFormComponent {
   }
 
   getVehicleFeatures(): void {
-    this.vehicleService.getFeatures()
+    this.featureService.getFeatures()
       .subscribe(features => this.features = features);
   }
 
