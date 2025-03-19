@@ -1,27 +1,27 @@
 using System.Linq.Expressions;
+using System.Text.RegularExpressions;
 
 using Vega.Core.Domain;
 using Vega.Core.QueryFilters;
 
 namespace Vega.Persistence.QueryFilters;
 
-public class VehiclesListFilter : QueryFilter<Vehicle>, IVehiclesListFilter
+public class VehiclesListParamProcessor : QueryParamProcessor<Vehicle>, IVehiclesListParamProcessor
 {
-    public VehiclesListFilter(IHttpContextAccessor contextAccessor) : base(contextAccessor)
+    public VehiclesListParamProcessor(IHttpContextAccessor contextAccessor) : base(contextAccessor)
     {
     }
 
     public void MakeId(object value)
     {
-        var id = Convert.ToUInt32(value);
+        var id = IsNotNumeric(value) ? 0 : Convert.ToUInt32(value);
 
         Queryable = Queryable.Where(v => v.Model.MakeId == id);
     }
 
-
     public void ModelId(object value)
     {
-        var id = Convert.ToUInt32(value);
+        var id = IsNotNumeric(value) ? 0 : Convert.ToUInt32(value);
 
         Queryable = Queryable.Where(v => v.ModelId == id);
     }

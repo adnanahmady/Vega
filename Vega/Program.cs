@@ -27,7 +27,7 @@ builder.Services.AddCors(options =>
     });
 });
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-builder.Services.AddScoped<IVehiclesListFilter, VehiclesListFilter>();
+builder.Services.AddScoped<IVehiclesListParamProcessor, VehiclesListParamProcessor>();
 
 var app = builder.Build();
 

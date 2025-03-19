@@ -13,11 +13,11 @@ namespace Vega.Persistence.Repositories;
 public class Repository<TEntity> : IRepository<TEntity> where TEntity : class
 {
     protected readonly DbContext Context;
-    protected IQueryFilter<TEntity>? Filter;
+    protected IQueryParamProcessor<TEntity>? Processor;
 
-    public IRepository<TEntity> QueryFilter(IQueryFilter<TEntity> filter)
+    public IRepository<TEntity> QueryParamProcessor(IQueryParamProcessor<TEntity> processor)
     {
-        Filter = filter;
+        Processor = processor;
 
         return this;
     }

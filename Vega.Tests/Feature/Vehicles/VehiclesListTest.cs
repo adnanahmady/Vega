@@ -36,6 +36,28 @@ public class VehiclesListTest : IClassFixture<TestableWebApplicationFactory>
             new Func<Make, Make, Make, Model, Model, Dictionary<string, string?>>(
             (make1, make2, make3, model1, model2) => new Dictionary<string, string?>
             {
+                { "modelId", "invalid" }
+            }),
+            0,
+            "given invalid model when called then should return 0 vehicle"
+        };
+
+        yield return new object[]
+        {
+            new Func<Make, Make, Make, Model, Model, Dictionary<string, string?>>(
+            (make1, make2, make3, model1, model2) => new Dictionary<string, string?>
+            {
+                { "makeId", "invalid" }
+            }),
+            0,
+            "given invalid make when called then should return 0 vehicle"
+        };
+
+        yield return new object[]
+        {
+            new Func<Make, Make, Make, Model, Model, Dictionary<string, string?>>(
+            (make1, make2, make3, model1, model2) => new Dictionary<string, string?>
+            {
                 { "makeId", $"{make1.Id}" }
             }),
             1,

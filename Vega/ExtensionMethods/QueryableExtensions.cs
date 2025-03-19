@@ -4,13 +4,13 @@ namespace Vega.ExtensionMethods;
 
 public static class QueryableExtensions
 {
-    public static IQueryable<T> Filter<T>(this IQueryable<T> queryable, IQueryFilter<T> filter)
+    public static IQueryable<T> QueryParamProcessor<T>(this IQueryable<T> queryable, IQueryParamProcessor<T> paramProcessor)
     {
-        if (filter == null)
+        if (paramProcessor == null)
         {
-            throw new ArgumentNullException(nameof(filter), message: "filter is required");
+            throw new ArgumentNullException(nameof(paramProcessor), message: "filter is required");
         }
 
-        return filter.Apply(queryable);
+        return paramProcessor.Apply(queryable);
     }
 }

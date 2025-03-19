@@ -1,6 +1,6 @@
 namespace Vega.Core.QueryFilters;
 
-public interface IQueryFilter<T>
+public interface IQueryParamProcessor<T>
 {
     IQueryable<T> Apply(IQueryable<T> queryable);
 }

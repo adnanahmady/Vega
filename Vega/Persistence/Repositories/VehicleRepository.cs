@@ -30,9 +30,9 @@ public class VehicleRepository : Repository<Vehicle>, IVehicleRepository
             .Include(v => v.VehicleFeatures)
             .AsQueryable();
 
-        if (null != Filter)
+        if (null != Processor)
         {
-            queryable = queryable.Filter(Filter).AsQueryable();
+            queryable = queryable.QueryParamProcessor(Processor).AsQueryable();
         }
 
         return queryable.ToList();
@@ -49,9 +49,9 @@ public class VehicleRepository : Repository<Vehicle>, IVehicleRepository
             .Include(v => v.VehicleFeatures)
             .AsQueryable();
 
-        if (null != Filter)
+        if (null != Processor)
         {
-            queryable = queryable.Filter(Filter).AsQueryable();
+            queryable = queryable.QueryParamProcessor(Processor).AsQueryable();
         }
 
         return queryable.ToList();

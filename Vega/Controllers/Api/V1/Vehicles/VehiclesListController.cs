@@ -14,13 +14,13 @@ using Resources.V1;
 [Route("api/v1/vehicles")]
 public class VehiclesListController : BaseController
 {
-    private readonly IQueryFilter<Vehicle> _filter;
+    private readonly IQueryParamProcessor<Vehicle> _paramProcessor;
 
     public VehiclesListController(
         IUnitOfWork unitOfWork,
         IMapper mapper,
-        IVehiclesListFilter filter
-    ) : base(unitOfWork, mapper) => _filter = filter;
+        IVehiclesListParamProcessor paramProcessor
+    ) : base(unitOfWork, mapper) => _paramProcessor = paramProcessor;
 
     [HttpGet]
     public PageResult<VehicleResource> Index(
@@ -31,7 +31,7 @@ public class VehiclesListController : BaseController
 
         var count = UnitOfWork.Vehicles.CountAll();
         var vehicles = UnitOfWork.Vehicles
-            .QueryFilter(_filter)
+            .QueryParamProcessor(_paramProcessor)
             .GetAll(skip: pageIndex, take: pageSize);
 
         var list = Mapper.Map<List<VehicleResource>>(vehicles);
