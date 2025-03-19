@@ -1,3 +1,5 @@
+using System.Linq.Expressions;
+
 using Vega.Core.Domain;
 using Vega.Core.QueryFilters;
 
@@ -39,11 +41,12 @@ public class VehiclesListFilter : QueryFilter<Vehicle>, IVehiclesListFilter
         Queryable = Queryable.OrderBy(c).AsQueryable();
     }
 
-    private Func<Vehicle, object> GetColumnMap(string column) => column.ToLower() switch
-    {
-        "make" => v => v.Model.Make.Name,
-        "model" => v => v.Model.Name,
-        "contact-name" => v => v.ContactName,
-        _ => v => v.Id,
-    };
+    private Expression<Func<Vehicle, object>> GetColumnMap(string column) =>
+        column.ToLower() switch
+        {
+            "make" => v => v.Model.Make.Name,
+            "model" => v => v.Model.Name,
+            "contact-name" => v => v.ContactName,
+            _ => v => v.Id,
+        };
 }

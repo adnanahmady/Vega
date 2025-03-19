@@ -1,7 +1,5 @@
 using Humanizer;
 
-using Microsoft.IdentityModel.Tokens;
-
 using Vega.Core.QueryFilters;
 
 namespace Vega.Persistence.QueryFilters;

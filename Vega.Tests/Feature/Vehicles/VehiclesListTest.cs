@@ -177,6 +177,13 @@ public class VehiclesListTest : IClassFixture<TestableWebApplicationFactory>
     {
         yield return new object[]
         {
+            new Dictionary<string, string?> { { "sortBy", "invalid" } },
+            new Action<JsonElement>(data => data.GetProperty("id").GetInt32().ShouldBe(1)),
+            "given invalid column name when its called then should sort by id"
+        };
+
+        yield return new object[]
+        {
             new Dictionary<string, string?>()
                     {
                         { "sortBy", "make" },
@@ -263,6 +270,7 @@ public class VehiclesListTest : IClassFixture<TestableWebApplicationFactory>
         string scenario
     )
     {
+        await _context.Vehicles.ExecuteDeleteAsync();
         var items = new[]
         {
             new[] { "A User", "C Model", "B Make" },
