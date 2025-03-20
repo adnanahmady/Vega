@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 using Vega.Core.QueryFilters;
 using Vega.Core.Repositories;
+using Vega.Dtos;
 
 using DbContext = Microsoft.EntityFrameworkCore.DbContext;
 
@@ -30,8 +31,11 @@ public class Repository<TEntity> : IRepository<TEntity> where TEntity : class
     public virtual int CountAll() => Context.Set<TEntity>().Count();
     public virtual IEnumerable<TEntity> GetAll() => Context.Set<TEntity>().ToList();
 
-    public virtual IEnumerable<TEntity> GetAll(int skip, int take) =>
-        Context.Set<TEntity>().Skip(skip).Take(take).ToList();
+    public virtual PaginationDto<TEntity> GetAll(int skip, int take) => new PaginationDto<TEntity>()
+    {
+        Count = Context.Set<TEntity>().Count(),
+        Items = Context.Set<TEntity>().Skip(skip).Take(take).ToList(),
+    };
 
     public virtual async Task<IEnumerable<TEntity>> GetAllAsync() =>
         await Context.Set<TEntity>().ToListAsync();

@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 
 using Vega.Core.Domain;
 using Vega.Core.Repositories;
+using Vega.Dtos;
 using Vega.ExtensionMethods;
 
 namespace Vega.Persistence.Repositories;
@@ -38,12 +39,10 @@ public class VehicleRepository : Repository<Vehicle>, IVehicleRepository
         return queryable.ToList();
     }
 
-    public override IEnumerable<Vehicle> GetAll(int skip, int take)
+    public override PaginationDto<Vehicle> GetAll(int skip, int take)
     {
         var queryable = VegaDbContext.Vehicles
             .OrderBy(v => v.Id)
-            .Skip(skip)
-            .Take(take)
             .Include(v => v.Model)
             .ThenInclude(m => m.Make)
             .Include(v => v.VehicleFeatures)
@@ -54,7 +53,11 @@ public class VehicleRepository : Repository<Vehicle>, IVehicleRepository
             queryable = queryable.QueryParamProcessor(Processor).AsQueryable();
         }
 
-        return queryable.ToList();
+        return new PaginationDto<Vehicle>()
+        {
+            Count = queryable.Count(),
+            Items = queryable.Skip(skip * take).Take(take).ToList()
+        };
     }
 
     public async Task<Vehicle?> FindWithModelAndFeaturesAsync(int id) =>

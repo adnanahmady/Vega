@@ -16,6 +16,7 @@ import {AppErrorHandler} from "./handlers/app.error-handler";
 import {VehiclesListComponent} from "./vehicles-list/vehicles-list.component";
 import {FeatureService} from "./services/feature.service";
 import {MakeService} from "./services/make.service";
+import { PaginationComponent } from './shared/pagination/pagination.component';
 
 @NgModule({
   declarations: [
@@ -26,6 +27,7 @@ import {MakeService} from "./services/make.service";
     FetchDataComponent,
     VehicleFormComponent,
     VehiclesListComponent,
+    PaginationComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),

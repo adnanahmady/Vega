@@ -1,3 +1,5 @@
+using System.Data.Entity.Core.Metadata.Edm;
+
 using Vega.Core;
 using Vega.Core.Domain;
 using Vega.Core.QueryFilters;
@@ -29,19 +31,18 @@ public class VehiclesListController : BaseController
         var pageIndex = pageNumber > 0 ? pageNumber - 1 : 0;
         pageSize = pageSize < 1 ? 15 : pageSize;
 
-        var count = UnitOfWork.Vehicles.CountAll();
-        var vehicles = UnitOfWork.Vehicles
+        var result = UnitOfWork.Vehicles
             .QueryParamProcessor(_paramProcessor)
             .GetAll(skip: pageIndex, take: pageSize);
 
-        var list = Mapper.Map<List<VehicleResource>>(vehicles);
+        var list = Mapper.Map<List<VehicleResource>>(result.Items);
 
         return new PageResult<VehicleResource>()
         {
             Items = list,
             CurrentPage = pageNumber,
             PageSize = pageSize,
-            TotalRecords = count,
+            TotalRecords = result.Count,
         };
     }
 }

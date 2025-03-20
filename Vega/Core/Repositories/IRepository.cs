@@ -1,6 +1,7 @@
 using System.Linq.Expressions;
 
 using Vega.Core.QueryFilters;
+using Vega.Dtos;
 
 namespace Vega.Core.Repositories;
 
@@ -13,7 +14,7 @@ public interface IRepository<TEntity> where TEntity : class
     Task<TEntity?> GetAsync(int id);
     int CountAll();
     IEnumerable<TEntity> GetAll();
-    IEnumerable<TEntity> GetAll(int skip, int take);
+    PaginationDto<TEntity> GetAll(int skip, int take);
     Task<IEnumerable<TEntity>> GetAllAsync();
     IEnumerable<TEntity> Find(Expression<Func<TEntity, bool>> predicate);
     Task<IEnumerable<TEntity>> FindAsync(Expression<Func<TEntity, bool>> predicate);

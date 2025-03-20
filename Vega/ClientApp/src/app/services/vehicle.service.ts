@@ -39,7 +39,7 @@ export class VehicleService {
     );
   }
 
-  getVehicles(filter: VehicleFilters): Observable<{ data: VehicleResource[], meta: object}> {
+  getVehicles(filter: VehicleFilters): Observable<{ data: VehicleResource[], meta: any}> {
     return this.http.get<{ data: VehicleResource[], meta: object}>(
       this.baseUrl,
       {params: {...filter}}
@@ -52,4 +52,6 @@ export interface VehicleFilters {
   modelId?: number,
   sortBy?: string,
   sortDirection?: string;
+  pageNumber?: number;
+  pageSize?: number;
 }

@@ -15,7 +15,7 @@ import {MakeService} from "../services/make.service";
 export class VehiclesListComponent {
   protected vehicles: VehicleResource[] = [];
   protected allVehicles: VehicleResource[] = [];
-  protected meta = {};
+  protected meta: any = {};
   protected makes: IdNameType[] = [];
   protected query: VehicleFilters = {};
   protected columns: {
@@ -28,6 +28,16 @@ export class VehiclesListComponent {
     { title: 'Make', key: 'make', isSortable: true },
     { title: 'Model', key: 'model', isSortable: true },
   ];
+  protected page: {
+    totalItems: number,
+    pageSize: number,
+    currentPage: number
+  } = {
+    totalItems: 0,
+    pageSize: 3,
+    currentPage: 1
+  };
+  protected resetTrigger: number = 0;
 
   constructor(
     private vehicleService: VehicleService,
@@ -43,11 +53,14 @@ export class VehiclesListComponent {
   }
 
   getVehicles() {
+    this.query.pageNumber = this.page.currentPage;
+    this.query.pageSize = this.page.pageSize;
     this.vehicleService.getVehicles(this.query)
       .subscribe(l => {
         this.vehicles = l.data;
         this.allVehicles = l.data;
         this.meta = l.meta;
+        this.page.totalItems = l.meta.pagination.totalRecords;
       }, e => {
         alert('list could not be fetched');
         console.log({e})
@@ -55,10 +68,13 @@ export class VehiclesListComponent {
   }
 
   handleFilterChange(): void {
+    this.page.currentPage = 1;
+    this.resetTrigger++;
     this.getVehicles();
   }
 
   resetFilter() {
+    this.resetTrigger++;
     this.query = {};
     this.handleFilterChange();
   }
@@ -71,6 +87,11 @@ export class VehiclesListComponent {
       this.query.sortDirection = 'desc';
     }
 
+    this.getVehicles();
+  }
+
+  handlePageChanged(page: number): void {
+    this.page.currentPage = page;
     this.getVehicles();
   }
 }

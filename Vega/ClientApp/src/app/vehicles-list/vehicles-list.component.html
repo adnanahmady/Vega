@@ -41,3 +41,9 @@
   </tr>
   </tbody>
 </table>
+
+<pagination
+  [total-items]="page.totalItems"
+  [page-size]="page.pageSize"
+  [reset]="resetTrigger"
+  (page-changed)="handlePageChanged($event)"></pagination>
