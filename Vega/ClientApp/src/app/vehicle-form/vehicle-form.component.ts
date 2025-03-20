@@ -121,19 +121,16 @@ export class VehicleFormComponent {
     if (this.vehicle.id) {
       this.vehicleService.update(this.vehicle)
         .subscribe(
-          x => console.log("Success", x),
-          err => {
-            alert("Vehicle creation failed");
-          }
+          x =>
+          this.router.navigate(['/']),
+          err => { alert("Vehicle creation failed"); }
         );
       return;
     }
     this.vehicleService.create(this.vehicle)
       .subscribe(
-        x => console.log("Success", x),
-        err => {
-          alert("Vehicle creation failed");
-        }
+        x => this.router.navigate(['/']),
+        err => { alert("Vehicle creation failed"); }
       );
   }
 
@@ -147,7 +144,7 @@ export class VehicleFormComponent {
 
     this.vehicleService.delete(this.vehicle.id)
       .subscribe(x => {
-        this.router.navigate(['/home']);
+        this.router.navigate(['/']);
       });
   }
 }

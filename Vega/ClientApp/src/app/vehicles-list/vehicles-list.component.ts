@@ -17,7 +17,17 @@ export class VehiclesListComponent {
   protected allVehicles: VehicleResource[] = [];
   protected meta = {};
   protected makes: IdNameType[] = [];
-  protected filter: VehicleFilters = {};
+  protected query: VehicleFilters = {};
+  protected columns: {
+    title: string,
+    key: string,
+    isSortable?: boolean | undefined
+  }[] = [
+    { title: 'Id', key: 'id' },
+    { title: 'Contact Name', key: 'contactName', isSortable: true },
+    { title: 'Make', key: 'make', isSortable: true },
+    { title: 'Model', key: 'model', isSortable: true },
+  ];
 
   constructor(
     private vehicleService: VehicleService,
@@ -33,7 +43,7 @@ export class VehiclesListComponent {
   }
 
   getVehicles() {
-    this.vehicleService.getVehicles(this.filter)
+    this.vehicleService.getVehicles(this.query)
       .subscribe(l => {
         this.vehicles = l.data;
         this.allVehicles = l.data;
@@ -49,7 +59,18 @@ export class VehiclesListComponent {
   }
 
   resetFilter() {
-    this.filter = {};
+    this.query = {};
     this.handleFilterChange();
+  }
+
+  sortBy(columnName: string): void {
+    if (this.query.sortBy === columnName) {
+      this.query.sortDirection = this.query.sortDirection === 'asc' ? 'desc' : 'asc';
+    } else {
+      this.query.sortBy = columnName;
+      this.query.sortDirection = 'desc';
+    }
+
+    this.getVehicles();
   }
 }

@@ -50,4 +50,6 @@ export class VehicleService {
 export interface VehicleFilters {
   makeId?: number,
   modelId?: number,
+  sortBy?: string,
+  sortDirection?: string;
 }
