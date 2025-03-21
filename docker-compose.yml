@@ -10,6 +10,8 @@ x-database-config: &database_config
   environment:
     <<: *database_user
   <<: *restart_policy
+  expose:
+    - 1433
   healthcheck:
     test: 
       - "CMD-SHELL"
@@ -20,12 +22,30 @@ x-database-config: &database_config
     retries: 10
 
 services:
+  backend:
+    build:
+      context: .backend
+      dockerfile: Dockerfile
+    working_dir: /home/docker/backend
+    user: docker
+    volumes:
+      - .backend/home/.nuget:/home/docker/.nuget
+      - .backend/home/.aspnet:/home/docker/.aspnet
+      - .:/home/docker/backend
+    stdin_open: true
+    tty: true
+    ports:
+        # http
+      - 5000:5000
+        # https
+      - 5001:5001
+        # frontend
+      - 44477:44477
+
   database:
     <<: *database_config
     volumes:
       - sqlserver:/var/opt/mssql:rw
-    ports:
-      - 1433:1433
 
   test_db:
     <<: *database_config
@@ -34,8 +54,6 @@ services:
       <<: *database_user
     tmpfs: 
       - /var/opt/mssql/data:rw
-    ports:
-      - 1434:1433
   
   adminer:
     image: adminer:4.8.1

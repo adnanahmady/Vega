@@ -6,8 +6,20 @@ define prefix
 $(if $(1),$(2)$(1),)
 endef
 
+setup:
+	mkdir -p .backend/home/.nuget
+	mkdir -p .backend/home/.aspnet
+	${MAKE} up
+	${MAKE} shell run="sudo chmod -R 777 /home/docker/.nuget"
+	${MAKE} shell run="sudo chmod -R 777 /home/docker/.aspnet"
+	${MAKE} shell run="dotnet restore"
+	${MAKE} shell run="dotnet dev-certs https --trust"
+
 up:
 	@docker compose up -d ${up-with}
+
+build:
+	${MAKE} up-with=--build
 
 down:
 	@docker compose down ${down-with}
@@ -16,7 +28,7 @@ restart:
 	${MAKE} down up
 
 shell:
-	@docker compose exec $(call default,${service},database) bash
+	@docker compose exec $(call default,${service},backend) $(call default,${run},bash)
 
 ps:
 	@docker compose ps
@@ -32,16 +44,16 @@ volumes:
 status: ps volumes
 
 logs:
-	@docker compose logs $(call default,${service},database) ${with}
+	@docker compose logs $(call default,${service},backend) ${with}
 
 run: start
 start:
-	@dotnet run --project Vega
+	${MAKE} shell run="dotnet run --project Vega"
 
 test:
-	@dotnet test $(call default,$(call prefix,${filter},--filter=),$(call prefix,${f},--filter=)) ${with}
+	${MAKE} shell run="dotnet test $(call default,$(call prefix,${filter},--filter=),$(call prefix,${f},--filter=)) ${with}"
 
 fix:
-	@dotnet format style
-	@dotnet format style --severity=info
-	@dotnet format whitespace
+	${MAKE} shell run="dotnet format style"
+	${MAKE} shell run="dotnet format style --severity=info"
+	${MAKE} shell run="dotnet format whitespace"
