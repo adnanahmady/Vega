@@ -26,12 +26,12 @@ services:
     build:
       context: .backend
       dockerfile: Dockerfile
-    working_dir: /home/docker/backend
+    working_dir: ${PWD}
     user: docker
     volumes:
       - .backend/home/.nuget:/home/docker/.nuget
       - .backend/home/.aspnet:/home/docker/.aspnet
-      - .:/home/docker/backend
+      - .:${PWD}
     stdin_open: true
     tty: true
     ports:
