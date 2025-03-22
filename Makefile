@@ -50,6 +50,9 @@ run: start
 start:
 	${MAKE} shell run="dotnet run --project Vega"
 
+restore:
+	${MAKE} shell run="dotnet restore"
+
 test:
 	${MAKE} shell run="dotnet test $(call default,$(call prefix,${filter},--filter=),$(call prefix,${f},--filter=)) ${with}"
 
