@@ -30,7 +30,7 @@ services:
     user: docker
     volumes:
       - .backend/home/.nuget:/home/docker/.nuget
-      - .backend/home/.aspnet:/home/docker/.aspnet
+      - ~/.aspnet:/home/docker/.aspnet
       - .:${PWD}
     stdin_open: true
     tty: true
