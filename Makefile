@@ -13,6 +13,7 @@ setup:
 	${MAKE} shell run="sudo chmod -R 777 /home/docker/.nuget"
 	${MAKE} shell run="sudo chmod -R 777 /home/docker/.aspnet"
 	${MAKE} shell run="dotnet restore"
+	${MAKE} shell run="dotnet tool restore"
 	${MAKE} shell run="dotnet dev-certs https --trust"
 
 up:
