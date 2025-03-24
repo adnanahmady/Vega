@@ -12,7 +12,7 @@ public class UnitOfWork : IUnitOfWork
     public IMakeRepository Makes { get; }
     public IModelRepository Models { get; }
     public IVehicleFeatureRepository VehicleFeatures { get; }
-    public IPhotoRepository VehiclePhotos { get;  }
+    public IPhotoRepository VehiclePhotos { get; }
 
     public UnitOfWork(VegaDbContext context)
     {

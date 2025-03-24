@@ -3,7 +3,6 @@ using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 
 using Vega.Core;
-using Vega.Core.Domain;
 using Vega.Resources.V1;
 
 namespace Vega.Controllers.Api.V1.Vehicles;

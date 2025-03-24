@@ -12,8 +12,8 @@ namespace Vega.Tests.Feature.Vehicles;
 
 public class VehiclePhotosListTest : IClassFixture<TestableWebApplicationFactory>
 {
-    private HttpClient _client;
-    private VegaDbContext _context;
+    private readonly HttpClient _client;
+    private readonly VegaDbContext _context;
 
     public VehiclePhotosListTest(TestableWebApplicationFactory factory)
     {

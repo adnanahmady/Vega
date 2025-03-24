@@ -1,17 +1,11 @@
 using System.Net;
-using System.Text;
-
-using Microsoft.AspNetCore.Http;
-
-using Moq;
-using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Text;
 
 using Microsoft.EntityFrameworkCore;
 
 using Shouldly;
 
-using Vega.Core.Domain;
 using Vega.Persistence;
 using Vega.Tests.Factories;
 using Vega.Tests.Support;
@@ -44,8 +38,10 @@ public class UploadVehiclePhotoTest : IClassFixture<TestableWebApplicationFactor
         var streamContent = new StreamContent(new MemoryStream(content));
         streamContent.Headers.ContentType = new MediaTypeHeaderValue("image/jpeg");
 
-        var formData = new MultipartFormDataContent();
-        formData.Add(streamContent, "file", "test.jpeg");
+        var formData = new MultipartFormDataContent
+        {
+            { streamContent, "file", "test.jpeg" }
+        };
 
         var url = $"/api/v1/vehicles/{vehicle.Id}/photos";
 
@@ -71,8 +67,10 @@ public class UploadVehiclePhotoTest : IClassFixture<TestableWebApplicationFactor
         var streamContent = new StreamContent(new MemoryStream(content));
         streamContent.Headers.ContentType = new MediaTypeHeaderValue("image/jpeg");
 
-        var formData = new MultipartFormDataContent();
-        formData.Add(streamContent, "file", "test.jpg");
+        var formData = new MultipartFormDataContent
+        {
+            { streamContent, "file", "test.jpg" }
+        };
 
         var url = $"/api/v1/vehicles/{vehicle.Id}/photos";
 

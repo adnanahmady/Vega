@@ -1,5 +1,3 @@
-using Vega.Core.Domain;
-
 namespace Vega.Resources.V1;
 
 public class PhotoResource

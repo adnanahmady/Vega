@@ -1,5 +1,3 @@
-using System.Text.Json;
-
 using AutoMapper;
 
 using Microsoft.AspNetCore.Mvc;
@@ -7,7 +5,6 @@ using Microsoft.Extensions.Options;
 
 using Vega.Core;
 using Vega.Core.Domain;
-using Vega.Forms;
 using Vega.Resources.V1;
 
 namespace Vega.Controllers.Api.V1.Vehicles;
@@ -47,9 +44,7 @@ public class UploadVehiclePhotoController : BaseController
             "file size should be 10mb maximum");
         if (!_photoSettings.IsSupported(file.FileName))
         {
-            return BadRequest($"File type should be either ({
-                string.Join(", ", _photoSettings.AcceptedFileTypes)
-            })");
+            return BadRequest($"File type should be either ({string.Join(", ", _photoSettings.AcceptedFileTypes)})");
         }
 
         try
@@ -74,7 +69,7 @@ public class UploadVehiclePhotoController : BaseController
             return BadRequest(new
             {
                 Error = "Failed to upload file",
-                Message = ex.Message
+                ex.Message
             });
         }
     }

@@ -1,7 +1,5 @@
 using Bogus;
 
-using Microsoft.AspNetCore.Http.HttpResults;
-
 using Vega.Core.Domain;
 
 namespace Vega.Tests.Factories;
