@@ -14,6 +14,4 @@ public class Model
     public int MakeId { get; set; }
 
     public ICollection<Vehicle> Vehicles { get; set; } = new List<Vehicle>();
-
-    public override string ToString() => JsonSerializer.Serialize(this);
 }

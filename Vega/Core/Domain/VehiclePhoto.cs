@@ -1,4 +1,3 @@
-
 namespace Vega.Core.Domain;
 
 public class VehiclePhoto
