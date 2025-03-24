@@ -8,7 +8,6 @@ endef
 
 setup:
 	mkdir -p .backend/home/.nuget
-	mkdir -p .backend/home/.aspnet
 	${MAKE} up
 	${MAKE} shell run="sudo chmod -R 777 /home/docker/.nuget"
 	${MAKE} shell run="sudo chmod -R 777 /home/docker/.aspnet"
