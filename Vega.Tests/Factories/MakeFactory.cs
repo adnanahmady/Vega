@@ -13,3 +13,4 @@ public static class MakeFactory
             .RuleFor(m => m.Name, name)
             .Generate();
 }
+

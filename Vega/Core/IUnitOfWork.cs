@@ -8,6 +8,7 @@ public interface IUnitOfWork : IDisposable
     IMakeRepository Makes { get; }
     IModelRepository Models { get; }
     IVehicleFeatureRepository VehicleFeatures { get; }
+    IPhotoRepository VehiclePhotos { get; }
 
     int Complete();
     Task<int> CompleteAsync();

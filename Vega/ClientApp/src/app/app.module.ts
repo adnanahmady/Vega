@@ -17,6 +17,8 @@ import {VehiclesListComponent} from "./vehicles-list/vehicles-list.component";
 import {FeatureService} from "./services/feature.service";
 import {MakeService} from "./services/make.service";
 import { PaginationComponent } from './shared/pagination/pagination.component';
+import { ShowVehicleComponent } from './show-vehicle/show-vehicle.component';
+import {PhotoService} from "./services/photo.service";
 
 @NgModule({
   declarations: [
@@ -28,6 +30,7 @@ import { PaginationComponent } from './shared/pagination/pagination.component';
     VehicleFormComponent,
     VehiclesListComponent,
     PaginationComponent,
+    ShowVehicleComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -39,12 +42,14 @@ import { PaginationComponent } from './shared/pagination/pagination.component';
       { path: 'counter', component: CounterComponent },
       { path: 'fetch-data', component: FetchDataComponent },
       { path: 'vehicles', component: VehiclesListComponent },
+      { path: 'vehicles/:id/show', component: ShowVehicleComponent },
       { path: 'vehicles/new', component: VehicleFormComponent },
-      { path: 'vehicles/:id', component: VehicleFormComponent },
+      { path: 'vehicles/:id/edit', component: VehicleFormComponent },
     ])
   ],
   providers: [
     { provide: ErrorHandler, useClass: AppErrorHandler },
+    PhotoService,
     VehicleService,
     MakeService,
     FeatureService,

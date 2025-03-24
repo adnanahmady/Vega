@@ -12,6 +12,7 @@ public class UnitOfWork : IUnitOfWork
     public IMakeRepository Makes { get; }
     public IModelRepository Models { get; }
     public IVehicleFeatureRepository VehicleFeatures { get; }
+    public IPhotoRepository VehiclePhotos { get;  }
 
     public UnitOfWork(VegaDbContext context)
     {
@@ -20,6 +21,7 @@ public class UnitOfWork : IUnitOfWork
         Makes = new MakeRepository(_context);
         Models = new ModelRepository(_context);
         VehicleFeatures = new VehicleFeatureRepository(_context);
+        VehiclePhotos = new PhotoRepository(_context);
     }
 
     public int Complete() => _context.SaveChanges();

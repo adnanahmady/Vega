@@ -1,10 +1,12 @@
-import {Make} from "./MakeInterfaces";
-
 export interface VehicleForm {
-  make: Make;
-  model: Make;
-  ContactName: string;
-  ContactPhone: string;
-  ContactEmail: string;
-  VehicleFeatureIds: number[];
+  id?: number,
+  makeId?: number;
+  modelId?: number;
+  isRegistered: boolean;
+  contact: {
+    name: string;
+    phone: string;
+    email: string;
+  };
+  featureIds: number[];
 }

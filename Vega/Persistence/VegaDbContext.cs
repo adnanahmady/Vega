@@ -11,6 +11,7 @@ public class VegaDbContext : DbContext
     public DbSet<Model> Models { get; set; }
     public DbSet<VehicleFeature> VehicleFeatures { get; set; }
     public DbSet<Vehicle> Vehicles { get; set; }
+    public DbSet<VehiclePhoto> VehiclePhotos { get; set; }
 
     public VegaDbContext(DbContextOptions<VegaDbContext> options)
         : base(options)
@@ -23,6 +24,7 @@ public class VegaDbContext : DbContext
         modelBuilder.ApplyConfiguration(new ModelConfiguration());
         modelBuilder.ApplyConfiguration(new VehicleFeatureConfiguration());
         modelBuilder.ApplyConfiguration(new VehicleConfiguration());
+        modelBuilder.ApplyConfiguration(new VehiclePhotoConfiguration());
 
         base.OnModelCreating(modelBuilder);
     }

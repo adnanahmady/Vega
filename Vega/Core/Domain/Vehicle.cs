@@ -25,4 +25,6 @@ public class Vehicle
     public DateTime LastUpdate { get; set; } = DateTime.Now;
 
     public override string ToString() => JsonSerializer.Serialize(this);
+
+    public ICollection<VehiclePhoto> Photos { get; set; } = new List<VehiclePhoto>();
 }

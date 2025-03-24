@@ -49,5 +49,10 @@ public class VehicleConfiguration : IEntityTypeConfiguration<Vehicle>
                         "VehicleId"
                     )
                 );
+
+        builder
+            .HasMany<VehiclePhoto>(v => v.Photos)
+            .WithOne(p => p.Vehicle)
+            .IsRequired(false);
     }
 }

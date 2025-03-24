@@ -1,24 +1,11 @@
 import {Component, Inject} from '@angular/core';
 import {VehicleService} from "../services/vehicle.service";
 import {Make, Model, Feature} from "../Interfaces/MakeInterfaces";
-import {ToastyService} from "ng2-toasty";
 import {ActivatedRoute, Router} from "@angular/router";
-import {Observable} from "rxjs";
 import {FeatureService} from "../services/feature.service";
 import {MakeService} from "../services/make.service";
+import {VehicleForm} from "../Interfaces/VehicleForm";
 
-interface Vehicle {
-  id?: number,
-  makeId?: number;
-  modelId?: number;
-  isRegistered: boolean;
-  contact: {
-    name: string;
-    phone: string;
-    email: string;
-  };
-  featureIds: number[];
-}
 
 @Component({
   selector: 'app-form',
@@ -29,7 +16,7 @@ export class VehicleFormComponent {
   public models: Model[] = [];
   public features: Feature[] = [];
   public selectedMake: null | Make = null;
-  public vehicle: Vehicle = {
+  public vehicle: VehicleForm = {
     isRegistered: false,
     featureIds: [],
     contact: {

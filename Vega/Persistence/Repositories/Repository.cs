@@ -31,7 +31,7 @@ public class Repository<TEntity> : IRepository<TEntity> where TEntity : class
     public virtual int CountAll() => Context.Set<TEntity>().Count();
     public virtual IEnumerable<TEntity> GetAll() => Context.Set<TEntity>().ToList();
 
-    public virtual PaginationDto<TEntity> GetAll(int skip, int take) => new PaginationDto<TEntity>()
+    public virtual PaginationDto<TEntity> GetAll(int skip, int take) => new()
     {
         Count = Context.Set<TEntity>().Count(),
         Items = Context.Set<TEntity>().Skip(skip).Take(take).ToList(),

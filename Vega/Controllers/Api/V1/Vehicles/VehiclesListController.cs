@@ -1,5 +1,3 @@
-using System.Data.Entity.Core.Metadata.Edm;
-
 using Vega.Core;
 using Vega.Core.Domain;
 using Vega.Core.QueryFilters;

@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 
 using Vega.Core;
+using Vega.Core.Domain;
 using Vega.Core.QueryFilters;
 using Vega.Persistence;
 using Vega.Persistence.QueryFilters;
@@ -26,6 +27,8 @@ builder.Services.AddCors(options =>
             .AllowAnyMethod();
     });
 });
+builder.Services.Configure<PhotoSettings>(
+    builder.Configuration.GetSection("PhotoSettings"));
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IVehiclesListParamProcessor, VehiclesListParamProcessor>();
 

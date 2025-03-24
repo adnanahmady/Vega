@@ -1,11 +1,7 @@
 import {Component, Inject, NgModule} from '@angular/core';
 import {VehicleFilters, VehicleService} from "../services/vehicle.service";
 import {Make, Model, Feature} from "../Interfaces/MakeInterfaces";
-import {ToastyService} from "ng2-toasty";
-import {ActivatedRoute, Router} from "@angular/router";
-import {Observable} from "rxjs";
 import {IdNameType, VehicleResource} from "../types/resources/vehicle-resources";
-import {CommonModule} from "@angular/common";
 import {MakeService} from "../services/make.service";
 
 @Component({

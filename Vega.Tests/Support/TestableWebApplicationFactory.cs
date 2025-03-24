@@ -26,15 +26,16 @@ public class TestableWebApplicationFactory : WebApplicationFactory<Program>
     }
 
     public T ResolveDbContext<T>() where T : class => this
-            .Services
-            .CreateScope()
-            .ServiceProvider
-            .GetRequiredService<T>();
+        .Services
+        .CreateScope()
+        .ServiceProvider
+        .GetRequiredService<T>();
 
-    private void LoadTestSettingFile(IWebHostBuilder builder) => builder.ConfigureAppConfiguration((c, config) =>
-                                                                      {
-                                                                          config.AddJsonFile("appsettings.Testing.json", optional: false, reloadOnChange: true);
-                                                                      });
+    private void LoadTestSettingFile(IWebHostBuilder builder) => builder
+        .ConfigureAppConfiguration((c, config) =>
+        {
+            config.AddJsonFile("appsettings.Testing.json", optional: false, reloadOnChange: true);
+        });
 
     private void RemoveExistingDbContext(IServiceCollection services)
     {

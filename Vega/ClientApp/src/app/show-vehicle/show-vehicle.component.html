@@ -1,0 +1,64 @@
+<div class="container">
+  <!-- Nav tabs -->
+  <ul class="nav nav-tabs" id="myTab" role="tablist">
+    <li class="nav-item" role="presentation">
+      <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true">
+        Basic
+      </button>
+    </li>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false">
+        Photos
+      </button>
+    </li>
+  </ul>
+
+  <div class="tab-content" id="myTabContent">
+    <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+      <div class="row">
+        <div class="col">
+          Make: {{ vehicle.make.name }}
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          Model: {{ vehicle.model.name }}
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          Name: {{ vehicle.contact.name }}
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          Phone: {{ vehicle.contact.phone }}
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          Email: {{ vehicle.contact.email }}
+        </div>
+      </div>
+      <a
+        href="/vehicles/{{vehicle.id}}/edit"
+        class="btn btn-primary"
+      >Edit</a>
+    </div>
+
+    <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+      <h2>Photos</h2>
+      <div class="mb-3">
+        <input type="file" (input)="uploadPhoto()" #fileInput>
+      </div>
+      <div>
+        <img
+          *ngFor="let photo of photos"
+          src="http://localhost:5000/uploads/{{ photo.name }}"
+          width="100"
+          height="auto"
+          class="img-thumbnail">
+      </div>
+    </div>
+  </div>
+</div>

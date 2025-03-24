@@ -31,6 +31,7 @@ public class MappingProfile : Profile
 
     private void MapBiDirectionalModelResource()
     {
+        AddMap<VehiclePhoto, PhotoResource>();
         AddMap<Make, MakeResource>();
         AddMap<Model, KeyValuePairResource>();
         AddMap<VehicleFeature, KeyValuePairResource>();
