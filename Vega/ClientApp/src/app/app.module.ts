@@ -1,7 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import {ErrorHandler, NgModule} from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 
 import { AppComponent } from './app.component';
@@ -19,6 +19,7 @@ import {MakeService} from "./services/make.service";
 import { PaginationComponent } from './shared/pagination/pagination.component';
 import { ShowVehicleComponent } from './show-vehicle/show-vehicle.component';
 import {PhotoService} from "./services/photo.service";
+import { HttpProgressInterceptor, ProgressService } from './services/progress.service';
 
 @NgModule({
   declarations: [
@@ -49,6 +50,8 @@ import {PhotoService} from "./services/photo.service";
   ],
   providers: [
     { provide: ErrorHandler, useClass: AppErrorHandler },
+    ProgressService,
+    { provide: HTTP_INTERCEPTORS, useClass: HttpProgressInterceptor, multi: true },
     PhotoService,
     VehicleService,
     MakeService,

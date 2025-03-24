@@ -58,8 +58,8 @@ export class VehiclesListComponent {
         this.meta = l.meta;
         this.page.totalItems = l.meta.pagination.totalRecords;
       }, e => {
+        console.error({e})
         alert('list could not be fetched');
-        console.log({e})
       })
   }
 

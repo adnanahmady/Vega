@@ -1,5 +1,5 @@
 import {Injectable} from "@angular/core";
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpEvent} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {PhotoResource} from "../types/resources/photo-resource";
 
@@ -10,12 +10,16 @@ export class PhotoService {
   constructor(private http: HttpClient) {
   }
 
-  upload(vehicleId: number, photo: File) : Observable<PhotoResource> {
+  upload(vehicleId: number, photo: File) : Observable<HttpEvent<PhotoResource>> {
     var formData = new FormData();
     formData.append('file', photo);
     return this.http.post<PhotoResource>(
       this.baseUrl + `/${vehicleId}/photos`,
-      formData
+      formData,
+      {
+        reportProgress: true,
+        observe: 'events'
+      }
     );
   }
 

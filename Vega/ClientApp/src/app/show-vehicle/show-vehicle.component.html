@@ -50,11 +50,20 @@
       <h2>Photos</h2>
       <div class="mb-3">
         <input type="file" (input)="uploadPhoto()" #fileInput>
+        <div class="progress" *ngIf="progress > 0 && progress < 100">
+          <div
+            class="progress-bar"
+            role="progressbar"
+            [style.width]="progress + '%'"
+            [style.height.px]="10">
+            {{ progress }}%
+          </div>
+        </div>
       </div>
       <div>
         <img
           *ngFor="let photo of photos"
-          src="http://localhost:5000/uploads/{{ photo.name }}"
+          src="https://localhost:5001/uploads/{{ photo.name }}"
           width="100"
           height="auto"
           class="img-thumbnail">
