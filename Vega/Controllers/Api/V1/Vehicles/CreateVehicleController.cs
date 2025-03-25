@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Authorization;
+
 using Vega.Core;
 
 namespace Vega.Controllers.Api.V1.Vehicles;
@@ -23,6 +25,7 @@ public class CreateVehicleController : BaseController
     }
 
     [HttpPost]
+    [Authorize]
     public async Task<IActionResult> Create([FromBody] VehicleForm data)
     {
         if (!ModelState.IsValid)

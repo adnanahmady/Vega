@@ -19,13 +19,47 @@ using Support;
 
 public class CreateVehicleTest : IClassFixture<TestableWebApplicationFactory>
 {
+    private readonly HttpClient _authClient;
     private readonly HttpClient _client;
     private readonly VegaDbContext _context;
 
     public CreateVehicleTest(TestableWebApplicationFactory factory)
     {
+        _authClient = factory.Authenticate().CreateClient();
         _client = factory.CreateClient();
         _context = factory.ResolveDbContext<VegaDbContext>();
+    }
+
+
+    [Fact]
+    public async Task GivenUserWhenItUnauthorizedThenShouldNotCreate()
+    {
+        await _context.Vehicles.ExecuteDeleteAsync();
+        _context.Models.Add(ModelFactory.Create());
+        _context.VehicleFeatures.Add(VehicleFeatureFactory.Create());
+        await _context.SaveChangesAsync();
+        var data = new
+        {
+            Id = 1000,
+            IsRegistered = true,
+            Contact = new
+            {
+                Name = "John",
+                Phone = "09119933311",
+                Email = "user@dummy.com",
+            },
+            ModelId = _context.Models.OrderBy(i => i.Id).First().Id,
+            FeatureIds = new[]
+            {
+                _context.VehicleFeatures.OrderBy(i => i.Id).First().Id
+            }
+        };
+
+        var response = await _client.PostAsJsonAsync("/api/v1/vehicles", data);
+
+        response.StatusCode.ShouldBe(HttpStatusCode.Unauthorized);
+        var count = await _context.Vehicles.CountAsync();
+        count.ShouldBe(0);
     }
 
     public static IEnumerable<object[]> InvalidDataForValidationTest()
@@ -141,7 +175,7 @@ public class CreateVehicleTest : IClassFixture<TestableWebApplicationFactory>
         data = fn(data);
 
         // Act
-        var response = await _client.PostAsJsonAsync("/api/v1/vehicles", data);
+        var response = await _authClient.PostAsJsonAsync("/api/v1/vehicles", data);
 
         // Arrange
         response.StatusCode.ShouldBe(HttpStatusCode.BadRequest);
@@ -175,7 +209,7 @@ public class CreateVehicleTest : IClassFixture<TestableWebApplicationFactory>
             }
         };
 
-        var response = await _client.PostAsJsonAsync("/api/v1/vehicles", data);
+        var response = await _authClient.PostAsJsonAsync("/api/v1/vehicles", data);
 
         var vehicle = await response.Content.ReadFromJsonAsync<VehicleResource>();
         var exists = await _context.Vehicles.AnyAsync(
@@ -211,7 +245,7 @@ public class CreateVehicleTest : IClassFixture<TestableWebApplicationFactory>
             }
         };
 
-        var response = await _client.PostAsJsonAsync("/api/v1/vehicles", data);
+        var response = await _authClient.PostAsJsonAsync("/api/v1/vehicles", data);
 
         var content = await response.Content.ReadFromJsonAsync<JsonElement>();
         content.GetProperty("id").GetInt32().ShouldBeGreaterThan(0);
@@ -252,7 +286,7 @@ public class CreateVehicleTest : IClassFixture<TestableWebApplicationFactory>
             }
         };
 
-        var response = await _client.PostAsJsonAsync("/api/v1/vehicles", data);
+        var response = await _authClient.PostAsJsonAsync("/api/v1/vehicles", data);
 
         response.StatusCode.ShouldBe(HttpStatusCode.Created);
     }

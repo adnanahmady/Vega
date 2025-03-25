@@ -1,5 +1,6 @@
 using AutoMapper;
 
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 
@@ -27,6 +28,7 @@ public class UploadVehiclePhotoController : BaseController
     }
 
     [HttpPost]
+    [Authorize]
     public async Task<IActionResult> UploadPhoto(
         [FromRoute] int id,
         [FromForm] IFormFile? file)

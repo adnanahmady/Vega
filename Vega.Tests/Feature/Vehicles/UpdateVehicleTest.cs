@@ -20,13 +20,53 @@ using Support;
 
 public class UpdateVehicleTest : IClassFixture<TestableWebApplicationFactory>
 {
+    private readonly HttpClient _authClient;
     private readonly HttpClient _client;
     private readonly VegaDbContext _context;
 
     public UpdateVehicleTest(TestableWebApplicationFactory factory)
     {
+        _authClient = factory.Authenticate().CreateClient();
         _client = factory.CreateClient();
         _context = factory.ResolveDbContext<VegaDbContext>();
+    }
+
+    [Fact]
+    public async Task GivenUserWhenItsUnauthorizedThenShouldNotUpdate()
+    {
+        // Arrange
+        var (url, vehicle) = await Prepare();
+        var feature = await FactoryFeature();
+        var data = new
+        {
+            vehicle.IsRegistered,
+            vehicle.ModelId,
+            FeatureIds = new[] { feature.Id },
+            Contact = new
+            {
+                Name = vehicle.ContactName,
+                Email = vehicle.ContactEmail,
+                Phone = "09117773313",
+            },
+        };
+
+        // Act
+        var response = await _client.PutAsJsonAsync(url, data);
+
+        // Assert
+        response.StatusCode.ShouldBe(HttpStatusCode.Unauthorized);
+
+        var queryable = _context.Vehicles
+            .Where(v => v.Id == vehicle.Id)
+            .Where(v => v.ContactEmail == vehicle.ContactEmail);
+
+        var updateShouldBeMissing = await queryable
+            .CountAsync(v => v.ContactPhone == data.Contact.Phone);
+        updateShouldBeMissing.ShouldBe(0);
+
+        var vehicleShouldNotBeUpdated = await queryable
+            .CountAsync(v => v.ContactPhone == vehicle.ContactPhone);
+        vehicleShouldNotBeUpdated.ShouldBe(1);
     }
 
     public static IEnumerable<object[]> InvalidDataForValidationTest()
@@ -118,7 +158,7 @@ public class UpdateVehicleTest : IClassFixture<TestableWebApplicationFactory>
         data = fn(data);
 
         // Act
-        var response = await _client.PutAsJsonAsync(url, data);
+        var response = await _authClient.PutAsJsonAsync(url, data);
 
         // Assert
         response.StatusCode.ShouldBe(HttpStatusCode.BadRequest);
@@ -146,7 +186,7 @@ public class UpdateVehicleTest : IClassFixture<TestableWebApplicationFactory>
             },
         };
 
-        await _client.PutAsJsonAsync(url, data);
+        await _authClient.PutAsJsonAsync(url, data);
 
         var count = await _context.Vehicles
             .Where(v => v.Id == vehicle.Id)
@@ -179,7 +219,7 @@ public class UpdateVehicleTest : IClassFixture<TestableWebApplicationFactory>
             },
         };
 
-        var response = await _client.PutAsJsonAsync(url, data);
+        var response = await _authClient.PutAsJsonAsync(url, data);
         var resource = await response.Content.ReadFromJsonAsync<VehicleResource>();
 
         resource!.IsRegistered.ShouldBe(data.IsRegistered);
@@ -209,7 +249,7 @@ public class UpdateVehicleTest : IClassFixture<TestableWebApplicationFactory>
             },
         };
 
-        var response = await _client.PutAsJsonAsync(url, data);
+        var response = await _authClient.PutAsJsonAsync(url, data);
 
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
     }

@@ -17,13 +17,44 @@ namespace Vega.Tests.Feature.Vehicles;
 
 public class UploadVehiclePhotoTest : IClassFixture<TestableWebApplicationFactory>
 {
+    private readonly HttpClient _authClient;
     private readonly HttpClient _client;
     private readonly VegaDbContext _context;
 
     public UploadVehiclePhotoTest(TestableWebApplicationFactory factory)
     {
+        _authClient = factory.Authenticate().CreateClient();
         _client = factory.CreateClient();
         _context = factory.ResolveDbContext<VegaDbContext>();
+    }
+
+    [Fact]
+    public async Task GivenUserWhenItsUnauthenticatedThenShouldNotUpload()
+    {
+        // Arrange
+        await _context.VehiclePhotos.ExecuteDeleteAsync();
+        var vehicle = VehicleFactory.Create();
+        _context.Vehicles.Add(vehicle);
+        await _context.SaveChangesAsync();
+
+        var content = Encoding.UTF8.GetBytes("Fake image content");
+        var streamContent = new StreamContent(new MemoryStream(content));
+        streamContent.Headers.ContentType = new MediaTypeHeaderValue("image/jpeg");
+
+        var formData = new MultipartFormDataContent
+        {
+            { streamContent, "file", "test.jpg" }
+        };
+
+        var url = $"/api/v1/vehicles/{vehicle.Id}/photos";
+
+        // Act
+        var response = await _client.PostAsync(url, formData);
+
+        // Assert
+        response.StatusCode.ShouldBe(HttpStatusCode.Unauthorized);
+        var count = await _context.VehiclePhotos.CountAsync();
+        count.ShouldBe(0);
     }
 
     [Fact]
@@ -46,7 +77,7 @@ public class UploadVehiclePhotoTest : IClassFixture<TestableWebApplicationFactor
         var url = $"/api/v1/vehicles/{vehicle.Id}/photos";
 
         // Act
-        var response = await _client.PostAsync(url, formData);
+        var response = await _authClient.PostAsync(url, formData);
 
         // Assert
         var count = await _context
@@ -75,7 +106,7 @@ public class UploadVehiclePhotoTest : IClassFixture<TestableWebApplicationFactor
         var url = $"/api/v1/vehicles/{vehicle.Id}/photos";
 
         // Act
-        var response = await _client.PostAsync(url, formData);
+        var response = await _authClient.PostAsync(url, formData);
 
         // Assert
         response.StatusCode.ShouldBe(HttpStatusCode.OK);

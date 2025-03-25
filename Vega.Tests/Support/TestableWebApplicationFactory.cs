@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Authentication;
+
 namespace Vega.Tests.Support;
 
 using Microsoft.AspNetCore.Hosting;
@@ -52,10 +54,9 @@ public class TestableWebApplicationFactory : WebApplicationFactory<Program>
         IServiceCollection services)
     {
         var connectionString = context.Configuration.GetConnectionString("Test");
-        services.AddDbContext<VegaDbContext>(options =>
-        {
-            options.UseSqlServer(connectionString);
-        });
+        services.AddDbContext<VegaDbContext>(
+            options => options.UseSqlServer(connectionString)
+        );
     }
 
     private void ApplyMigrationsBeforeTesting(IServiceCollection services)
@@ -65,4 +66,15 @@ public class TestableWebApplicationFactory : WebApplicationFactory<Program>
         context.Database.EnsureDeleted();
         context.Database.Migrate();
     }
+
+    public WebApplicationFactory<Program> Authenticate() =>
+        WithWebHostBuilder(builder => builder
+            .ConfigureServices(services => services
+                .AddAuthentication(options =>
+                {
+                    options.DefaultAuthenticateScheme = "Test";
+                    options.DefaultChallengeScheme = "Test";
+                })
+                .AddScheme<AuthenticationSchemeOptions, TestAuthHandler>(
+                    "Test", o => { })));
 }

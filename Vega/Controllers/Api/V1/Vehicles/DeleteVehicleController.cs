@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Authorization;
+
 using Vega.Core;
 
 namespace Vega.Controllers.Api.V1.Vehicles;
@@ -17,6 +19,7 @@ public class DeleteVehicleController : BaseController
     }
 
     [HttpDelete(@"{id:int}")]
+    [Authorize]
     public async Task<IActionResult> Delete([FromRoute] int id)
     {
         var result = await UnitOfWork.Vehicles

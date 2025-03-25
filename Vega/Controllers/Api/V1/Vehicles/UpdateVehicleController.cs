@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Authorization;
+
 using Vega.Core;
 
 namespace Vega.Controllers.Api.V1.Vehicles;
@@ -23,6 +25,7 @@ public class UpdateVehicleController : BaseController
     }
 
     [HttpPut(@"{id:int}")]
+    [Authorize]
     public async Task<IActionResult> Update(
         [FromBody] VehicleForm vehicleForm,
         [FromRoute] int id)
