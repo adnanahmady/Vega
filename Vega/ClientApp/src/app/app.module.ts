@@ -3,7 +3,6 @@ import {ErrorHandler, NgModule} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
-
 import { AppComponent } from './app.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
 import { HomeComponent } from './home/home.component';
@@ -20,8 +19,14 @@ import { PaginationComponent } from './shared/pagination/pagination.component';
 import { ShowVehicleComponent } from './show-vehicle/show-vehicle.component';
 import {PhotoService} from "./services/photo.service";
 import { HttpProgressInterceptor, ProgressService } from './services/progress.service';
+import {AuthGuard, AuthModule} from "@auth0/auth0-angular";
+import {AuthButtonComponent} from "./auth/auth-button.component";
+import {UserProfileComponent} from "./auth/user-profile.component";
+import { AuthInterceptor } from './services/auth.interceptor';
+import { environment } from '../environments/environment';
 
 @NgModule({
+  bootstrap: [AppComponent],
   declarations: [
     AppComponent,
     NavMenuComponent,
@@ -32,32 +37,45 @@ import { HttpProgressInterceptor, ProgressService } from './services/progress.se
     VehiclesListComponent,
     PaginationComponent,
     ShowVehicleComponent,
+    AuthButtonComponent,
+    UserProfileComponent
   ],
   imports: [
-    BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
+    AuthModule.forRoot({
+      domain: environment.auth0.domain,
+      clientId: environment.auth0.clientId,
+      authorizationParams: {
+        redirect_uri: 'https://localhost:5001'
+      }
+    }),
+    BrowserModule.withServerTransition({appId: 'ng-cli-universal'}),
     HttpClientModule,
     FormsModule,
     ToastyModule.forRoot(),
     RouterModule.forRoot([
-      { path: '', redirectTo: '/vehicles', pathMatch: 'full' },
-      { path: 'counter', component: CounterComponent },
-      { path: 'fetch-data', component: FetchDataComponent },
-      { path: 'vehicles', component: VehiclesListComponent },
-      { path: 'vehicles/:id/show', component: ShowVehicleComponent },
-      { path: 'vehicles/new', component: VehicleFormComponent },
-      { path: 'vehicles/:id/edit', component: VehicleFormComponent },
-    ])
+      {path: '', redirectTo: '/vehicles', pathMatch: 'full'},
+      {path: 'counter', component: CounterComponent},
+      {path: 'fetch-data', component: FetchDataComponent},
+      {path: 'vehicles', component: VehiclesListComponent},
+      {path: 'vehicles/:id/show', component: ShowVehicleComponent},
+      {path: 'vehicles/new', component: VehicleFormComponent, canActivate: [AuthGuard]},
+      {path: 'vehicles/:id/edit', component: VehicleFormComponent, canActivate: [AuthGuard]},
+    ]),
   ],
   providers: [
-    { provide: ErrorHandler, useClass: AppErrorHandler },
+    {provide: ErrorHandler, useClass: AppErrorHandler},
     ProgressService,
-    { provide: HTTP_INTERCEPTORS, useClass: HttpProgressInterceptor, multi: true },
+    {provide: HTTP_INTERCEPTORS, useClass: HttpProgressInterceptor, multi: true},
     PhotoService,
     VehicleService,
     MakeService,
     FeatureService,
     ToastyService,
-  ],
-  bootstrap: [AppComponent]
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true
+    }
+  ]
 })
 export class AppModule { }

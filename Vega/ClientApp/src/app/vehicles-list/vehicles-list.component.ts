@@ -3,6 +3,7 @@ import {VehicleFilters, VehicleService} from "../services/vehicle.service";
 import {Make, Model, Feature} from "../Interfaces/MakeInterfaces";
 import {IdNameType, VehicleResource} from "../types/resources/vehicle-resources";
 import {MakeService} from "../services/make.service";
+import { AuthService } from '@auth0/auth0-angular';
 
 @Component({
   selector: 'app-vehicles-list',
@@ -37,10 +38,18 @@ export class VehiclesListComponent {
 
   constructor(
     private vehicleService: VehicleService,
-    private makeService: MakeService
+    private makeService: MakeService,
+    private auth: AuthService
   ) {
+    this.storeToken();
     this.getVehicles();
     this.getMakes();
+  }
+
+  private storeToken() {
+    this.auth.idTokenClaims$.subscribe(claims => {
+      localStorage.setItem('token', claims!.__raw);
+    });
   }
 
   getMakes(): void {

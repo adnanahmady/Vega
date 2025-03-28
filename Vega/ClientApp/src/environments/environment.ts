@@ -4,7 +4,12 @@
 
 export const environment = {
   production: false,
-  baseUrl: 'https://localhost:7177/'
+  baseUrl: 'https://localhost:5001/',
+  auth0: {
+    domain: '',
+    clientId: '',
+    redirectUri: 'https://localhost:5001'
+  }
 };
 
 /*
