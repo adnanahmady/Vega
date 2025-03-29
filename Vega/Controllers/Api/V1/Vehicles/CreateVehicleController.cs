@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Mvc;
 
 using Resources.V1;
 
+[ApiController]
 [Route("api/v1/vehicles")]
 public class CreateVehicleController : BaseController
 {
@@ -28,11 +29,6 @@ public class CreateVehicleController : BaseController
     [Authorize]
     public async Task<IActionResult> Create([FromBody] VehicleForm data)
     {
-        if (!ModelState.IsValid)
-        {
-            return ValidationResponse();
-        }
-
         var model = await UnitOfWork.Models.GetAsync(data.ModelId);
         if (model == null)
         {

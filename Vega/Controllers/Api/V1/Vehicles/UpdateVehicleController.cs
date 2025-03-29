@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Mvc;
 
 using Resources.V1;
 
+[ApiController]
 [Route("api/v1/vehicles")]
 public class UpdateVehicleController : BaseController
 {
@@ -37,11 +38,6 @@ public class UpdateVehicleController : BaseController
         if (vehicle == null)
         {
             return new NotFoundResult();
-        }
-
-        if (!ModelState.IsValid)
-        {
-            return ValidationResponse();
         }
 
         Mapper.Map(vehicleForm, vehicle);

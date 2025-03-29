@@ -32,11 +32,11 @@ public static class StringExtensions
             .Replace('-', '+')
             .Replace('_', '/');
 
-        switch (base64.Length % 4)
+        return (base64.Length % 4) switch
         {
-            case 2: return base64 + "==";
-            case 3: return base64 + "=";
-            default: return base64;
-        }
+            2 => base64 + "==",
+            3 => base64 + "=",
+            _ => base64,
+        };
     }
 }

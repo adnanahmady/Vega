@@ -7,6 +7,7 @@ using Vega.Resources.V1;
 
 namespace Vega.Controllers.Api.V1.Vehicles;
 
+[ApiController]
 [Route("/api/v1/vehicles/{id:int}/photos")]
 public class ListVehiclePhotosController : BaseController
 {

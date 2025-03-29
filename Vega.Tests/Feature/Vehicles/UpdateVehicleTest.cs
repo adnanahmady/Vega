@@ -80,7 +80,8 @@ public class UpdateVehicleTest : IClassFixture<TestableWebApplicationFactory>
                 return data;
             }),
             1,
-            "Contact.Name"
+            "Contact.Name",
+            "Given contact name when its missing then should invalidate request"
         };
 
         yield return new object[]
@@ -94,7 +95,8 @@ public class UpdateVehicleTest : IClassFixture<TestableWebApplicationFactory>
                 return data;
             }),
             1,
-            "Contact.Phone"
+            "Contact.Phone",
+            "Given contact phone when its not 11 characters then should invalidate request"
         };
 
         yield return new object[]
@@ -106,7 +108,8 @@ public class UpdateVehicleTest : IClassFixture<TestableWebApplicationFactory>
                 return data;
             }),
             1,
-            "Contact.Email"
+            "Contact.Email",
+            "Given contact email when its not given then should invalidate request"
         };
 
         yield return new object[]
@@ -118,7 +121,8 @@ public class UpdateVehicleTest : IClassFixture<TestableWebApplicationFactory>
                 return data;
             }),
             1,
-            "ModelId"
+            "ModelId",
+            "Given model id when its not present then should invalidate request"
         };
 
         yield return new object[]
@@ -129,8 +133,9 @@ public class UpdateVehicleTest : IClassFixture<TestableWebApplicationFactory>
 
                 return data;
             }),
-            1,
-            "FeatureIds"
+            2,
+            "FeatureIds",
+            "Given feature ids list when its not present then should invalidate request"
         };
     }
 
@@ -139,7 +144,8 @@ public class UpdateVehicleTest : IClassFixture<TestableWebApplicationFactory>
     public async Task GivenWrongDataWhenCalledThenShouldReturnBadRequest(
         Func<Dictionary<string, object>, Dictionary<string, object>> fn,
         int expectedCount,
-        string expectedField)
+        string expectedField,
+        string scenario)
     {
         // Arrange
         var (url, vehicle) = await Prepare();
@@ -163,10 +169,11 @@ public class UpdateVehicleTest : IClassFixture<TestableWebApplicationFactory>
         // Assert
         response.StatusCode.ShouldBe(HttpStatusCode.BadRequest);
         var content = await response.Content.ReadFromJsonAsync<JsonElement>();
-        content.GetProperty("errors").EnumerateArray()
-            .Count(i => i.GetProperty("field").GetString() == expectedField)
-            .ShouldBe(1);
-        content.GetProperty("errors").GetArrayLength().ShouldBe(expectedCount);
+        content.GetProperty("errors").GetProperty(expectedField)
+            .EnumerateArray()
+            .Count()
+            .ShouldBe(expectedCount);
+        content.GetProperty("errors").EnumerateObject().Count().ShouldBe(1);
     }
 
     [Fact]

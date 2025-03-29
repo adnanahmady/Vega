@@ -8,6 +8,7 @@ namespace Vega.Controllers.Api.V1;
 
 using Resources.V1;
 
+[ApiController]
 [Route("api/v1/features")]
 public class VehicleFeaturesController : BaseController
 {

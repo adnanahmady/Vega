@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 
 using Resources.V1;
 
+[ApiController]
 [Route("api/v1/vehicles")]
 public class VehiclesListController : BaseController
 {

@@ -75,7 +75,8 @@ public class CreateVehicleTest : IClassFixture<TestableWebApplicationFactory>
                 return data;
             }),
             "Contact.Name",
-            1
+            1,
+            "Given contact name when its missing then should invalidate request"
         };
 
         yield return new object[]
@@ -89,7 +90,8 @@ public class CreateVehicleTest : IClassFixture<TestableWebApplicationFactory>
                 return data;
             }),
             "Contact.Phone",
-            1
+            1,
+            "Given contact phone when its not 11 characters then should invalidate request"
         };
 
         yield return new object[]
@@ -103,7 +105,8 @@ public class CreateVehicleTest : IClassFixture<TestableWebApplicationFactory>
                 return data;
             }),
             "Contact.Email",
-            1
+            1,
+            "Given contact email when its not given then should invalidate request"
         };
 
         // ModelId should exist in the system
@@ -116,7 +119,8 @@ public class CreateVehicleTest : IClassFixture<TestableWebApplicationFactory>
                 return data;
             }),
             "ModelId",
-            1
+            1,
+            "Given model id when does not exist in system then should invalidate request"
         };
 
         yield return new object[]
@@ -128,7 +132,8 @@ public class CreateVehicleTest : IClassFixture<TestableWebApplicationFactory>
                 return data;
             }),
             "ModelId",
-            1
+            1,
+            "Given model id when its not present then should invalidate request"
         };
 
         yield return new object[]
@@ -140,7 +145,8 @@ public class CreateVehicleTest : IClassFixture<TestableWebApplicationFactory>
                 return data;
             }),
             "FeatureIds",
-            1
+            2,
+            "Given feature ids list when its not present then should invalidate request"
         };
     }
 
@@ -149,7 +155,8 @@ public class CreateVehicleTest : IClassFixture<TestableWebApplicationFactory>
     public async Task GivenWrongDataWhenCalledThenShouldThrowError(
         Func<Dictionary<string, object>, Dictionary<string, object>> fn,
         string expectedField,
-        int expectedCount)
+        int expectedCount,
+        string scenario)
     {
         // Arrange
         _context.Models.Add(ModelFactory.Create());
@@ -180,10 +187,11 @@ public class CreateVehicleTest : IClassFixture<TestableWebApplicationFactory>
         // Arrange
         response.StatusCode.ShouldBe(HttpStatusCode.BadRequest);
         var content = await response.Content.ReadFromJsonAsync<JsonElement>();
-        content.GetProperty("errors").EnumerateArray()
-            .Count(i => i.GetProperty("field").GetString() == expectedField)
-            .ShouldBe(1);
-        content.GetProperty("errors").GetArrayLength().ShouldBe(expectedCount);
+        content.GetProperty("errors").GetProperty(expectedField)
+            .EnumerateArray()
+            .Count()
+            .ShouldBe(expectedCount);
+        content.GetProperty("errors").EnumerateObject().Count().ShouldBe(1);
     }
 
     [Fact]

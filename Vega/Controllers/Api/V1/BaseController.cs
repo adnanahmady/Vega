@@ -19,14 +19,16 @@ public abstract class BaseController : Controller
 
     protected IActionResult ValidationResponse()
     {
-        var errors = ModelState
-            .Where(x => x.Value!.Errors.Any())
-            .Select(x => new
-            {
-                Field = x.Key,
-                Errors = x.Value!.Errors.Select(
-                    e => e.ErrorMessage).ToList()
-            }).ToList();
+        var errors = new Dictionary<string, object>();
+        var states = ModelState.Where(x => x.Value!.Errors.Any());
+
+        foreach (var x in states)
+        {
+            errors.Add(
+                x.Key,
+                x.Value!.Errors.Select(e => e.ErrorMessage).ToList()
+            );
+        }
 
         return BadRequest(new
         {
