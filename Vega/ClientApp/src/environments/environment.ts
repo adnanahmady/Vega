@@ -8,7 +8,8 @@ export const environment = {
   auth0: {
     domain: '',
     clientId: '',
-    redirectUri: 'https://localhost:5001'
+    redirectUri: 'https://localhost:44477',
+    audience: ''
   }
 };
 

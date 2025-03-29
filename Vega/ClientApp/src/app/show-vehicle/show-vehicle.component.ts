@@ -6,6 +6,8 @@ import {PhotoService} from "../services/photo.service";
 import {PhotoResource} from "../types/resources/photo-resource";
 import { ProgressService } from "../services/progress.service";
 import {HttpEvent, HttpEventType, HttpResponse} from "@angular/common/http";
+import {isAuthenticated} from "../auth/auth";
+import {AuthService} from "@auth0/auth0-angular";
 
 @Component({
   selector: 'app-show-vehicle',
@@ -38,7 +40,8 @@ export class ShowVehicleComponent {
     private router: Router,
     private vehicleService: VehicleService,
     private photoService: PhotoService,
-    private progressService: ProgressService
+    private progressService: ProgressService,
+    protected auth: AuthService
   ) {
     this.route.params.subscribe(p => {
       this.vehicleService.getVehicle(p['id'])
@@ -65,4 +68,6 @@ export class ShowVehicleComponent {
         }
       })
   }
+
+  protected readonly isAuthenticated = isAuthenticated;
 }

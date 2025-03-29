@@ -25,4 +25,18 @@ public static class StringExtensions
 
         return string.Join(' ', words.Take(numberOfWords));
     }
+
+    public static string PadBase64(this string base64)
+    {
+        base64 = base64
+            .Replace('-', '+')
+            .Replace('_', '/');
+
+        switch (base64.Length % 4)
+        {
+            case 2: return base64 + "==";
+            case 3: return base64 + "=";
+            default: return base64;
+        }
+    }
 }

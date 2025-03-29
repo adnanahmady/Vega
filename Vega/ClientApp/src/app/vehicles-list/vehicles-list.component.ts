@@ -4,6 +4,8 @@ import {Make, Model, Feature} from "../Interfaces/MakeInterfaces";
 import {IdNameType, VehicleResource} from "../types/resources/vehicle-resources";
 import {MakeService} from "../services/make.service";
 import { AuthService } from '@auth0/auth0-angular';
+import {isAuthenticated} from "../auth/auth";
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-vehicles-list',
@@ -39,17 +41,10 @@ export class VehiclesListComponent {
   constructor(
     private vehicleService: VehicleService,
     private makeService: MakeService,
-    private auth: AuthService
+    protected auth: AuthService,
   ) {
-    this.storeToken();
     this.getVehicles();
     this.getMakes();
-  }
-
-  private storeToken() {
-    this.auth.idTokenClaims$.subscribe(claims => {
-      localStorage.setItem('token', claims!.__raw);
-    });
   }
 
   getMakes(): void {
@@ -99,4 +94,6 @@ export class VehiclesListComponent {
     this.page.currentPage = page;
     this.getVehicles();
   }
+
+  protected readonly isAuthenticated = isAuthenticated;
 }

@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import {ErrorHandler, NgModule} from '@angular/core';
+import {APP_INITIALIZER, ErrorHandler, NgModule} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
@@ -24,6 +24,7 @@ import {AuthButtonComponent} from "./auth/auth-button.component";
 import {UserProfileComponent} from "./auth/user-profile.component";
 import { AuthInterceptor } from './services/auth.interceptor';
 import { environment } from '../environments/environment';
+import { AuthInitService, InitializeAuth } from './services/auth-init.service';
 
 @NgModule({
   bootstrap: [AppComponent],
@@ -41,13 +42,6 @@ import { environment } from '../environments/environment';
     UserProfileComponent
   ],
   imports: [
-    AuthModule.forRoot({
-      domain: environment.auth0.domain,
-      clientId: environment.auth0.clientId,
-      authorizationParams: {
-        redirect_uri: 'https://localhost:5001'
-      }
-    }),
     BrowserModule.withServerTransition({appId: 'ng-cli-universal'}),
     HttpClientModule,
     FormsModule,
@@ -61,6 +55,12 @@ import { environment } from '../environments/environment';
       {path: 'vehicles/new', component: VehicleFormComponent, canActivate: [AuthGuard]},
       {path: 'vehicles/:id/edit', component: VehicleFormComponent, canActivate: [AuthGuard]},
     ]),
+    AuthModule.forRoot({
+      domain: environment.auth0.domain,
+      clientId: environment.auth0.clientId,
+      redirect_uri: environment.auth0.redirectUri,
+      audience: environment.auth0.audience,
+    }),
   ],
   providers: [
     {provide: ErrorHandler, useClass: AppErrorHandler},
@@ -71,11 +71,18 @@ import { environment } from '../environments/environment';
     MakeService,
     FeatureService,
     ToastyService,
+    AuthInitService,
+    {
+      provide: APP_INITIALIZER,
+      useFactory: InitializeAuth,
+      deps: [AuthInitService],
+      multi: true
+    },
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,
       multi: true
-    }
+    },
   ]
 })
 export class AppModule { }

@@ -23,9 +23,14 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll", policy =>
     {
-        policy.AllowAnyOrigin()
+        var origins = builder
+            .Configuration
+            .GetSection("AllowedOrigins")
+            .Get<string[]>();
+        policy.WithOrigins(origins)
             .AllowAnyHeader()
-            .AllowAnyMethod();
+            .AllowAnyMethod()
+            .AllowCredentials();
     });
 });
 builder.Services.Configure<PhotoSettings>(

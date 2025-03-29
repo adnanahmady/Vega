@@ -4,6 +4,7 @@ export const environment = {
   auth0: {
     domain: 'your-prod-domain',
     clientId: 'your-prod-client-id',
-    redirectUri: 'your-prod-url'
+    redirectUri: 'your-prod-url',
+    audience: 'your-prod-audience'
   }
 };

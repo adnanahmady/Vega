@@ -4,7 +4,7 @@
 
 <p *ngIf="!allVehicles?.length"><em>Loading...</em></p>
 
-<a href="/vehicles/new" class="btn btn-primary mb-3">New Vehicle</a>
+<a *ngIf="isAuthenticated() || (this.auth.isAuthenticated$ | async)" href="/vehicles/new" class="btn btn-primary mb-3">New Vehicle</a>
 
 <div class="well mb-3">
   <div class="form-group mb-3">

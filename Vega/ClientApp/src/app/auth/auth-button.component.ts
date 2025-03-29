@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { async } from '@angular/core/testing';
 import { AuthService } from '@auth0/auth0-angular';
+import {isAuthenticated} from "./auth";
 
 @Component({
   selector: 'app-auth-button',
@@ -31,7 +31,5 @@ export class AuthButtonComponent {
     this.auth.logout({ returnTo: window.location.origin });
   }
 
-  isAuthenticated() {
-    return localStorage.getItem('token');
-  }
+  protected readonly isAuthenticated = isAuthenticated;
 }
