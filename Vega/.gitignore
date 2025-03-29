@@ -231,3 +231,7 @@ _Pvt_Extensions
 .fake/
 bin/
 obj/
+
+!appsettings.example.json
+!appsettings.Testing.json
+appsettings*.json
