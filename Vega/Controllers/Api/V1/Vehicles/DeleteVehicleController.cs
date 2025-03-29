@@ -9,7 +9,8 @@ using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 
 [ApiController]
-[Route("api/v1/vehicles")]
+[Route("api/v{version:apiVersion}/vehicles")]
+[ApiVersion("1.0")]
 public class DeleteVehicleController : BaseController
 {
     public DeleteVehicleController(

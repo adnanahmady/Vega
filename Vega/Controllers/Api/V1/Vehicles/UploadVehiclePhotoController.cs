@@ -11,7 +11,8 @@ using Vega.Resources.V1;
 namespace Vega.Controllers.Api.V1.Vehicles;
 
 [ApiController]
-[Route("/api/v1/vehicles/{id:int}/photos")]
+[Route("/api/v{version:apiVersion}/vehicles/{id:int}/photos")]
+[ApiVersion("1.0")]
 public class UploadVehiclePhotoController : BaseController
 {
     private readonly IHostEnvironment _host;

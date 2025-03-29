@@ -15,7 +15,8 @@ using Microsoft.AspNetCore.Mvc;
 using Resources.V1;
 
 [ApiController]
-[Route("api/v1/vehicles")]
+[Route("api/v{version:apiVersion}/vehicles")]
+[ApiVersion("1.0")]
 public class UpdateVehicleController : BaseController
 {
     public UpdateVehicleController(

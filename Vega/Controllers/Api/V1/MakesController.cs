@@ -8,8 +8,9 @@ namespace Vega.Controllers.Api.V1;
 
 using Resources.V1;
 
-[Route("api/v1/makes")]
 [ApiController]
+[Route("api/v{version:apiversion}/makes")]
+[ApiVersion("1.0")]
 public class MakesController : BaseController
 {
     public MakesController(
