@@ -8,6 +8,7 @@
     <SpaProxyServerUrl>https://localhost:44477</SpaProxyServerUrl>
     <SpaProxyLaunchCommand>npm start</SpaProxyLaunchCommand>
     <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>adnans-vega-project</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
@@ -26,6 +27,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.SecretManager.Tools" Version="2.0.2" />
   </ItemGroup>
 
   <ItemGroup>
@@ -44,7 +46,7 @@
     <Message Importance="high" Text="Restoring dependencies using 'npm'. This may take several minutes..." />
     <Exec WorkingDirectory="$(SpaRoot)" Command="npm install" />
   </Target>
-  
+
   <Target Name="PublishRunWebpack" AfterTargets="ComputeFilesToPublish">
     <!-- As part of publishing, ensure the JS resources are freshly built in production mode -->
     <Exec WorkingDirectory="$(SpaRoot)" Command="npm install" />
